@@ -6,8 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "biome check",
-    "format": "biome format --write"
+    "format": "npm run format:biome && npm run format:prettier",
+    "format:biome": "biome format --write",
+    "format:prettier": "prettier --write \"**/*.{css,scss,mdx,md}\"",
+    "lint": "npm run lint:biome && npm run lint:prettier",
+    "lint:biome": "biome check",
+    "lint:prettier": "prettier --check \"**/*.{css,scss,mdx,md}\"",
+    "lint:errors": "biome check --diagnostic-level error --max-diagnostics 100",
+    "lint:warnings": "biome check --diagnostic-level warn --max-diagnostics 100",
+    "lint:fix": "biome check --write"
   },
   "dependencies": {
     "next": "16.1.6",
@@ -20,6 +27,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
+    "prettier": "3.8.1",
     "sass": "^1.97.3",
     "typescript": "^5"
   }

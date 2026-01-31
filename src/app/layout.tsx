@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "../styles/reset.scss";
-import styles from "./layout.module.scss";
-import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { Header } from "@/components/header";
+import styles from "./layout.module.scss";
 
 export const metadata: Metadata = {
   title: "Chop Logic",
