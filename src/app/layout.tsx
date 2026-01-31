@@ -3,6 +3,7 @@ import "../styles/reset.scss";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import styles from "./layout.module.scss";
+import { Provider } from "@/components/provider";
 
 export const metadata: Metadata = {
   title: "Chop Logic",
@@ -17,9 +18,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={styles.layout}>
-        <Header />
-        <main className={styles.layout__main}>{children}</main>
-        <Footer />
+        <Provider>
+          <Header />
+          <main className={styles.layout__main}>{children}</main>
+          <Footer />
+        </Provider>
       </body>
     </html>
   );
