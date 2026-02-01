@@ -1,0 +1,42 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Header > should match snapshot 1`] = `
+<DocumentFragment>
+  <header
+    class="_header_6f96bd"
+  >
+    <div
+      class="_header__content_6f96bd"
+    >
+      <div
+        class="_header__brand_6f96bd"
+      >
+        <a
+          href="/"
+        >
+          Chop Logic
+        </a>
+      </div>
+      <nav
+        class="_header__nav_6f96bd"
+      >
+        <a
+          href="/"
+        >
+          Home
+        </a>
+        <a
+          href="/about"
+        >
+          About
+        </a>
+        <a
+          href="/blog"
+        >
+          Blog
+        </a>
+      </nav>
+    </div>
+  </header>
+</DocumentFragment>
+`;
