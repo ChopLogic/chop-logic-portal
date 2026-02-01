@@ -15,11 +15,15 @@
     "lint:errors": "biome check --diagnostic-level error --max-diagnostics 100",
     "lint:warnings": "biome check --diagnostic-level warn --max-diagnostics 100",
     "lint:fix": "biome check --write",
+    "typecheck": "tsc --pretty --noEmit",
     "test": "vitest",
     "test:ci": "vitest run --passWithNoTests",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "prepare": "husky"
   },
   "dependencies": {
+    "@commitlint/cli": "^20.4.0",
+    "@commitlint/config-conventional": "^20.4.0",
     "chop-logic-components": "^3.7.3",
     "next": "16.1.6",
     "react": "19.2.3",
@@ -35,11 +39,27 @@
     "@vitejs/plugin-react": "^5.1.2",
     "@vitest/coverage-v8": "^4.0.18",
     "babel-plugin-react-compiler": "1.0.0",
+    "husky": "^9.1.7",
     "jsdom": "^27.4.0",
+    "lint-staged": "^16.2.7",
     "prettier": "3.8.1",
     "sass": "^1.97.3",
     "typescript": "^5",
     "vite-tsconfig-paths": "^6.0.5",
     "vitest": "^4.0.18"
+  },
+  "lint-staged": {
+    "*.(ts|tsx)": [
+      "bash -c 'npm run typecheck'"
+    ],
+    "*.{js,jsx,ts,tsx,json}": [
+      "biome format --write",
+      "biome check --write",
+      "biome check --diagnostic-level error",
+      "npm run test:ci"
+    ],
+    "*.{css,scss,md,mdx}": [
+      "prettier --write"
+    ]
   }
 }
