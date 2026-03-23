@@ -18,7 +18,8 @@
 		"astro:check": "astro check",
 		"check": "biome check . && npm run typecheck && npm run astro:check && npm run test:ci",
 		"test": "vitest",
-		"test:ci": "vitest run --passWithNoTests"
+		"test:ci": "vitest run --passWithNoTests",
+		"test:coverage": "vitest run --coverage"
 	},
 	"dependencies": {
 		"@astrojs/mdx": "^5.0.2",
@@ -38,6 +39,7 @@
 		"@biomejs/biome": "^2.4.8",
 		"@commitlint/cli": "^20.5.0",
 		"@commitlint/config-conventional": "^20.5.0",
+		"@vitest/coverage-v8": "^4.1.1",
 		"husky": "^9.1.7",
 		"lint-staged": "^16.4.0",
 		"typescript": "^5.9.3",
