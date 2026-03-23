@@ -14,13 +14,11 @@
 		"lint": "biome check .",
 		"lint:fix": "biome check --write .",
 		"format": "biome format --write .",
-		"check": "biome check . && vitest run",
+		"typecheck": "tsc --noEmit",
+		"astro:check": "astro check",
+		"check": "biome check . && npm run typecheck && npm run astro:check && npm run test:ci",
 		"test": "vitest",
-		"test:run": "vitest run",
-		"test:watch": "vitest --watch"
-	},
-	"lint-staged": {
-		"*.{js,mjs,cjs,ts,tsx,astro,json,jsonc,css}": "biome check --write --no-errors-on-unmatched"
+		"test:ci": "vitest run --passWithNoTests"
 	},
 	"dependencies": {
 		"@astrojs/mdx": "^5.0.2",
@@ -36,11 +34,13 @@
 		"sharp": "^0.34.3"
 	},
 	"devDependencies": {
+		"@astrojs/check": "^0.9.8",
 		"@biomejs/biome": "^2.4.8",
 		"@commitlint/cli": "^20.5.0",
 		"@commitlint/config-conventional": "^20.5.0",
 		"husky": "^9.1.7",
 		"lint-staged": "^16.4.0",
+		"typescript": "^5.9.3",
 		"vitest": "^4.1.0"
 	}
 }
