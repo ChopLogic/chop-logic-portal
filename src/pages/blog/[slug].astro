@@ -1,0 +1,46 @@
+---
+import Layout from "../../layouts/BlogPost.astro";
+import { createContentProvider } from "../../lib/content/provider";
+
+export async function getStaticPaths() {
+	const content = createContentProvider();
+	const summaries = await content.listArticles();
+	const paths = await Promise.all(
+		summaries.map(async (summary) => {
+			const detail = await content.getArticleBySlug(summary.slug);
+			if (!detail) {
+				return null;
+			}
+			return {
+				params: { slug: summary.slug },
+				props: { detail },
+			};
+		}),
+	);
+	return paths.filter((p): p is NonNullable<typeof p> => p !== null);
+}
+
+const { detail } = Astro.props;
+---
+
+<Layout
+	title={detail.title}
+	description={detail.description}
+	pubDate={detail.pubDate}
+	updatedDate={detail.updatedDate}
+	heroImageUrl={detail.heroImageUrl}
+	heroImageAlt={detail.heroImageAlt}
+>
+	<div class="article-body cms-body" set:html={detail.bodyHtml} />
+</Layout>
+
+<style>
+	.article-body :global(.cms-picture img) {
+		max-width: 100%;
+		height: auto;
+		border-radius: 8px;
+	}
+	.article-body :global(section) {
+		margin-bottom: 1.5rem;
+	}
+</style>

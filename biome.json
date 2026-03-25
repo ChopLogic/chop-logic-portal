@@ -55,6 +55,16 @@
 					}
 				}
 			}
+		},
+		{
+			"includes": ["src/lib/cms/strapi/**/*.ts"],
+			"linter": {
+				"rules": {
+					"complexity": {
+						"useLiteralKeys": "off"
+					}
+				}
+			}
 		}
 	]
 }
