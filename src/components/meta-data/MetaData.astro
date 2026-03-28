@@ -38,7 +38,7 @@ const {
 	ogImage = FallbackImage,
 } = Astro.props;
 
-const siteRoot = Astro.site ?? new URL(Astro.url.origin);
+const siteRoot = new URL(Astro.url.origin); // TODO: Replace with siteRoot = Astro.site ?? new URL(Astro.url.origin) when Astro.site is available
 const canonical = canonicalURL ?? new URL(Astro.url.pathname, siteRoot);
 const ogImageURL = new URL(ogImage.src, Astro.url);
 const rssURL = new URL("rss.xml", siteRoot);

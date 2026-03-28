@@ -47,8 +47,18 @@ export const strapiSingletonEntitySchema = z
 	})
 	.passthrough();
 
+export const strapiConfigEntitySchema = z
+	.object({
+		documentId: z.string(),
+		siteTitle: z.string(),
+		footerText: z.string(),
+		socialLinks: z.array(z.unknown()),
+	})
+	.passthrough();
+
 export type StrapiArticleEntity = z.infer<typeof strapiArticleEntitySchema>;
 export type StrapiSingletonEntity = z.infer<typeof strapiSingletonEntitySchema>;
+export type StrapiConfigEntity = z.infer<typeof strapiConfigEntitySchema>;
 
 export function parseStrapiList(json: unknown) {
 	return strapiListResponseSchema.parse(json);
@@ -64,4 +74,8 @@ export function parseArticleEntity(raw: unknown): StrapiArticleEntity {
 
 export function parseSingletonEntity(raw: unknown): StrapiSingletonEntity {
 	return strapiSingletonEntitySchema.parse(raw);
+}
+
+export function parseConfigEntity(raw: unknown): StrapiConfigEntity {
+	return strapiConfigEntitySchema.parse(raw);
 }

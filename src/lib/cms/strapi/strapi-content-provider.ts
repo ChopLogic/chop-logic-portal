@@ -1,10 +1,15 @@
 import type { ContentPort, SingletonKey } from "../../content/ports";
-import type { ArticleDetail, ArticleSummary } from "../../content/types";
+import type {
+	ArticleDetail,
+	ArticleSummary,
+	Config,
+} from "../../content/types";
 import { type StrapiClientConfig, strapiFetch } from "./client";
 import {
 	mapArticleToDetail,
 	mapArticleToSummary,
 	mapSingletonToPage,
+	mapSocialLinks,
 } from "./mappers";
 import {
 	appendArticleDetailPopulate,
@@ -13,6 +18,7 @@ import {
 } from "./populate";
 import {
 	parseArticleEntity,
+	parseConfigEntity,
 	parseSingletonEntity,
 	parseStrapiList,
 	parseStrapiSingle,
@@ -93,5 +99,31 @@ export class StrapiContentProvider implements ContentPort {
 		}
 		const entity = parseSingletonEntity(parsed.data);
 		return mapSingletonToPage(this.config.baseUrl, entity);
+	}
+
+	async getConfig(): Promise<Config | null> {
+		const params = new URLSearchParams();
+		params.set("populate[socialLinks]", "true");
+
+		const res = await strapiFetch(this.config, "/api/config", params);
+
+		if (!res.ok) {
+			throw new Error(
+				`Strapi get config failed: ${res.status} ${await res.text()}`,
+			);
+		}
+
+		const json: unknown = await res.json();
+		const parsed = parseStrapiSingle(json);
+		if (!parsed.data) {
+			return null;
+		}
+		const entity = parseConfigEntity(parsed.data);
+
+		return {
+			siteTitle: entity.siteTitle,
+			footerText: entity.footerText,
+			socialLinks: mapSocialLinks(entity.socialLinks),
+		};
 	}
 }
