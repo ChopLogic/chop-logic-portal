@@ -1,20 +1,13 @@
-import {
-	type ArticleDetail,
-	type ArticleSummary,
-	LinkTarget,
-	LinkType,
-	ReferrerPolicy,
-	type SingletonPage,
-	type SocialLink,
+import { isRecord } from "../../checks";
+import type {
+	ArticleDetail,
+	ArticleSummary,
+	SingletonPage,
 } from "../../content/types";
 import { blocksToHtml, blocksToPlainText } from "./blocks";
 import { dynamicZoneToHtml } from "./dynamic-zone";
 import { mediaAlt, resolveMediaUrl } from "./media";
 import type { StrapiArticleEntity, StrapiSingletonEntity } from "./schemas";
-
-function isRecord(v: unknown): v is Record<string, unknown> {
-	return typeof v === "object" && v !== null && !Array.isArray(v);
-}
 
 function mapSeo(raw: unknown): { metaTitle: string; metaDescription: string } {
 	if (!isRecord(raw)) {
@@ -117,33 +110,4 @@ export function mapSingletonToPage(
 		publishedAt:
 			publishedAt && !Number.isNaN(publishedAt.getTime()) ? publishedAt : null,
 	};
-}
-
-export function mapSocialLink(raw: unknown): SocialLink | null {
-	if (!isRecord(raw)) {
-		return null;
-	}
-
-	return {
-		url: typeof raw["url"] === "string" ? raw["url"] : "",
-		text: typeof raw["text"] === "string" ? raw["text"] : "",
-		target:
-			typeof raw["target"] === "string"
-				? (raw["target"] as LinkTarget)
-				: LinkTarget.Blank,
-		type:
-			typeof raw["type"] === "string"
-				? (raw["type"] as LinkType)
-				: LinkType.External,
-		referrerpolicy:
-			typeof raw["referrerpolicy"] === "string"
-				? (raw["referrerpolicy"] as ReferrerPolicy)
-				: ReferrerPolicy.NoReferrer,
-	};
-}
-
-export function mapSocialLinks(raw: unknown[]): SocialLink[] {
-	return raw
-		.map(mapSocialLink)
-		.filter((link): link is SocialLink => link !== null);
 }

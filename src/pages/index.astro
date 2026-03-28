@@ -7,7 +7,8 @@ import { createContentProvider } from "../lib/content/provider";
 
 const content = createContentProvider();
 const home = await content.getSingleton("home");
-const config = await content.getConfig();
+const siteConfig = await content.getSiteConfig();
+console.log(siteConfig);
 const metaTitle = home?.seo.metaTitle ?? SITE_TITLE;
 const metaDescription = home?.seo.metaDescription ?? SITE_DESCRIPTION;
 ---
@@ -16,7 +17,7 @@ const metaDescription = home?.seo.metaDescription ?? SITE_DESCRIPTION;
 <html lang="en">
 	<head>
 		<MetaData
-			siteTitle={config?.siteTitle ?? SITE_TITLE}
+			siteTitle={siteConfig?.siteTitle ?? SITE_TITLE}
 			metaTitle={metaTitle}
 			metaDescription={metaDescription}
 		/>

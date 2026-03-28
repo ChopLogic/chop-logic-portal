@@ -1,15 +1,12 @@
+import { mapLinks } from "../../content/mappers";
+import type { SiteConfig } from "../../content/models";
 import type { ContentPort, SingletonKey } from "../../content/ports";
-import type {
-	ArticleDetail,
-	ArticleSummary,
-	Config,
-} from "../../content/types";
+import type { ArticleDetail, ArticleSummary } from "../../content/types";
 import { type StrapiClientConfig, strapiFetch } from "./client";
 import {
 	mapArticleToDetail,
 	mapArticleToSummary,
 	mapSingletonToPage,
-	mapSocialLinks,
 } from "./mappers";
 import {
 	appendArticleDetailPopulate,
@@ -101,9 +98,9 @@ export class StrapiContentProvider implements ContentPort {
 		return mapSingletonToPage(this.config.baseUrl, entity);
 	}
 
-	async getConfig(): Promise<Config | null> {
+	async getSiteConfig(): Promise<SiteConfig | null> {
 		const params = new URLSearchParams();
-		params.set("populate[socialLinks]", "true");
+		params.set("populate[links]", "true");
 
 		const res = await strapiFetch(this.config, "/api/config", params);
 
@@ -123,7 +120,7 @@ export class StrapiContentProvider implements ContentPort {
 		return {
 			siteTitle: entity.siteTitle,
 			footerText: entity.footerText,
-			socialLinks: mapSocialLinks(entity.socialLinks),
+			links: mapLinks(entity.links),
 		};
 	}
 }

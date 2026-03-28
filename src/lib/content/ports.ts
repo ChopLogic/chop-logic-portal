@@ -1,9 +1,5 @@
-import type {
-	ArticleDetail,
-	ArticleSummary,
-	Config,
-	SingletonPage,
-} from "./types";
+import type { SiteConfig } from "./models";
+import type { ArticleDetail, ArticleSummary, SingletonPage } from "./types";
 
 export type SingletonKey = "home" | "about-me";
 
@@ -12,5 +8,5 @@ export type ContentPort = {
 	listArticles(): Promise<ArticleSummary[]>;
 	getArticleBySlug(slug: string): Promise<ArticleDetail | null>;
 	getSingleton(key: SingletonKey): Promise<SingletonPage | null>;
-	getConfig(): Promise<Config | null>;
+	getSiteConfig(): Promise<SiteConfig | null>;
 };

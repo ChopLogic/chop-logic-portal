@@ -1,0 +1,1 @@
+export { mapLinks } from "./link";

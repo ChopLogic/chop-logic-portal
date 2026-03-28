@@ -52,7 +52,7 @@ export const strapiConfigEntitySchema = z
 		documentId: z.string(),
 		siteTitle: z.string(),
 		footerText: z.string(),
-		socialLinks: z.array(z.unknown()),
+		links: z.array(z.unknown()),
 	})
 	.passthrough();
 
