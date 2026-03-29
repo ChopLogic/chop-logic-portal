@@ -77,7 +77,10 @@ export class StrapiContentProvider implements ContentPort {
 
 	async getSingleton(key: SingletonKey) {
 		const params = new URLSearchParams();
-		params.set("populate[metaData]", "true");
+		params.set(
+			"populate[metaData][populate][openGraph][populate][ogImage]",
+			"true",
+		);
 		if (key === "about-me") {
 			params.set("populate[heroImage][populate][image]", "true");
 		}
@@ -90,6 +93,7 @@ export class StrapiContentProvider implements ContentPort {
 			);
 		}
 		const json: unknown = await res.json();
+		console.log("+++json", json);
 		const parsed = parseStrapiSingle(json);
 		if (!parsed.data) {
 			return null;

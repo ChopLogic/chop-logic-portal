@@ -1,5 +1,7 @@
 /** Domain models for the portal UI (CMS-agnostic). */
 
+import type { MetaData } from "./models";
+
 export type ArticleSummary = {
 	documentId: string;
 	slug: string;
@@ -21,13 +23,10 @@ export type SingletonPage = {
 	title: string;
 	heading: string;
 	subHeading: string | null;
-	seo: {
-		metaTitle: string;
-		metaDescription: string;
-	};
 	heroImageUrl: string | null;
 	heroImageAlt: string;
 	bodyHtml: string;
 	/** Strapi `publishedAt`, when present. */
 	publishedAt: Date | null;
+	metaData: MetaData;
 };

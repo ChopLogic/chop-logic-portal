@@ -1,4 +1,5 @@
 import { isRecord } from "../../checks";
+import { mapMetaData } from "../../content/mappers";
 import type {
 	ArticleDetail,
 	ArticleSummary,
@@ -69,7 +70,7 @@ export function mapSingletonToPage(
 	baseUrl: string,
 	entity: StrapiSingletonEntity,
 ): SingletonPage {
-	const seo = mapSeo(entity.metaData);
+	const metaData = mapMetaData(entity.metaData);
 	const hero = entity.heroImage;
 	let heroImageUrl: string | null = null;
 	let heroImageAlt = "";
@@ -97,13 +98,7 @@ export function mapSingletonToPage(
 		heading: entity.heading,
 		subHeading:
 			typeof entity.subHeading === "string" ? entity.subHeading : null,
-		seo:
-			seo.metaTitle.length > 0 || seo.metaDescription.length > 0
-				? seo
-				: {
-						metaTitle: entity.title,
-						metaDescription: entity.heading,
-					},
+		metaData,
 		heroImageUrl,
 		heroImageAlt,
 		bodyHtml: dynamicZoneToHtml(baseUrl, entity.content),

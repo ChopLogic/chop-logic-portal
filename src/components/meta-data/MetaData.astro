@@ -2,45 +2,33 @@
 // Import the global.css file here so that it is included on
 // all pages through the use of the <MetaData /> component.
 import "../../styles/global.css";
-import type { ImageMetadata } from "astro";
 import FallbackImage from "../../assets/blog-placeholder-1.jpg";
+import { DEFAULT_OPEN_GRAPH } from "../../constants/defaults";
+import type { MetaData } from "../../lib/content/models";
 
 interface Props {
-	// Global Settings
 	siteTitle: string;
-
-	// Meta SEO
-	metaTitle: string;
-	metaDescription: string;
-	authorName?: string;
-	keywords?: string;
-	canonicalURL?: string;
-	robots?: string;
-
-	// Open Graph
-	ogType?: string;
-	ogTitle?: string;
-	ogDescription?: string;
-	ogImage?: ImageMetadata;
+	metaData: MetaData;
 }
 
+const { siteTitle, metaData } = Astro.props;
 const {
-	siteTitle,
 	metaTitle,
 	metaDescription,
 	keywords,
-	authorName,
 	canonicalURL,
-	robots = "index, follow",
-	ogType = "website",
-	ogTitle,
-	ogDescription,
-	ogImage = FallbackImage,
-} = Astro.props;
+	authorName,
+	robots,
+	openGraph,
+} = metaData;
+const { ogDescription, ogTitle, ogType, ogImage } =
+	openGraph ?? DEFAULT_OPEN_GRAPH;
 
 const siteRoot = new URL(Astro.url.origin); // TODO: Replace with siteRoot = Astro.site ?? new URL(Astro.url.origin) when Astro.site is available
 const canonical = canonicalURL ?? new URL(Astro.url.pathname, siteRoot);
-const ogImageURL = new URL(ogImage.src, Astro.url);
+const ogImageURL = ogImage
+	? new URL(ogImage.src, Astro.url)
+	: new URL(FallbackImage.src, Astro.url);
 const rssURL = new URL("rss.xml", siteRoot);
 const hasAuthor = !!authorName && authorName.trim() !== "";
 const hasKeywords = !!keywords && keywords.trim() !== "";

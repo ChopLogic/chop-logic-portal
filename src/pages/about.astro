@@ -9,8 +9,8 @@ const page = await content.getSingleton("about-me");
 {
 	page ? (
 		<Layout
-			title={page.seo.metaTitle}
-			description={page.seo.metaDescription}
+			title={page.metaData.metaTitle}
+			description={page.metaData.metaDescription}
 			pubDate={page.publishedAt ?? new Date()}
 			heroImageUrl={page.heroImageUrl}
 			heroImageAlt={page.heroImageAlt}
