@@ -4,7 +4,7 @@ import type {
 	ArticleDetail,
 	ArticleSummary,
 	SingletonPage,
-} from "../../content/types";
+} from "../../content/models";
 import { blocksToHtml, blocksToPlainText } from "./blocks";
 import { dynamicZoneToHtml } from "./dynamic-zone";
 import { mediaAlt, resolveMediaUrl } from "./media";

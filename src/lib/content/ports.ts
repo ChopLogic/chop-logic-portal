@@ -1,5 +1,9 @@
-import type { SiteConfig } from "./models";
-import type { ArticleDetail, ArticleSummary, SingletonPage } from "./types";
+import type {
+	ArticleDetail,
+	ArticleSummary,
+	SingletonPage,
+	SiteConfig,
+} from "./models";
 
 export type SingletonKey = "home" | "about-me";
 

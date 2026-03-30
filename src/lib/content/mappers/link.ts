@@ -7,8 +7,16 @@ export function mapLink(raw: unknown): Link | null {
 		return null;
 	}
 
+	const idRaw = raw["id"];
+	const id =
+		typeof idRaw === "number"
+			? String(idRaw)
+			: typeof idRaw === "string"
+				? idRaw
+				: "";
+
 	return {
-		id: typeof raw["id"] === "number" ? String(raw["id"]) : "",
+		id,
 		url: typeof raw["url"] === "string" ? raw["url"] : "",
 		text: typeof raw["text"] === "string" ? raw["text"] : "",
 		target:

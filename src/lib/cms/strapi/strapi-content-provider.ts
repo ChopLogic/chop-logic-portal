@@ -1,7 +1,10 @@
-import { mapLinks } from "../../content/mappers";
-import type { SiteConfig } from "../../content/models";
+import { mapSiteConfig } from "../../content/mappers";
+import type {
+	ArticleDetail,
+	ArticleSummary,
+	SiteConfig,
+} from "../../content/models";
 import type { ContentPort, SingletonKey } from "../../content/ports";
-import type { ArticleDetail, ArticleSummary } from "../../content/types";
 import { type StrapiClientConfig, strapiFetch } from "./client";
 import {
 	mapArticleToDetail,
@@ -93,7 +96,6 @@ export class StrapiContentProvider implements ContentPort {
 			);
 		}
 		const json: unknown = await res.json();
-		console.log("+++json", json);
 		const parsed = parseStrapiSingle(json);
 		if (!parsed.data) {
 			return null;
@@ -120,11 +122,6 @@ export class StrapiContentProvider implements ContentPort {
 			return null;
 		}
 		const entity = parseConfigEntity(parsed.data);
-
-		return {
-			siteTitle: entity.siteTitle,
-			footerText: entity.footerText,
-			links: mapLinks(entity.links),
-		};
+		return mapSiteConfig(entity);
 	}
 }
