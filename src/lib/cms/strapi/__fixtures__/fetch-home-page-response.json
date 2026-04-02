@@ -1,0 +1,335 @@
+{
+	"data": {
+		"home": {
+			"documentId": "euewwnreubczj9k31jnyq8nu",
+			"title": "Chop Logic Home",
+			"subTitle": "A place where logic works!",
+			"slug": "home",
+			"updatedAt": "2026-04-01T16:29:29.301Z",
+			"content": [
+				{
+					"id": "29",
+					"heading": "Paragraph Heading",
+					"subHeading": "Paragraph Sub Heading",
+					"content": [
+						{
+							"type": "paragraph",
+							"children": [
+								{
+									"type": "text",
+									"text": "A list"
+								}
+							]
+						},
+						{
+							"type": "list",
+							"format": "ordered",
+							"children": [
+								{
+									"type": "list-item",
+									"children": [
+										{
+											"type": "text",
+											"text": "One"
+										}
+									]
+								},
+								{
+									"type": "list-item",
+									"children": [
+										{
+											"type": "text",
+											"text": "Two"
+										}
+									]
+								},
+								{
+									"type": "list-item",
+									"children": [
+										{
+											"type": "text",
+											"text": "Three"
+										}
+									]
+								}
+							]
+						},
+						{
+							"type": "heading",
+							"children": [
+								{
+									"type": "text",
+									"text": "Header lvl 3"
+								}
+							],
+							"level": 3
+						},
+						{
+							"type": "paragraph",
+							"children": [
+								{
+									"type": "text",
+									"text": "Regular text"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"children": [
+								{
+									"type": "text",
+									"text": "Strike throw",
+									"strikethrough": true
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"children": [
+								{
+									"type": "text",
+									"text": "Italic text",
+									"italic": true
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"children": [
+								{
+									"type": "text",
+									"text": "Bold text",
+									"bold": true
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"children": [
+								{
+									"type": "text",
+									"text": "Underscore text",
+									"underline": true
+								}
+							]
+						}
+					],
+					"alignment": "left"
+				},
+				{
+					"id": "5",
+					"heading": "Heading",
+					"subHeading": "Sub Heading",
+					"picture": {
+						"documentId": "q1kzu6b3zlc7qhl9c0x5uwr1",
+						"name": "logo.png",
+						"alternativeText": null,
+						"caption": null,
+						"focalPoint": null,
+						"width": 612,
+						"height": 306,
+						"formats": {
+							"thumbnail": {
+								"name": "thumbnail_logo.png",
+								"hash": "thumbnail_logo_cc917a1e2d",
+								"ext": ".png",
+								"mime": "image/png",
+								"path": null,
+								"width": 245,
+								"height": 122,
+								"size": 13.96,
+								"sizeInBytes": 13959,
+								"url": "/uploads/thumbnail_logo_cc917a1e2d.png"
+							},
+							"small": {
+								"name": "small_logo.png",
+								"hash": "small_logo_cc917a1e2d",
+								"ext": ".png",
+								"mime": "image/png",
+								"path": null,
+								"width": 500,
+								"height": 250,
+								"size": 32.48,
+								"sizeInBytes": 32482,
+								"url": "/uploads/small_logo_cc917a1e2d.png"
+							}
+						},
+						"size": 5.17,
+						"url": "/uploads/logo_cc917a1e2d.png",
+						"previewUrl": null,
+						"updatedAt": "2026-03-21T13:30:07.786Z"
+					},
+					"link": {
+						"id": "34",
+						"text": "Call to action",
+						"url": "https://github.com/SavouryGin",
+						"type": "external",
+						"platform": "GitHub",
+						"target": "blank",
+						"referrerpolicy": "strict_origin_when_cross_origin"
+					}
+				},
+				{
+					"id": "7",
+					"heading": "Heading",
+					"subHeading": "Sub Heading",
+					"link": {
+						"id": "35",
+						"text": "YouTube Video Title",
+						"url": "https://youtu.be/ZXnEJJu3IHQ?si=g6sYcWxaMmmtS8Ss",
+						"type": "external",
+						"platform": "YouTube",
+						"target": "blank",
+						"referrerpolicy": "strict_origin_when_cross_origin"
+					}
+				},
+				{
+					"id": "5",
+					"heading": "Heading",
+					"subHeading": "Sub Heading",
+					"publicationDate": "2026-03-04",
+					"item": {
+						"documentId": "gqg6jhtzay1wox6e01g9zcb7",
+						"name": "pexels-eberhardgross-1367192.jpg",
+						"alternativeText": "Forest view",
+						"caption": "Forest view caption",
+						"focalPoint": null,
+						"width": 4000,
+						"height": 2666,
+						"formats": {
+							"thumbnail": {
+								"name": "thumbnail_pexels-eberhardgross-1367192.jpg",
+								"hash": "thumbnail_pexels_eberhardgross_1367192_2d5bf83eaf",
+								"ext": ".jpg",
+								"mime": "image/jpeg",
+								"path": null,
+								"width": 234,
+								"height": 156,
+								"size": 4.68,
+								"sizeInBytes": 4677,
+								"url": "/uploads/thumbnail_pexels_eberhardgross_1367192_2d5bf83eaf.jpg"
+							},
+							"small": {
+								"name": "small_pexels-eberhardgross-1367192.jpg",
+								"hash": "small_pexels_eberhardgross_1367192_2d5bf83eaf",
+								"ext": ".jpg",
+								"mime": "image/jpeg",
+								"path": null,
+								"width": 500,
+								"height": 333,
+								"size": 16.34,
+								"sizeInBytes": 16343,
+								"url": "/uploads/small_pexels_eberhardgross_1367192_2d5bf83eaf.jpg"
+							},
+							"large": {
+								"name": "large_pexels-eberhardgross-1367192.jpg",
+								"hash": "large_pexels_eberhardgross_1367192_2d5bf83eaf",
+								"ext": ".jpg",
+								"mime": "image/jpeg",
+								"path": null,
+								"width": 1000,
+								"height": 667,
+								"size": 60.31,
+								"sizeInBytes": 60311,
+								"url": "/uploads/large_pexels_eberhardgross_1367192_2d5bf83eaf.jpg"
+							},
+							"medium": {
+								"name": "medium_pexels-eberhardgross-1367192.jpg",
+								"hash": "medium_pexels_eberhardgross_1367192_2d5bf83eaf",
+								"ext": ".jpg",
+								"mime": "image/jpeg",
+								"path": null,
+								"width": 750,
+								"height": 500,
+								"size": 33.92,
+								"sizeInBytes": 33925,
+								"url": "/uploads/medium_pexels_eberhardgross_1367192_2d5bf83eaf.jpg"
+							}
+						},
+						"size": 840.16,
+						"url": "/uploads/pexels_eberhardgross_1367192_2d5bf83eaf.jpg",
+						"previewUrl": null,
+						"updatedAt": "2026-04-01T16:17:52.703Z"
+					}
+				}
+			],
+			"metaData": {
+				"metaTitle": "Chop Logic Portal Home",
+				"metaDescription": "Chop Logic Home Description",
+				"keywords": "logic, philosophy, programming",
+				"authorName": "Dmitrii Suroviagin",
+				"canonicalURL": null,
+				"robots": "follow",
+				"structuredData": null,
+				"openGraph": {
+					"ogDescription": "Chop Logic OG Descr",
+					"ogImage": {
+						"documentId": "np08c0kq9fsy55aeee5bxoze",
+						"name": "IMG_20241102_123132.jpg",
+						"alternativeText": "Dmitrii's photo",
+						"caption": "Dmitrii's photo",
+						"focalPoint": null,
+						"width": 6528,
+						"height": 4896,
+						"formats": {
+							"thumbnail": {
+								"name": "thumbnail_IMG_20241102_123132.jpg",
+								"hash": "thumbnail_IMG_20241102_123132_fbf5a2a7a4",
+								"ext": ".jpg",
+								"mime": "image/jpeg",
+								"path": null,
+								"width": 208,
+								"height": 156,
+								"size": 9.69,
+								"sizeInBytes": 9686,
+								"url": "/uploads/thumbnail_IMG_20241102_123132_fbf5a2a7a4.jpg"
+							},
+							"small": {
+								"name": "small_IMG_20241102_123132.jpg",
+								"hash": "small_IMG_20241102_123132_fbf5a2a7a4",
+								"ext": ".jpg",
+								"mime": "image/jpeg",
+								"path": null,
+								"width": 500,
+								"height": 375,
+								"size": 48.75,
+								"sizeInBytes": 48747,
+								"url": "/uploads/small_IMG_20241102_123132_fbf5a2a7a4.jpg"
+							},
+							"medium": {
+								"name": "medium_IMG_20241102_123132.jpg",
+								"hash": "medium_IMG_20241102_123132_fbf5a2a7a4",
+								"ext": ".jpg",
+								"mime": "image/jpeg",
+								"path": null,
+								"width": 750,
+								"height": 563,
+								"size": 105.66,
+								"sizeInBytes": 105659,
+								"url": "/uploads/medium_IMG_20241102_123132_fbf5a2a7a4.jpg"
+							},
+							"large": {
+								"name": "large_IMG_20241102_123132.jpg",
+								"hash": "large_IMG_20241102_123132_fbf5a2a7a4",
+								"ext": ".jpg",
+								"mime": "image/jpeg",
+								"path": null,
+								"width": 1000,
+								"height": 750,
+								"size": 176.27,
+								"sizeInBytes": 176268,
+								"url": "/uploads/large_IMG_20241102_123132_fbf5a2a7a4.jpg"
+							}
+						},
+						"size": 3676.62,
+						"url": "/uploads/IMG_20241102_123132_fbf5a2a7a4.jpg",
+						"previewUrl": null,
+						"updatedAt": "2026-04-01T16:06:26.747Z"
+					},
+					"ogTitle": "Chop Logic OG",
+					"ogType": "website"
+				}
+			}
+		}
+	}
+}

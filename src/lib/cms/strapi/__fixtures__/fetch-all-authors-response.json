@@ -1,0 +1,77 @@
+{
+	"data": {
+		"authors": [
+			{
+				"documentId": "kqm2i83xje3xh3r9c6ll2cqp",
+				"name": "Test Author",
+				"email": "test-author@email.com",
+				"role": null,
+				"slug": "author",
+				"createdAt": "2026-04-02T18:37:08.997Z",
+				"updatedAt": "2026-04-02T18:37:12.768Z",
+				"bio": [
+					{
+						"type": "paragraph",
+						"children": [
+							{
+								"type": "text",
+								"text": "Test author biography"
+							}
+						]
+					}
+				],
+				"socialLinks": [
+					{
+						"id": "49",
+						"text": "Udemy link",
+						"url": "https://www.udemy.com/",
+						"type": "external",
+						"platform": null,
+						"target": "blank",
+						"referrerpolicy": "strict_origin_when_cross_origin"
+					}
+				]
+			},
+			{
+				"documentId": "kmqjzh4ds7g19x48zpeqpfno",
+				"name": "Dmitrii Suroviagin",
+				"email": "dmitrii.suroviagin@gmail.com",
+				"role": "Main contributor",
+				"slug": "dmitrii-suroviagin",
+				"createdAt": "2026-03-21T13:51:14.797Z",
+				"updatedAt": "2026-04-02T18:46:16.382Z",
+				"bio": [
+					{
+						"type": "paragraph",
+						"children": [
+							{
+								"type": "text",
+								"text": "Lead Full-Stack Engineer specializing in transforming legacy systems into scalable, modern applications. With 6+ years of experience, I architect performant platforms using React, Next.js, and TypeScript on cloud infrastructure (AWS/Azure). My work directly improves business metrics, having driven 40-50% performance gains and expanded market reach through strategic CRM integrations for global clients."
+							}
+						]
+					}
+				],
+				"socialLinks": [
+					{
+						"id": "52",
+						"text": "GitHub Account",
+						"url": "https://github.com/",
+						"type": "external",
+						"platform": "GitHub",
+						"target": "blank",
+						"referrerpolicy": "strict_origin_when_cross_origin"
+					},
+					{
+						"id": "53",
+						"text": "LinkedInAccount",
+						"url": "https://www.linkedin.com/feed/",
+						"type": "external",
+						"platform": "LinkedIn",
+						"target": "blank",
+						"referrerpolicy": "strict_origin_when_cross_origin"
+					}
+				]
+			}
+		]
+	}
+}

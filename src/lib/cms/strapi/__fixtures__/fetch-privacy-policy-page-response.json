@@ -1,0 +1,99 @@
+{
+	"data": {
+		"privacyPolicy": {
+			"documentId": "jwypzh9wt1oqc5bi7wvgcfx7",
+			"updatedAt": "2026-04-02T18:23:05.551Z",
+			"title": "Privacy Policy",
+			"subTitle": "Privacy Policy Sub Title",
+			"slug": "privacy-policy",
+			"content": [
+				{
+					"type": "paragraph",
+					"children": [
+						{
+							"type": "text",
+							"text": "Some legal text"
+						}
+					]
+				},
+				{
+					"type": "paragraph",
+					"children": [
+						{
+							"type": "text",
+							"text": "Unordered list"
+						}
+					]
+				},
+				{
+					"type": "list",
+					"format": "unordered",
+					"children": [
+						{
+							"type": "list-item",
+							"children": [
+								{
+									"type": "text",
+									"text": "One "
+								}
+							]
+						},
+						{
+							"type": "list-item",
+							"children": [
+								{
+									"type": "text",
+									"text": "Two"
+								}
+							]
+						},
+						{
+							"type": "list-item",
+							"children": [
+								{
+									"type": "text",
+									"text": "Tree"
+								}
+							]
+						}
+					]
+				},
+				{
+					"type": "heading",
+					"children": [
+						{
+							"type": "text",
+							"text": "Heading 2"
+						}
+					],
+					"level": 2
+				},
+				{
+					"type": "paragraph",
+					"children": [
+						{
+							"type": "text",
+							"text": "Simple text"
+						}
+					]
+				}
+			],
+			"metaData": {
+				"metaTitle": "Privacy Policy",
+				"metaDescription": "Privacy Policy Description",
+				"canonicalURL": null,
+				"authorName": null,
+				"keywords": null,
+				"robots": null,
+				"structuredData": null,
+				"openGraph": {
+					"id": "18",
+					"ogTitle": "OG Title",
+					"ogDescription": "OG Description",
+					"ogImage": null,
+					"ogType": null
+				}
+			}
+		}
+	}
+}
