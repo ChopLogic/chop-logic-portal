@@ -1,11 +1,7 @@
-import { StrapiContentProvider } from "../cms/strapi/strapi-content-provider";
 import { StrapiGraphqlContentProvider } from "../cms/strapi/strapi-graphql-content-provider";
 import type { ContentPort } from "./ports";
 
-/**
- * Factory for the active content backend. Swap the implementation here to change CMS.
- */
-export function createContentProvider(isGraphql: boolean = false): ContentPort {
+export function createContentProvider(): ContentPort {
 	const baseUrl = import.meta.env.STRAPI_URL?.replace(/\/$/, "");
 	if (!baseUrl) {
 		throw new Error(
@@ -22,8 +18,5 @@ export function createContentProvider(isGraphql: boolean = false): ContentPort {
 				: undefined,
 	};
 
-	if (isGraphql) {
-		return new StrapiGraphqlContentProvider(config);
-	}
-	return new StrapiContentProvider(config);
+	return new StrapiGraphqlContentProvider(config);
 }

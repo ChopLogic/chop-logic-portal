@@ -1,3 +1,5 @@
+import type { JsonValue } from "./json";
+
 export interface MetaData {
 	metaTitle: string;
 	metaDescription: string;
@@ -5,15 +7,22 @@ export interface MetaData {
 	keywords?: string;
 	authorName?: string;
 	robots?: Robots;
-	structuredData?: unknown;
+	structuredData?: JsonValue;
 	openGraph?: OpenGraph;
+}
+
+/** Absolute `src` for OG/Twitter tags (Astro-friendly, no Strapi-relative paths). */
+export interface OpenGraphImageMeta {
+	readonly src: string;
+	readonly width?: number;
+	readonly height?: number;
 }
 
 export interface OpenGraph {
 	ogDescription: string;
 	ogTitle: string;
 	ogType: OgType;
-	ogImage?: ImageMetadata;
+	ogImage?: OpenGraphImageMeta;
 }
 
 export enum Robots {

@@ -14,30 +14,61 @@ import {
 } from "./schemas";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const fixturePath = path.join(__dirname, "__fixtures__", "article.json");
+const articlesMockPath = path.join(
+	__dirname,
+	"__mocks__",
+	"fetch-all-articles-projection.json",
+);
+
+const previewFixture = {
+	documentId: "pv1",
+	name: "preview.jpg",
+	url: "/uploads/preview_abc.jpg",
+	width: 800,
+	height: 600,
+	alternativeText: "Preview alt",
+	caption: null,
+	formats: {},
+};
 
 describe("mapArticleToSummary", () => {
-	it("maps fixture article from Strapi 5 shape", () => {
-		const raw = JSON.parse(fs.readFileSync(fixturePath, "utf8")) as unknown;
-		const entity = parseArticleEntity(raw);
+	it("maps GraphQL-shaped article from mock projection", () => {
+		const root = JSON.parse(fs.readFileSync(articlesMockPath, "utf8")) as {
+			data: { articles: unknown[] };
+		};
+		const raw = root.data.articles[0];
+		if (raw == null || typeof raw !== "object") {
+			throw new Error("mock article missing");
+		}
+		const withPreview = { ...raw, preview: previewFixture };
+		const entity = parseArticleEntity(withPreview);
 		const summary = mapArticleToSummary("http://localhost:1337", entity);
-		expect(summary.slug).toBe("fixture-article");
-		expect(summary.title).toBe("Fixture article");
-		expect(summary.description).toBe("Fixture meta description for SEO.");
+		expect(summary.slug).toBe("article-1-test");
+		expect(summary.title).toBe("Article 1 Test");
+		expect(summary.subTitle).toBe("Article 1 sub-title");
 		expect(summary.heroImageUrl).toBe(
 			"http://localhost:1337/uploads/preview_abc.jpg",
 		);
 		expect(summary.heroImageAlt).toBe("Preview alt");
+		expect(summary.tags).toHaveLength(1);
+		expect(summary.authors).toHaveLength(1);
+		expect(summary.authors[0]?.name).toBe("Dmitrii Suroviagin");
 	});
 });
 
 describe("mapArticleToDetail", () => {
 	it("includes rendered body HTML", () => {
-		const raw = JSON.parse(fs.readFileSync(fixturePath, "utf8")) as unknown;
-		const entity = parseArticleEntity(raw);
+		const root = JSON.parse(fs.readFileSync(articlesMockPath, "utf8")) as {
+			data: { articles: unknown[] };
+		};
+		const raw = root.data.articles[0];
+		if (raw == null || typeof raw !== "object") {
+			throw new Error("mock article missing");
+		}
+		const withPreview = { ...raw, preview: previewFixture };
+		const entity = parseArticleEntity(withPreview);
 		const detail = mapArticleToDetail("http://localhost:1337", entity);
-		expect(detail.bodyHtml).toContain("<p>Summary line for the card.</p>");
-		expect(detail.bodyHtml).toContain("Body paragraph.");
+		expect(detail.bodyHtml).toContain("Lorem Ipsum");
 	});
 });
 
@@ -59,7 +90,7 @@ describe("parseStrapiList", () => {
 });
 
 describe("mapSingletonToPage", () => {
-	it("maps singleton with hero picture component", () => {
+	it("maps singleton with hero picture component (legacy REST)", () => {
 		const raw = {
 			documentId: "home1",
 			title: "Site",
@@ -79,5 +110,21 @@ describe("mapSingletonToPage", () => {
 		const page = mapSingletonToPage("http://localhost:1337", entity);
 		expect(page.heroImageUrl).toBe("http://localhost:1337/uploads/hero.png");
 		expect(page.publishedAt?.toISOString()).toContain("2024-01-01");
+	});
+
+	it("maps GraphQL home shape (title + subTitle, no heading)", () => {
+		const raw = {
+			documentId: "h1",
+			title: "Chop Logic Home",
+			subTitle: "A place where logic works!",
+			slug: "home",
+			metaData: { metaTitle: "MT", metaDescription: "MD" },
+			content: [],
+		};
+		const entity = parseSingletonEntity(raw);
+		const page = mapSingletonToPage("http://localhost:1337", entity);
+		expect(page.heading).toBe("Chop Logic Home");
+		expect(page.subHeading).toBe("A place where logic works!");
+		expect(page.heroImageUrl).toBeNull();
 	});
 });

@@ -9,7 +9,6 @@ const content = createContentProvider();
 const home = await content.getSingleton("home");
 const siteConfig = await content.getSiteConfig();
 const metaData = home?.metaData ?? DEFAULT_META_DATA;
-console.log("+++metaData", metaData);
 ---
 
 <!doctype html>

@@ -11,17 +11,14 @@ import type { StrapiGraphqlClientConfig } from "./graphql/client";
 import { strapiGraphqlRequest } from "./graphql/client";
 import { normalizeDynamicZoneFromGraphql } from "./graphql/normalize";
 import {
-	ABOUT_ME_QUERY,
-	ARTICLE_BY_SLUG_QUERY,
-	ARTICLE_LIST_QUERY,
-	HOME_QUERY,
-	SITE_CONFIG_QUERY,
-} from "./graphql/queries";
-import {
 	mapArticleToDetail,
 	mapArticleToSummary,
 	mapSingletonToPage,
 } from "./mappers";
+import { ABOUT_ME_QUERY } from "./queries/about-me";
+import { ARTICLE_BY_SLUG_QUERY, ARTICLES_LIST_QUERY } from "./queries/articles";
+import { CONFIG_QUERY } from "./queries/config";
+import { HOME_PAGE_QUERY } from "./queries/home-page";
 import {
 	parseArticleEntity,
 	parseConfigEntity,
@@ -40,20 +37,6 @@ function normalizeArticleFromGraphql(raw: unknown): unknown {
 	return next;
 }
 
-/** GraphQL returns picture components without `__component`; the singleton mapper expects it for about-me. */
-function normalizeHeroImageFromGraphql(hero: unknown): unknown {
-	if (!isRecord(hero)) {
-		return hero;
-	}
-	if (hero["__component"] === "sections.picture") {
-		return hero;
-	}
-	if (typeof hero["altText"] === "string" || hero["image"] != null) {
-		return { ...hero, __component: "sections.picture" };
-	}
-	return hero;
-}
-
 function normalizeSingletonFromGraphql(raw: unknown): unknown {
 	if (!isRecord(raw)) {
 		return raw;
@@ -61,9 +44,6 @@ function normalizeSingletonFromGraphql(raw: unknown): unknown {
 	const next: Record<string, unknown> = { ...raw };
 	if (next["content"] !== undefined) {
 		next["content"] = normalizeDynamicZoneFromGraphql(next["content"]);
-	}
-	if (next["heroImage"] !== undefined) {
-		next["heroImage"] = normalizeHeroImageFromGraphql(next["heroImage"]);
 	}
 	return next;
 }
@@ -74,7 +54,7 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 	async listArticles(): Promise<ArticleSummary[]> {
 		const data = await strapiGraphqlRequest<{ articles: unknown[] }>(
 			this.config,
-			ARTICLE_LIST_QUERY,
+			ARTICLES_LIST_QUERY,
 		);
 		const rows = Array.isArray(data.articles) ? data.articles : [];
 		const out: ArticleSummary[] = [];
@@ -110,7 +90,7 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 				? (
 						await strapiGraphqlRequest<{ home: unknown }>(
 							this.config,
-							HOME_QUERY,
+							HOME_PAGE_QUERY,
 						)
 					).home
 				: (
@@ -131,12 +111,12 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 	async getSiteConfig(): Promise<SiteConfig | null> {
 		const data = await strapiGraphqlRequest<{ config: unknown }>(
 			this.config,
-			SITE_CONFIG_QUERY,
+			CONFIG_QUERY,
 		);
 		if (data.config == null || !isRecord(data.config)) {
 			return null;
 		}
 		const entity = parseConfigEntity(data.config);
-		return mapSiteConfig(entity);
+		return mapSiteConfig(entity, this.config.baseUrl);
 	}
 }

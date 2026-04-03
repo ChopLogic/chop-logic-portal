@@ -9,9 +9,9 @@ export const PRIVACY_POLICY_QUERY = /* GraphQL */ `
         subTitle
         slug
         content
-    }
-    metaData {
-        ${METADATA_PROJECTION}
+        metaData {
+            ${METADATA_PROJECTION}
+        }
     }
   }
 `;

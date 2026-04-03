@@ -1,6 +1,33 @@
 /** biome-ignore-all lint/complexity/useLiteralKeys: Access to unknown keys */
 import { isRecord } from "../../checks";
-import { type Link, LinkTarget, LinkType, ReferrerPolicy } from "../models";
+import {
+	type Link,
+	LinkTarget,
+	LinkType,
+	ReferrerPolicy,
+	type SocialPlatform,
+} from "../models";
+
+function normalizeLinkTarget(raw: string): LinkTarget {
+	if (
+		raw === LinkTarget.Blank ||
+		raw === "_blank" ||
+		raw === "blank" ||
+		raw === ""
+	) {
+		return LinkTarget.Blank;
+	}
+	if (raw === LinkTarget.Self || raw === "_self" || raw === "self") {
+		return LinkTarget.Self;
+	}
+	if (raw === LinkTarget.Parent || raw === "_parent") {
+		return LinkTarget.Parent;
+	}
+	if (raw === LinkTarget.Top || raw === "_top") {
+		return LinkTarget.Top;
+	}
+	return LinkTarget.Blank;
+}
 
 export function mapLink(raw: unknown): Link | null {
 	if (!isRecord(raw)) {
@@ -15,14 +42,14 @@ export function mapLink(raw: unknown): Link | null {
 				? idRaw
 				: "";
 
+	const targetRaw = typeof raw["target"] === "string" ? raw["target"] : "";
+	const target = normalizeLinkTarget(targetRaw);
+
 	return {
 		id,
 		url: typeof raw["url"] === "string" ? raw["url"] : "",
 		text: typeof raw["text"] === "string" ? raw["text"] : "",
-		target:
-			typeof raw["target"] === "string"
-				? (raw["target"] as LinkTarget)
-				: LinkTarget.Blank,
+		target,
 		type:
 			typeof raw["type"] === "string"
 				? (raw["type"] as LinkType)
@@ -30,7 +57,10 @@ export function mapLink(raw: unknown): Link | null {
 		referrerpolicy:
 			typeof raw["referrerpolicy"] === "string"
 				? (raw["referrerpolicy"] as ReferrerPolicy)
-				: ReferrerPolicy.NoReferrer,
+				: ReferrerPolicy.StrictOriginWhenCrossOrigin,
+		...(typeof raw["platform"] === "string" && raw["platform"].length > 0
+			? { platform: raw["platform"] as SocialPlatform }
+			: {}),
 	};
 }
 
