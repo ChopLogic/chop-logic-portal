@@ -2,21 +2,19 @@
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import MetaData from "../components/meta-data/MetaData.astro";
-import { DEFAULT_META_DATA, DEFAULT_SITE_TITLE } from "../constants/defaults";
+import { DEFAULT_SITE_TITLE } from "../constants/defaults";
 import { createContentProvider } from "../lib/content/provider";
 
-const content = createContentProvider();
-const home = await content.getSingleton("home");
-const siteConfig = await content.getSiteConfig();
-const metaData = home?.metaData ?? DEFAULT_META_DATA;
+const provider = createContentProvider();
+const { home, siteConfig } = await provider.getHomeIndexContent();
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
 		<MetaData
-			siteTitle={siteConfig?.siteTitle ?? DEFAULT_SITE_TITLE}
-			metaData={metaData}
+			siteTitle={siteConfig.siteTitle || DEFAULT_SITE_TITLE}
+			metaData={home.metaData}
 		/>
 		<style>
 			main {
@@ -45,25 +43,11 @@ const metaData = home?.metaData ?? DEFAULT_META_DATA;
 	<body>
 		<Header />
 		<main>
-			{
-				home ? (
-					<>
-						<div class="home-hero">
-							<h1>{home.heading}</h1>
-							{home.subHeading && (
-								<p class="sub">{home.subHeading}</p>
-							)}
-						</div>
-						<div class="cms-body" set:html={home.bodyHtml} />
-					</>
-				) : (
-					<p>
-						No Home entry found in Strapi (publish the Home single
-						type), or
-						<code>STRAPI_URL</code> is unreachable.
-					</p>
-				)
-			}
+			<div class="home-hero">
+				<h1>{home.heading}</h1>
+				{home.subHeading && <p class="sub">{home.subHeading}</p>}
+			</div>
+			<div class="cms-body" set:html={home.bodyHtml} />
 		</main>
 		<Footer />
 	</body>

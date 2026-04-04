@@ -1,4 +1,5 @@
 import { isRecord } from "../../checks";
+import { ArticleNotFoundError } from "../../content/errors";
 import { mapSiteConfig } from "../../content/mappers";
 import type {
 	ArticleDetail,
@@ -6,7 +7,11 @@ import type {
 	SingletonPage,
 	SiteConfig,
 } from "../../content/models";
-import type { ContentPort, SingletonKey } from "../../content/ports";
+import type {
+	ContentPort,
+	HomeIndexContent,
+	SingletonKey,
+} from "../../content/ports";
 import type { StrapiGraphqlClientConfig } from "./graphql/client";
 import { strapiGraphqlRequest } from "./graphql/client";
 import { normalizeDynamicZoneFromGraphql } from "./graphql/normalize";
@@ -18,6 +23,7 @@ import {
 import { ABOUT_ME_QUERY } from "./queries/about-me";
 import { ARTICLE_BY_SLUG_QUERY, ARTICLES_LIST_QUERY } from "./queries/articles";
 import { CONFIG_QUERY } from "./queries/config";
+import { HOME_AND_CONFIG_QUERY } from "./queries/home-and-config";
 import { HOME_PAGE_QUERY } from "./queries/home-page";
 import {
 	parseArticleEntity,
@@ -48,8 +54,36 @@ function normalizeSingletonFromGraphql(raw: unknown): unknown {
 	return next;
 }
 
+function singletonLabel(key: SingletonKey): string {
+	return key === "home" ? "Home" : "About Me";
+}
+
 export class StrapiGraphqlContentProvider implements ContentPort {
 	constructor(private readonly config: StrapiGraphqlClientConfig) {}
+
+	private mapSingletonFromGraphql(
+		document: unknown,
+		cmsLabel: string,
+	): SingletonPage {
+		if (document == null || !isRecord(document)) {
+			throw new Error(
+				`${cmsLabel} is missing, unpublished, or not returned by the CMS. Publish the single type in Strapi or check STRAPI_URL and API permissions.`,
+			);
+		}
+		const normalized = normalizeSingletonFromGraphql(document);
+		const entity = parseSingletonEntity(normalized);
+		return mapSingletonToPage(this.config.baseUrl, entity);
+	}
+
+	private mapSiteConfigFromGraphql(config: unknown): SiteConfig {
+		if (config == null || !isRecord(config)) {
+			throw new Error(
+				"Global config is missing, unpublished, or not returned by the CMS. Publish the Config single type in Strapi or check STRAPI_URL and API permissions.",
+			);
+		}
+		const entity = parseConfigEntity(config);
+		return mapSiteConfig(entity, this.config.baseUrl);
+	}
 
 	async listArticles(): Promise<ArticleSummary[]> {
 		const data = await strapiGraphqlRequest<{ articles: unknown[] }>(
@@ -68,7 +102,7 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 		return out;
 	}
 
-	async getArticleBySlug(slug: string): Promise<ArticleDetail | null> {
+	async getArticleBySlug(slug: string): Promise<ArticleDetail> {
 		const data = await strapiGraphqlRequest<{ articles: unknown[] }>(
 			this.config,
 			ARTICLE_BY_SLUG_QUERY,
@@ -77,14 +111,25 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 		const rows = Array.isArray(data.articles) ? data.articles : [];
 		const first = rows[0];
 		if (first === undefined) {
-			return null;
+			throw new ArticleNotFoundError(slug);
 		}
 		const normalized = normalizeArticleFromGraphql(first);
 		const entity = parseArticleEntity(normalized);
 		return mapArticleToDetail(this.config.baseUrl, entity);
 	}
 
-	async getSingleton(key: SingletonKey): Promise<SingletonPage | null> {
+	async getHomeIndexContent(): Promise<HomeIndexContent> {
+		const data = await strapiGraphqlRequest<{
+			home: unknown;
+			config: unknown;
+		}>(this.config, HOME_AND_CONFIG_QUERY);
+		return {
+			home: this.mapSingletonFromGraphql(data.home, "Home"),
+			siteConfig: this.mapSiteConfigFromGraphql(data.config),
+		};
+	}
+
+	async getSingleton(key: SingletonKey): Promise<SingletonPage> {
 		const document =
 			key === "home"
 				? (
@@ -100,23 +145,14 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 						)
 					).aboutMe;
 
-		if (document == null || !isRecord(document)) {
-			return null;
-		}
-		const normalized = normalizeSingletonFromGraphql(document);
-		const entity = parseSingletonEntity(normalized);
-		return mapSingletonToPage(this.config.baseUrl, entity);
+		return this.mapSingletonFromGraphql(document, singletonLabel(key));
 	}
 
-	async getSiteConfig(): Promise<SiteConfig | null> {
+	async getSiteConfig(): Promise<SiteConfig> {
 		const data = await strapiGraphqlRequest<{ config: unknown }>(
 			this.config,
 			CONFIG_QUERY,
 		);
-		if (data.config == null || !isRecord(data.config)) {
-			return null;
-		}
-		const entity = parseConfigEntity(data.config);
-		return mapSiteConfig(entity, this.config.baseUrl);
+		return this.mapSiteConfigFromGraphql(data.config);
 	}
 }

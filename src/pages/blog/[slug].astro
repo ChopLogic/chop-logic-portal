@@ -1,5 +1,6 @@
 ---
 import Layout from "../../layouts/BlogPost.astro";
+import { ArticleNotFoundError } from "../../lib/content/errors";
 import { createContentProvider } from "../../lib/content/provider";
 
 export async function getStaticPaths() {
@@ -7,14 +8,18 @@ export async function getStaticPaths() {
 	const summaries = await content.listArticles();
 	const paths = await Promise.all(
 		summaries.map(async (summary) => {
-			const detail = await content.getArticleBySlug(summary.slug);
-			if (!detail) {
-				return null;
+			try {
+				const detail = await content.getArticleBySlug(summary.slug);
+				return {
+					params: { slug: summary.slug },
+					props: { detail },
+				};
+			} catch (e) {
+				if (e instanceof ArticleNotFoundError) {
+					return null;
+				}
+				throw e;
 			}
-			return {
-				params: { slug: summary.slug },
-				props: { detail },
-			};
 		}),
 	);
 	return paths.filter((p): p is NonNullable<typeof p> => p !== null);

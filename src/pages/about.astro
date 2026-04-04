@@ -6,33 +6,17 @@ const content = createContentProvider();
 const page = await content.getSingleton("about-me");
 ---
 
-{
-	page ? (
-		<Layout
-			title={page.metaData.metaTitle}
-			description={page.metaData.metaDescription}
-			pubDate={page.publishedAt ?? new Date()}
-			heroImageUrl={page.heroImageUrl}
-			heroImageAlt={page.heroImageAlt}
-		>
-			<h2>{page.heading}</h2>
-			{page.subHeading && <p>{page.subHeading}</p>}
-			<div class="cms-body" set:html={page.bodyHtml} />
-		</Layout>
-	) : (
-		<Layout
-			title="About"
-			description="About page"
-			pubDate={new Date()}
-			heroImageUrl={null}
-		>
-			<p>
-				No About Me entry in Strapi, or it is not published. Create and publish
-				the About Me single type in the CMS.
-			</p>
-		</Layout>
-	)
-}
+<Layout
+	title={page.metaData.metaTitle}
+	description={page.metaData.metaDescription}
+	pubDate={page.publishedAt ?? new Date()}
+	heroImageUrl={page.heroImageUrl}
+	heroImageAlt={page.heroImageAlt}
+>
+	<h2>{page.heading}</h2>
+	{page.subHeading && <p>{page.subHeading}</p>}
+	<div class="cms-body" set:html={page.bodyHtml} />
+</Layout>
 
 <style>
 	.cms-body :global(.cms-picture img) {
