@@ -1,18 +1,19 @@
 ---
+import { DEFAULT_SITE_TITLE } from "../../constants/defaults";
 import Layout from "../../layouts/BlogPost.astro";
 import { ArticleNotFoundError } from "../../lib/content/errors";
 import { createContentProvider } from "../../lib/content/provider";
 
 export async function getStaticPaths() {
 	const content = createContentProvider();
-	const summaries = await content.listArticles();
+	const { articles, siteConfig } = await content.getBlogIndexContent();
 	const paths = await Promise.all(
-		summaries.map(async (summary) => {
+		articles.map(async (summary) => {
 			try {
 				const detail = await content.getArticleBySlug(summary.slug);
 				return {
 					params: { slug: summary.slug },
-					props: { detail },
+					props: { detail, siteConfig },
 				};
 			} catch (e) {
 				if (e instanceof ArticleNotFoundError) {
@@ -25,12 +26,14 @@ export async function getStaticPaths() {
 	return paths.filter((p): p is NonNullable<typeof p> => p !== null);
 }
 
-const { detail } = Astro.props;
+const { detail, siteConfig } = Astro.props;
+const siteTitle = siteConfig.siteTitle || DEFAULT_SITE_TITLE;
 ---
 
 <Layout
+	siteTitle={siteTitle}
+	metaData={detail.metaData}
 	title={detail.title}
-	description={detail.description}
 	pubDate={detail.pubDate}
 	updatedDate={detail.updatedDate}
 	heroImageUrl={detail.heroImageUrl}

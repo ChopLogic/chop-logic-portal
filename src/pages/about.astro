@@ -1,19 +1,21 @@
 ---
+import { DEFAULT_SITE_TITLE } from "../constants/defaults";
 import Layout from "../layouts/BlogPost.astro";
 import { createContentProvider } from "../lib/content/provider";
 
 const content = createContentProvider();
-const page = await content.getSingleton("about-me");
+const { page, siteConfig } = await content.getAboutPageContent();
+const siteTitle = siteConfig.siteTitle || DEFAULT_SITE_TITLE;
 ---
 
 <Layout
-	title={page.metaData.metaTitle}
-	description={page.metaData.metaDescription}
+	siteTitle={siteTitle}
+	metaData={page.metaData}
+	title={page.heading}
 	pubDate={page.publishedAt ?? new Date()}
 	heroImageUrl={page.heroImageUrl}
 	heroImageAlt={page.heroImageAlt}
 >
-	<h2>{page.heading}</h2>
 	{page.subHeading && <p>{page.subHeading}</p>}
 	<div class="cms-body" set:html={page.bodyHtml} />
 </Layout>

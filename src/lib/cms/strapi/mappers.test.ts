@@ -53,6 +53,8 @@ describe("mapArticleToSummary", () => {
 		expect(summary.tags).toHaveLength(1);
 		expect(summary.authors).toHaveLength(1);
 		expect(summary.authors[0]?.name).toBe("Dmitrii Suroviagin");
+		expect(summary.metaData.metaTitle).toBeTruthy();
+		expect(summary.metaData.metaDescription).toBeTruthy();
 	});
 });
 

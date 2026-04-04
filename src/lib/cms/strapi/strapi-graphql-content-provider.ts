@@ -8,6 +8,8 @@ import type {
 	SiteConfig,
 } from "../../content/models";
 import type {
+	AboutPageContent,
+	BlogIndexContent,
 	ContentPort,
 	HomeIndexContent,
 	SingletonKey,
@@ -20,8 +22,10 @@ import {
 	mapArticleToSummary,
 	mapSingletonToPage,
 } from "./mappers";
+import { ABOUT_AND_CONFIG_QUERY } from "./queries/about-and-config";
 import { ABOUT_ME_QUERY } from "./queries/about-me";
 import { ARTICLE_BY_SLUG_QUERY, ARTICLES_LIST_QUERY } from "./queries/articles";
+import { ARTICLES_AND_CONFIG_QUERY } from "./queries/articles-and-config";
 import { CONFIG_QUERY } from "./queries/config";
 import { HOME_AND_CONFIG_QUERY } from "./queries/home-and-config";
 import { HOME_PAGE_QUERY } from "./queries/home-page";
@@ -85,11 +89,9 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 		return mapSiteConfig(entity, this.config.baseUrl);
 	}
 
-	async listArticles(): Promise<ArticleSummary[]> {
-		const data = await strapiGraphqlRequest<{ articles: unknown[] }>(
-			this.config,
-			ARTICLES_LIST_QUERY,
-		);
+	private mapArticleListResponse(data: {
+		articles: unknown[];
+	}): ArticleSummary[] {
 		const rows = Array.isArray(data.articles) ? data.articles : [];
 		const out: ArticleSummary[] = [];
 		for (const raw of rows) {
@@ -100,6 +102,36 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 			}
 		}
 		return out;
+	}
+
+	async listArticles(): Promise<ArticleSummary[]> {
+		const data = await strapiGraphqlRequest<{ articles: unknown[] }>(
+			this.config,
+			ARTICLES_LIST_QUERY,
+		);
+		return this.mapArticleListResponse(data);
+	}
+
+	async getBlogIndexContent(): Promise<BlogIndexContent> {
+		const data = await strapiGraphqlRequest<{
+			articles: unknown[];
+			config: unknown;
+		}>(this.config, ARTICLES_AND_CONFIG_QUERY);
+		return {
+			articles: this.mapArticleListResponse(data),
+			siteConfig: this.mapSiteConfigFromGraphql(data.config),
+		};
+	}
+
+	async getAboutPageContent(): Promise<AboutPageContent> {
+		const data = await strapiGraphqlRequest<{
+			aboutMe: unknown;
+			config: unknown;
+		}>(this.config, ABOUT_AND_CONFIG_QUERY);
+		return {
+			page: this.mapSingletonFromGraphql(data.aboutMe, "About Me"),
+			siteConfig: this.mapSiteConfigFromGraphql(data.config),
+		};
 	}
 
 	async getArticleBySlug(slug: string): Promise<ArticleDetail> {

@@ -1,16 +1,24 @@
 import rss from "@astrojs/rss";
-import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
+import {
+	DEFAULT_SITE_DESCRIPTION,
+	DEFAULT_SITE_TITLE,
+} from "../constants/defaults";
 import { createContentProvider } from "../lib/content/provider";
 
 export async function GET(context) {
 	const content = createContentProvider();
-	const posts = await content.listArticles();
-	const sorted = [...posts].sort(
+	const { articles, siteConfig } = await content.getBlogIndexContent();
+	const sorted = [...articles].sort(
 		(a, b) => b.pubDate.valueOf() - a.pubDate.valueOf(),
 	);
+	const title = siteConfig.siteTitle || DEFAULT_SITE_TITLE;
+	const description =
+		siteConfig.description.trim() !== ""
+			? siteConfig.description
+			: DEFAULT_SITE_DESCRIPTION;
 	return rss({
-		title: SITE_TITLE,
-		description: SITE_DESCRIPTION,
+		title,
+		description,
 		site: context.site,
 		items: sorted.map((post) => ({
 			title: post.title,

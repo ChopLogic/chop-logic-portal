@@ -118,6 +118,7 @@ export function mapArticleToSummary(
 		previewImage,
 		tags: mapArticleTags(entity),
 		authors: mapArticleAuthors(entity),
+		metaData: mapMetaData(entity.metaData, baseUrl),
 	};
 }
 
