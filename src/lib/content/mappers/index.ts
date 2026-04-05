@@ -2,6 +2,7 @@ export {
 	cmsImageDefaultSrc,
 	cmsImageWidthsForResponsive,
 	mapCmsImage,
+	pickOpenGraphCmsImage,
 	resolveMediaAbsoluteUrl,
 } from "./image";
 export { mapLinks } from "./link";

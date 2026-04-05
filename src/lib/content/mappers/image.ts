@@ -101,6 +101,79 @@ export function cmsImageDefaultSrc(image: CmsImage, baseUrl: string): string {
 	return resolveMediaAbsoluteUrl(baseUrl, image.url);
 }
 
+/** Facebook / LinkedIn style cards: aim ~1200×630; Strapi cannot crop here — we pick the best preset. */
+const OG_IDEAL_WIDTH = 1200;
+const OG_MIN_WIDTH = 600;
+const OG_MIN_HEIGHT = 315;
+/** Above this width, treat as “original scale” and deprioritise vs presets. */
+const OG_SOFT_MAX_WIDTH = Math.round(OG_IDEAL_WIDTH * 1.5);
+
+export type OpenGraphCmsImagePick = {
+	readonly src: string;
+	readonly width: number;
+	readonly height: number;
+};
+
+/**
+ * Picks a Strapi `formats` variant (large → … → original) closest to recommended OG size,
+ * instead of always using the full upload (smaller files, faster crawler fetches).
+ */
+export function pickOpenGraphCmsImage(
+	image: CmsImage,
+	baseUrl: string,
+): OpenGraphCmsImagePick {
+	const candidates: OpenGraphCmsImagePick[] = [];
+	const push = (url: string, width: number, height: number) => {
+		if (width > 0 && height > 0) {
+			candidates.push({
+				src: resolveMediaAbsoluteUrl(baseUrl, url),
+				width,
+				height,
+			});
+		}
+	};
+
+	for (const name of [...FORMAT_NAMES].reverse()) {
+		const v = image.formats[name];
+		if (v) {
+			push(v.url, v.width, v.height);
+		}
+	}
+	push(image.url, image.width, image.height);
+
+	const meetsMinimum = (c: OpenGraphCmsImagePick) =>
+		c.width >= OG_MIN_WIDTH && c.height >= OG_MIN_HEIGHT;
+	let pool = candidates.filter(meetsMinimum);
+	if (pool.length === 0) {
+		pool = candidates;
+	}
+
+	const scoreWidth = (c: OpenGraphCmsImagePick): number => {
+		if (c.width > OG_SOFT_MAX_WIDTH) {
+			return c.width;
+		}
+		return Math.abs(c.width - OG_IDEAL_WIDTH);
+	};
+
+	pool.sort((a, b) => {
+		const d = scoreWidth(a) - scoreWidth(b);
+		if (d !== 0) {
+			return d;
+		}
+		return b.width * b.height - a.width * a.height;
+	});
+
+	const best = pool[0];
+	if (best) {
+		return best;
+	}
+	return {
+		src: cmsImageDefaultSrc(image, baseUrl),
+		width: image.width,
+		height: image.height,
+	};
+}
+
 /** Distinct widths from the original + format variants (sorted ascending). */
 export function cmsImageWidthsForResponsive(image: CmsImage): number[] {
 	const widths = new Set<number>([image.width]);

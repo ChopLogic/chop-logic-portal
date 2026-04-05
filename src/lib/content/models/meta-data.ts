@@ -6,7 +6,8 @@ export interface MetaData {
 	canonicalURL?: string;
 	keywords?: string;
 	authorName?: string;
-	robots?: Robots;
+	/** e.g. `index, follow` or `noindex, nofollow` */
+	robots?: string;
 	structuredData?: JsonValue;
 	openGraph?: OpenGraph;
 }
@@ -16,6 +17,7 @@ export interface OpenGraphImageMeta {
 	readonly src: string;
 	readonly width?: number;
 	readonly height?: number;
+	readonly alt?: string;
 }
 
 export interface OpenGraph {
@@ -23,13 +25,6 @@ export interface OpenGraph {
 	ogTitle: string;
 	ogType: OgType;
 	ogImage?: OpenGraphImageMeta;
-}
-
-export enum Robots {
-	INDEX = "index",
-	FOLLOW = "follow",
-	NOINDEX = "noindex",
-	NOFOLLOW = "nofollow",
 }
 
 export enum OgType {

@@ -151,4 +151,49 @@ describe("MetaData.astro", () => {
 		expect(html).toContain('title="Chop Logic"');
 		expect(html).toContain('href="https://example.com/rss.xml"');
 	});
+
+	test("defaults robots to index, follow when robots is omitted", async () => {
+		const { robots: _r, ...metaWithoutRobots } = baseProps.metaData;
+		const html = await renderMeta({
+			metaData: metaWithoutRobots,
+		});
+		expect(html).toContain('meta name="robots" content="index, follow"');
+	});
+
+	test("renders JSON-LD script when structuredData is an object", async () => {
+		const html = await renderMeta({
+			metaData: {
+				...baseProps.metaData,
+				structuredData: {
+					"@context": "https://schema.org",
+					"@type": "Article",
+					headline: "Example",
+				},
+			},
+		});
+		expect(html).toContain('type="application/ld+json"');
+		expect(html).toContain("schema.org");
+		expect(html).toContain("Example");
+	});
+
+	test("emits og:image dimensions and alt when openGraph image provides them", async () => {
+		const html = await renderMeta({
+			metaData: {
+				...baseProps.metaData,
+				openGraph: {
+					...baseProps.metaData.openGraph,
+					ogImage: {
+						src: "https://cdn.example.com/og.jpg",
+						width: 1200,
+						height: 630,
+						alt: "Hero alt text",
+					},
+				},
+			},
+		});
+		expect(html).toContain('property="og:image:width" content="1200"');
+		expect(html).toContain('property="og:image:height" content="630"');
+		expect(html).toContain('property="og:image:alt" content="Hero alt text"');
+		expect(html).toContain('name="twitter:image:alt" content="Hero alt text"');
+	});
 });

@@ -5,14 +5,15 @@ import {
 	DEFAULT_SITE_TITLE,
 } from "../../../constants/defaults";
 import { isRecord } from "../../checks";
-import { type MetaData, OgType, type OpenGraph, Robots } from "../models";
-import { cmsImageDefaultSrc, mapCmsImage } from "./image";
+import { type MetaData, OgType, type OpenGraph } from "../models";
+import { mapCmsImage, pickOpenGraphCmsImage } from "./image";
 
 export function mapMetaData(raw: unknown, baseUrl: string): MetaData {
 	if (!isRecord(raw)) {
 		return {
 			metaTitle: DEFAULT_SITE_TITLE,
 			metaDescription: DEFAULT_SITE_DESCRIPTION,
+			robots: "index, follow",
 			openGraph: DEFAULT_OPEN_GRAPH,
 		};
 	}
@@ -50,9 +51,9 @@ export function mapMetaData(raw: unknown, baseUrl: string): MetaData {
 		authorName:
 			typeof raw["authorName"] === "string" ? raw["authorName"] : undefined,
 		robots:
-			typeof raw["robots"] === "string"
-				? (raw["robots"] as Robots)
-				: Robots.INDEX,
+			typeof raw["robots"] === "string" && raw["robots"].trim() !== ""
+				? raw["robots"].trim()
+				: "index, follow",
 		structuredData,
 		openGraph:
 			typeof raw["openGraph"] === "object" && raw["openGraph"] !== null
@@ -70,10 +71,19 @@ function mapOpenGraph(raw: unknown, baseUrl: string): OpenGraph {
 	if (ogImageRaw != null && isRecord(ogImageRaw)) {
 		const img = mapCmsImage(ogImageRaw);
 		if (img) {
+			const alt =
+				typeof img.alternativeText === "string" &&
+				img.alternativeText.trim() !== ""
+					? img.alternativeText.trim()
+					: img.name.trim() !== ""
+						? img.name
+						: undefined;
+			const picked = pickOpenGraphCmsImage(img, baseUrl);
 			ogImage = {
-				src: cmsImageDefaultSrc(img, baseUrl),
-				width: img.width,
-				height: img.height,
+				src: picked.src,
+				width: picked.width,
+				height: picked.height,
+				alt,
 			};
 		}
 	}

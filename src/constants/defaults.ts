@@ -10,5 +10,6 @@ export const DEFAULT_OPEN_GRAPH: OpenGraph = {
 export const DEFAULT_META_DATA: MetaData = {
 	metaTitle: DEFAULT_SITE_TITLE,
 	metaDescription: DEFAULT_SITE_DESCRIPTION,
+	robots: "index, follow",
 	openGraph: DEFAULT_OPEN_GRAPH,
 };
