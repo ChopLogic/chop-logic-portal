@@ -1,0 +1,228 @@
+import { experimental_AstroContainer as AstroContainer } from "astro/container";
+import { describe, expect, test } from "vitest";
+import { finalizePageMetaData } from "../../lib/content/mappers/meta-data";
+import { type MetaData, OgType } from "../../lib/content/models";
+import MetaDataAstro from "./MetaData.astro";
+
+const openGraphBase = {
+	ogDescription: "Chop Logic Open Graph Description",
+	ogTitle: "Chop Logic Open Graph Title",
+	ogType: OgType.WEBSITE,
+};
+
+const draftFixture = (): MetaData => ({
+	metaTitle: "Chop Logic Meta Title",
+	metaDescription: "Chop Logic Meta Description",
+	robots: "index, follow",
+	openGraph: openGraphBase,
+});
+
+const baseProps = {
+	siteTitle: "Chop Logic Site Title",
+	metaData: finalizePageMetaData(draftFixture(), "Chop Logic Site Title"),
+};
+
+async function renderMeta(
+	props: Record<string, unknown> = {},
+	requestUrl = "https://example.com/docs/page",
+) {
+	const container = await AstroContainer.create();
+	return container.renderToString(MetaDataAstro, {
+		props: { ...baseProps, ...props },
+		request: new Request(requestUrl),
+	});
+}
+
+describe("MetaData.astro", () => {
+	test("renders core SEO and Open Graph tags", async () => {
+		const html = await renderMeta();
+		expect(html).toContain("<title>Chop Logic Meta Title</title>");
+		expect(html).toContain('meta name="title" content="Chop Logic Meta Title"');
+		expect(html).toContain(
+			'meta name="description" content="Chop Logic Meta Description"',
+		);
+		expect(html).toContain('meta name="robots" content="index, follow"');
+		expect(html).toContain('meta property="og:type" content="website"');
+		expect(html).toContain(
+			'meta property="og:title" content="Chop Logic Open Graph Title"',
+		);
+		expect(html).toContain(
+			'meta property="og:description" content="Chop Logic Open Graph Description"',
+		);
+		expect(html).toContain(
+			'meta name="twitter:card" content="summary_large_image"',
+		);
+		expect(html).toContain(
+			'meta name="twitter:title" content="Chop Logic Open Graph Title"',
+		);
+		expect(html).toContain(
+			'meta name="twitter:description" content="Chop Logic Open Graph Description"',
+		);
+		expect(html).toContain('property="og:image"');
+		expect(html).toContain('name="twitter:image"');
+	});
+
+	test("uses request pathname and site for default canonical, og:url, and twitter:url", async () => {
+		const html = await renderMeta(
+			{},
+			"https://example.com/blog/my-post?ref=twitter",
+		);
+		expect(html).toContain(
+			'<link rel="canonical" href="https://example.com/blog/my-post">',
+		);
+		expect(html).toContain(
+			'<meta property="og:url" content="https://example.com/blog/my-post">',
+		);
+		expect(html).toContain(
+			'<meta name="twitter:url" content="https://example.com/blog/my-post">',
+		);
+	});
+
+	test("uses custom canonicalURL for canonical, og:url, and twitter:url", async () => {
+		const custom = "https://example.com/preferred-url";
+		const html = await renderMeta({
+			metaData: finalizePageMetaData(
+				{ ...draftFixture(), canonicalURL: custom },
+				"Chop Logic Site Title",
+			),
+		});
+		expect(html).toContain(`<link rel="canonical" href="${custom}">`);
+		expect(html).toContain(`<meta property="og:url" content="${custom}">`);
+		expect(html).toContain(`<meta name="twitter:url" content="${custom}">`);
+	});
+
+	test("omits keywords and author meta when not provided", async () => {
+		const html = await renderMeta();
+		expect(html).not.toContain('name="keywords"');
+		expect(html).not.toContain('name="author"');
+	});
+
+	test("omits keywords and author when empty or whitespace-only", async () => {
+		const html = await renderMeta({
+			metaData: finalizePageMetaData(
+				{ ...draftFixture(), keywords: "   ", authorName: "\t\n" },
+				"Chop Logic Site Title",
+			),
+		});
+		expect(html).not.toContain('name="keywords"');
+		expect(html).not.toContain('name="author"');
+	});
+
+	test("renders keywords and author when non-empty", async () => {
+		const html = await renderMeta({
+			metaData: finalizePageMetaData(
+				{
+					...draftFixture(),
+					keywords: "astro, vitest",
+					authorName: "Ada Lovelace",
+				},
+				"Chop Logic Site Title",
+			),
+		});
+		expect(html).toContain('meta name="keywords" content="astro, vitest"');
+		expect(html).toContain('meta name="author" content="Ada Lovelace"');
+	});
+
+	test("uses custom og title and description when provided", async () => {
+		const html = await renderMeta({
+			metaData: finalizePageMetaData(
+				{
+					...draftFixture(),
+					openGraph: {
+						ogTitle: "OG Title",
+						ogDescription: "OG Description",
+						ogType: OgType.WEBSITE,
+					},
+				},
+				"Chop Logic Site Title",
+			),
+		});
+		expect(html).toContain('meta property="og:title" content="OG Title"');
+		expect(html).toContain(
+			'meta property="og:description" content="OG Description"',
+		);
+		expect(html).toContain('meta name="twitter:title" content="OG Title"');
+		expect(html).toContain(
+			'meta name="twitter:description" content="OG Description"',
+		);
+	});
+
+	test("allows overriding og type and robots", async () => {
+		const html = await renderMeta({
+			metaData: finalizePageMetaData(
+				{
+					...draftFixture(),
+					robots: "noindex, nofollow",
+					openGraph: {
+						...openGraphBase,
+						ogType: OgType.ARTICLE,
+					},
+				},
+				"Chop Logic Site Title",
+			),
+		});
+		expect(html).toContain('meta property="og:type" content="article"');
+		expect(html).toContain('meta name="robots" content="noindex, nofollow"');
+	});
+
+	test("sets RSS alternate link with site title", async () => {
+		const html = await renderMeta({
+			siteTitle: "Chop Logic",
+			metaData: finalizePageMetaData(draftFixture(), "Chop Logic"),
+		});
+		expect(html).toContain('type="application/rss+xml"');
+		expect(html).toContain('title="Chop Logic"');
+		expect(html).toContain('href="https://example.com/rss.xml"');
+	});
+
+	test("defaults robots to index, follow when robots is omitted", async () => {
+		const { robots: _r, ...draftNoRobots } = draftFixture();
+		const html = await renderMeta({
+			metaData: finalizePageMetaData(draftNoRobots, "Chop Logic Site Title"),
+		});
+		expect(html).toContain('meta name="robots" content="index, follow"');
+	});
+
+	test("renders JSON-LD script when structuredData is an object", async () => {
+		const html = await renderMeta({
+			metaData: finalizePageMetaData(
+				{
+					...draftFixture(),
+					structuredData: {
+						"@context": "https://schema.org",
+						"@type": "Article",
+						headline: "Example",
+					},
+				},
+				"Chop Logic Site Title",
+			),
+		});
+		expect(html).toContain('type="application/ld+json"');
+		expect(html).toContain("schema.org");
+		expect(html).toContain("Example");
+	});
+
+	test("emits og:image dimensions and alt when openGraph image provides them", async () => {
+		const html = await renderMeta({
+			metaData: finalizePageMetaData(
+				{
+					...draftFixture(),
+					openGraph: {
+						...openGraphBase,
+						ogImage: {
+							src: "https://cdn.example.com/og.jpg",
+							width: 1200,
+							height: 630,
+							alt: "Hero alt text",
+						},
+					},
+				},
+				"Chop Logic Site Title",
+			),
+		});
+		expect(html).toContain('property="og:image:width" content="1200"');
+		expect(html).toContain('property="og:image:height" content="630"');
+		expect(html).toContain('property="og:image:alt" content="Hero alt text"');
+		expect(html).toContain('name="twitter:image:alt" content="Hero alt text"');
+	});
+});

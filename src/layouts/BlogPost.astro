@@ -1,13 +1,15 @@
 ---
 import { Image } from "astro:assets";
-import BaseHead from "../components/BaseHead.astro";
 import Footer from "../components/Footer.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import Header from "../components/Header.astro";
+import MetaData from "../components/meta-data/MetaData.astro";
+import type { PageMetaData } from "../lib/content/models";
 
 type Props = {
+	siteTitle: string;
+	metaData: PageMetaData;
 	title: string;
-	description: string;
 	pubDate: Date;
 	updatedDate?: Date;
 	heroImageUrl: string | null;
@@ -15,8 +17,9 @@ type Props = {
 };
 
 const {
+	siteTitle,
+	metaData,
 	title,
-	description,
 	pubDate,
 	updatedDate,
 	heroImageUrl,
@@ -26,7 +29,7 @@ const {
 
 <html lang="en">
 	<head>
-		<BaseHead title={title} description={description} />
+		<MetaData siteTitle={siteTitle} metaData={metaData} />
 		<style>
 			main {
 				width: calc(100% - 2em);

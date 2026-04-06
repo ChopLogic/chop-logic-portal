@@ -1,38 +1,24 @@
 ---
+import { DEFAULT_SITE_TITLE } from "../constants/defaults";
 import Layout from "../layouts/BlogPost.astro";
 import { createContentProvider } from "../lib/content/provider";
 
 const content = createContentProvider();
-const page = await content.getSingleton("about-me");
+const { page, siteConfig } = await content.getAboutPageContent();
+const siteTitle = siteConfig.siteTitle || DEFAULT_SITE_TITLE;
 ---
 
-{
-	page ? (
-		<Layout
-			title={page.seo.metaTitle}
-			description={page.seo.metaDescription}
-			pubDate={page.publishedAt ?? new Date()}
-			heroImageUrl={page.heroImageUrl}
-			heroImageAlt={page.heroImageAlt}
-		>
-			<h2>{page.heading}</h2>
-			{page.subHeading && <p>{page.subHeading}</p>}
-			<div class="cms-body" set:html={page.bodyHtml} />
-		</Layout>
-	) : (
-		<Layout
-			title="About"
-			description="About page"
-			pubDate={new Date()}
-			heroImageUrl={null}
-		>
-			<p>
-				No About Me entry in Strapi, or it is not published. Create and publish
-				the About Me single type in the CMS.
-			</p>
-		</Layout>
-	)
-}
+<Layout
+	siteTitle={siteTitle}
+	metaData={page.metaData}
+	title={page.heading}
+	pubDate={page.publishedAt ?? new Date()}
+	heroImageUrl={page.heroImageUrl}
+	heroImageAlt={page.heroImageAlt}
+>
+	{page.subHeading && <p>{page.subHeading}</p>}
+	<div class="cms-body" set:html={page.bodyHtml} />
+</Layout>
 
 <style>
 	.cms-body :global(.cms-picture img) {

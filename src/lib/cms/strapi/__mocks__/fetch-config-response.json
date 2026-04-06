@@ -1,0 +1,89 @@
+{
+	"data": {
+		"config": {
+			"documentId": "y98o7tc2p127it5mht1e64ng",
+			"title": "Chop Logic",
+			"description": "A place where logic works!",
+			"links": [
+				{
+					"id": "27",
+					"text": "LinkedIn",
+					"url": "https://www.linkedin.com/in/dmitrii-suroviagin/",
+					"type": "external",
+					"platform": "LinkedIn",
+					"target": "blank",
+					"referrerpolicy": "strict_origin_when_cross_origin"
+				},
+				{
+					"id": "28",
+					"text": "GitHub",
+					"url": "https://github.com/ChopLogic",
+					"type": "external",
+					"platform": "GitHub",
+					"target": "blank",
+					"referrerpolicy": "strict_origin_when_cross_origin"
+				}
+			],
+			"footer": [
+				{
+					"type": "paragraph",
+					"children": [
+						{
+							"type": "text",
+							"text": "@copyright Dmitrii Suroviagin"
+						}
+					]
+				},
+				{
+					"type": "paragraph",
+					"children": [
+						{
+							"type": "text",
+							"text": "All rights reserved"
+						}
+					]
+				}
+			],
+			"logo": {
+				"documentId": "q1kzu6b3zlc7qhl9c0x5uwr1",
+				"name": "logo.png",
+				"alternativeText": null,
+				"caption": null,
+				"focalPoint": null,
+				"width": 612,
+				"height": 306,
+				"formats": {
+					"thumbnail": {
+						"name": "thumbnail_logo.png",
+						"hash": "thumbnail_logo_cc917a1e2d",
+						"ext": ".png",
+						"mime": "image/png",
+						"path": null,
+						"width": 245,
+						"height": 122,
+						"size": 13.96,
+						"sizeInBytes": 13959,
+						"url": "/uploads/thumbnail_logo_cc917a1e2d.png"
+					},
+					"small": {
+						"name": "small_logo.png",
+						"hash": "small_logo_cc917a1e2d",
+						"ext": ".png",
+						"mime": "image/png",
+						"path": null,
+						"width": 500,
+						"height": 250,
+						"size": 32.48,
+						"sizeInBytes": 32482,
+						"url": "/uploads/small_logo_cc917a1e2d.png"
+					}
+				},
+				"size": 5.17,
+				"url": "/uploads/logo_cc917a1e2d.png",
+				"previewUrl": null,
+				"updatedAt": "2026-03-21T13:30:07.786Z"
+			},
+			"updatedAt": "2026-04-01T16:04:04.256Z"
+		}
+	}
+}

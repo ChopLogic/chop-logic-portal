@@ -1,9 +1,6 @@
-import { StrapiContentProvider } from "../cms/strapi/strapi-content-provider";
+import { StrapiGraphqlContentProvider } from "../cms/strapi/strapi-graphql-content-provider";
 import type { ContentPort } from "./ports";
 
-/**
- * Factory for the active content backend. Swap the implementation here to change CMS.
- */
 export function createContentProvider(): ContentPort {
 	const baseUrl = import.meta.env.STRAPI_URL?.replace(/\/$/, "");
 	if (!baseUrl) {
@@ -13,11 +10,13 @@ export function createContentProvider(): ContentPort {
 	}
 
 	const apiToken = import.meta.env.STRAPI_API_TOKEN;
-	return new StrapiContentProvider({
+	const config = {
 		baseUrl,
 		apiToken:
 			typeof apiToken === "string" && apiToken.length > 0
 				? apiToken
 				: undefined,
-	});
+	};
+
+	return new StrapiGraphqlContentProvider(config);
 }

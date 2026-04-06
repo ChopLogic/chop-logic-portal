@@ -1,0 +1,46 @@
+{
+	"data": {
+		"tags": [
+			{
+				"documentId": "rawdx4h4see08x487qxghfhy",
+				"name": "TypeScript",
+				"description": null,
+				"slug": "type-script",
+				"publishedAt": "2026-03-16T19:38:05.987Z",
+				"updatedAt": "2026-03-16T19:38:05.983Z"
+			},
+			{
+				"documentId": "s8r6gc5umvx2zzwzcr55ebhd",
+				"name": "React",
+				"description": null,
+				"slug": "react",
+				"publishedAt": "2026-03-16T19:39:26.255Z",
+				"updatedAt": "2026-03-16T19:39:26.251Z"
+			},
+			{
+				"documentId": "ic4w8pd45wuweelcxgt9l06g",
+				"name": "AI",
+				"description": "Gen AI and more!",
+				"slug": "ai",
+				"publishedAt": "2026-04-02T18:41:37.770Z",
+				"updatedAt": "2026-04-02T18:41:37.762Z"
+			},
+			{
+				"documentId": "coineqmnk7v95jgrt01peqw2",
+				"name": "Lifestyle",
+				"description": "About my life and hobbies",
+				"slug": "lifestyle",
+				"publishedAt": "2026-04-02T18:42:01.624Z",
+				"updatedAt": "2026-04-02T18:42:01.621Z"
+			},
+			{
+				"documentId": "ev5gykj2o2pcv03d7230odkp",
+				"name": "QA",
+				"description": "Quality and automated testing",
+				"slug": "qa",
+				"publishedAt": "2026-04-02T18:42:21.448Z",
+				"updatedAt": "2026-04-02T18:42:21.443Z"
+			}
+		]
+	}
+}
