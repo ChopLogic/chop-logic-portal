@@ -27,6 +27,12 @@ export interface OpenGraph {
 	ogImage?: OpenGraphImageMeta;
 }
 
+/** After `mapMetaData` / `finalizePageMetaData`: robots, OG image (+ alt), trimmed fields. */
+export type PageMetaData = Omit<MetaData, "robots" | "openGraph"> & {
+	robots: string;
+	openGraph: OpenGraph & { ogImage: OpenGraphImageMeta & { alt: string } };
+};
+
 export enum OgType {
 	ARTICLE = "article",
 	WEBSITE = "website",

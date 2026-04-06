@@ -2,17 +2,16 @@
 // Import the global.css file here so that it is included on
 // all pages through the use of the <MetaData /> component.
 import "../../styles/global.css";
-import FallbackImage from "../../assets/Chop-Logic-Logo-Horizontal-612x306-white-bg.png";
-import { DEFAULT_OPEN_GRAPH } from "../../constants/defaults";
-import type { MetaData } from "../../lib/content/models";
+import type { PageMetaData } from "../../lib/content/models";
 import { structuredDataToJsonLdHtml } from "../../lib/content/structured-data-json-ld";
 
 interface Props {
 	siteTitle: string;
-	metaData: MetaData;
+	metaData: PageMetaData;
 }
 
 const { siteTitle, metaData } = Astro.props;
+
 const {
 	metaTitle,
 	metaDescription,
@@ -23,33 +22,16 @@ const {
 	structuredData,
 	openGraph,
 } = metaData;
-const { ogDescription, ogTitle, ogType, ogImage } =
-	openGraph ?? DEFAULT_OPEN_GRAPH;
+const { ogDescription, ogTitle, ogType, ogImage } = openGraph;
 
-const siteRoot = new URL(Astro.url.origin); // TODO: Replace with siteRoot = Astro.site ?? new URL(Astro.url.origin) when Astro.site is available
+const siteRoot = new URL(Astro.url.origin); // TODO: Astro.site when available for production canonicals
 const canonical = canonicalURL ?? new URL(Astro.url.pathname, siteRoot);
-const ogImageURL = ogImage
-	? new URL(ogImage.src, Astro.url)
-	: new URL(FallbackImage.src, Astro.url);
-const rssURL = new URL("rss.xml", siteRoot);
-const hasAuthor = !!authorName && authorName.trim() !== "";
-const hasKeywords = !!keywords && keywords.trim() !== "";
-const robotsContent = robots?.trim() || "index, follow";
-
-let ogImageWidth = ogImage?.width;
-let ogImageHeight = ogImage?.height;
-let ogImageAlt = ogImage?.alt;
-if (!ogImage) {
-	if ("width" in FallbackImage && typeof FallbackImage.width === "number") {
-		ogImageWidth = FallbackImage.width;
-	}
-	if ("height" in FallbackImage && typeof FallbackImage.height === "number") {
-		ogImageHeight = FallbackImage.height;
-	}
-	ogImageAlt = siteTitle;
-}
+const ogImageUrl = new URL(ogImage.src, Astro.url);
+const rssUrl = new URL("rss.xml", siteRoot);
 
 const structuredDataJsonLd = structuredDataToJsonLdHtml(structuredData);
+const showOgDimensions = ogImage.width != null && ogImage.width > 0;
+const showOgHeight = ogImage.height != null && ogImage.height > 0;
 ---
 
 <!-- Global Metadata -->
@@ -58,12 +40,7 @@ const structuredDataJsonLd = structuredDataToJsonLdHtml(structuredData);
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" href="/favicon.ico" />
 <link rel="sitemap" href="/sitemap-index.xml" />
-<link
-	rel="alternate"
-	type="application/rss+xml"
-	title={siteTitle}
-	href={rssURL}
-/>
+<link rel="alternate" type="application/rss+xml" title={siteTitle} href={rssUrl} />
 
 <!-- Font preloads -->
 <link
@@ -81,50 +58,37 @@ const structuredDataJsonLd = structuredDataToJsonLdHtml(structuredData);
 	crossorigin
 />
 
-<!-- Canonical URL -->
-<link rel="canonical" href={canonical} />
-
 <!-- Primary Meta Tags -->
+<link rel="canonical" href={canonical} />
 <title>{metaTitle}</title>
 <meta name="title" content={metaTitle} />
 <meta name="description" content={metaDescription} />
-<meta name="robots" content={robotsContent} />
-{hasKeywords && <meta name="keywords" content={keywords} />}
-{hasAuthor && <meta name="author" content={authorName} />}
+<meta name="robots" content={robots} />
+{keywords !== undefined && <meta name="keywords" content={keywords} />}
+{authorName !== undefined && <meta name="author" content={authorName} />}
 
 <!-- Open Graph -->
 <meta property="og:type" content={ogType} />
 <meta property="og:url" content={canonical} />
 <meta property="og:title" content={ogTitle ?? metaTitle} />
 <meta property="og:description" content={ogDescription ?? metaDescription} />
-<meta property="og:image" content={ogImageURL} />
-{
-	ogImageWidth != null && ogImageWidth > 0 && (
-		<meta property="og:image:width" content={String(ogImageWidth)} />
-	)
-}
-{
-	ogImageHeight != null && ogImageHeight > 0 && (
-		<meta property="og:image:height" content={String(ogImageHeight)} />
-	)
-}
-{
-	ogImageAlt != null && ogImageAlt.trim() !== "" && (
-		<>
-			<meta property="og:image:alt" content={ogImageAlt} />
-			<meta name="twitter:image:alt" content={ogImageAlt} />
-		</>
-	)
-}
+<meta property="og:image" content={ogImageUrl} />
+{showOgDimensions && (
+	<meta property="og:image:width" content={String(ogImage.width)} />
+)}
+{showOgHeight && (
+	<meta property="og:image:height" content={String(ogImage.height)} />
+)}
+<meta property="og:image:alt" content={ogImage.alt} />
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:url" content={canonical} />
 <meta name="twitter:title" content={ogTitle ?? metaTitle} />
 <meta name="twitter:description" content={ogDescription ?? metaDescription} />
-<meta name="twitter:image" content={ogImageURL} />
+<meta name="twitter:image" content={ogImageUrl} />
+<meta name="twitter:image:alt" content={ogImage.alt} />
 
-<!-- Structured Data -->
 {
 	structuredDataJsonLd && (
 		<script is:inline type="application/ld+json" set:html={structuredDataJsonLd} />

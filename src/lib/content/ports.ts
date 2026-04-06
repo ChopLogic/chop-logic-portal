@@ -25,7 +25,10 @@ export type AboutPageContent = {
 /** Content boundary: pages depend on this, not on a specific CMS. */
 export type ContentPort = {
 	listArticles(): Promise<ArticleSummary[]>;
-	getArticleBySlug(slug: string): Promise<ArticleDetail>;
+	getArticleBySlug(
+		slug: string,
+		siteTitleHint?: string,
+	): Promise<ArticleDetail>;
 	getAboutPageContent(): Promise<AboutPageContent>;
 	/** Article list plus global config in one CMS round-trip. */
 	getBlogIndexContent(): Promise<BlogIndexContent>;

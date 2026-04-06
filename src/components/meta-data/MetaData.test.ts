@@ -1,19 +1,25 @@
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { describe, expect, test } from "vitest";
-import MetaData from "./MetaData.astro";
+import { finalizePageMetaData } from "../../lib/content/mappers/meta-data";
+import { type MetaData, OgType } from "../../lib/content/models";
+import MetaDataAstro from "./MetaData.astro";
+
+const openGraphBase = {
+	ogDescription: "Chop Logic Open Graph Description",
+	ogTitle: "Chop Logic Open Graph Title",
+	ogType: OgType.WEBSITE,
+};
+
+const draftFixture = (): MetaData => ({
+	metaTitle: "Chop Logic Meta Title",
+	metaDescription: "Chop Logic Meta Description",
+	robots: "index, follow",
+	openGraph: openGraphBase,
+});
 
 const baseProps = {
 	siteTitle: "Chop Logic Site Title",
-	metaData: {
-		metaTitle: "Chop Logic Meta Title",
-		metaDescription: "Chop Logic Meta Description",
-		robots: "index, follow",
-		openGraph: {
-			ogDescription: "Chop Logic Open Graph Description",
-			ogTitle: "Chop Logic Open Graph Title",
-			ogType: "website",
-		},
-	},
+	metaData: finalizePageMetaData(draftFixture(), "Chop Logic Site Title"),
 };
 
 async function renderMeta(
@@ -21,7 +27,7 @@ async function renderMeta(
 	requestUrl = "https://example.com/docs/page",
 ) {
 	const container = await AstroContainer.create();
-	return container.renderToString(MetaData, {
+	return container.renderToString(MetaDataAstro, {
 		props: { ...baseProps, ...props },
 		request: new Request(requestUrl),
 	});
@@ -75,7 +81,10 @@ describe("MetaData.astro", () => {
 	test("uses custom canonicalURL for canonical, og:url, and twitter:url", async () => {
 		const custom = "https://example.com/preferred-url";
 		const html = await renderMeta({
-			metaData: { ...baseProps.metaData, canonicalURL: custom },
+			metaData: finalizePageMetaData(
+				{ ...draftFixture(), canonicalURL: custom },
+				"Chop Logic Site Title",
+			),
 		});
 		expect(html).toContain(`<link rel="canonical" href="${custom}">`);
 		expect(html).toContain(`<meta property="og:url" content="${custom}">`);
@@ -90,7 +99,10 @@ describe("MetaData.astro", () => {
 
 	test("omits keywords and author when empty or whitespace-only", async () => {
 		const html = await renderMeta({
-			metaData: { ...baseProps.metaData, keywords: "   ", authorName: "\t\n" },
+			metaData: finalizePageMetaData(
+				{ ...draftFixture(), keywords: "   ", authorName: "\t\n" },
+				"Chop Logic Site Title",
+			),
 		});
 		expect(html).not.toContain('name="keywords"');
 		expect(html).not.toContain('name="author"');
@@ -98,11 +110,14 @@ describe("MetaData.astro", () => {
 
 	test("renders keywords and author when non-empty", async () => {
 		const html = await renderMeta({
-			metaData: {
-				...baseProps.metaData,
-				keywords: "astro, vitest",
-				authorName: "Ada Lovelace",
-			},
+			metaData: finalizePageMetaData(
+				{
+					...draftFixture(),
+					keywords: "astro, vitest",
+					authorName: "Ada Lovelace",
+				},
+				"Chop Logic Site Title",
+			),
 		});
 		expect(html).toContain('meta name="keywords" content="astro, vitest"');
 		expect(html).toContain('meta name="author" content="Ada Lovelace"');
@@ -110,13 +125,17 @@ describe("MetaData.astro", () => {
 
 	test("uses custom og title and description when provided", async () => {
 		const html = await renderMeta({
-			metaData: {
-				...baseProps.metaData,
-				openGraph: {
-					ogTitle: "OG Title",
-					ogDescription: "OG Description",
+			metaData: finalizePageMetaData(
+				{
+					...draftFixture(),
+					openGraph: {
+						ogTitle: "OG Title",
+						ogDescription: "OG Description",
+						ogType: OgType.WEBSITE,
+					},
 				},
-			},
+				"Chop Logic Site Title",
+			),
 		});
 		expect(html).toContain('meta property="og:title" content="OG Title"');
 		expect(html).toContain(
@@ -130,13 +149,17 @@ describe("MetaData.astro", () => {
 
 	test("allows overriding og type and robots", async () => {
 		const html = await renderMeta({
-			metaData: {
-				...baseProps.metaData,
-				robots: "noindex, nofollow",
-				openGraph: {
-					ogType: "article",
+			metaData: finalizePageMetaData(
+				{
+					...draftFixture(),
+					robots: "noindex, nofollow",
+					openGraph: {
+						...openGraphBase,
+						ogType: OgType.ARTICLE,
+					},
 				},
-			},
+				"Chop Logic Site Title",
+			),
 		});
 		expect(html).toContain('meta property="og:type" content="article"');
 		expect(html).toContain('meta name="robots" content="noindex, nofollow"');
@@ -145,7 +168,7 @@ describe("MetaData.astro", () => {
 	test("sets RSS alternate link with site title", async () => {
 		const html = await renderMeta({
 			siteTitle: "Chop Logic",
-			metaData: { ...baseProps.metaData },
+			metaData: finalizePageMetaData(draftFixture(), "Chop Logic"),
 		});
 		expect(html).toContain('type="application/rss+xml"');
 		expect(html).toContain('title="Chop Logic"');
@@ -153,23 +176,26 @@ describe("MetaData.astro", () => {
 	});
 
 	test("defaults robots to index, follow when robots is omitted", async () => {
-		const { robots: _r, ...metaWithoutRobots } = baseProps.metaData;
+		const { robots: _r, ...draftNoRobots } = draftFixture();
 		const html = await renderMeta({
-			metaData: metaWithoutRobots,
+			metaData: finalizePageMetaData(draftNoRobots, "Chop Logic Site Title"),
 		});
 		expect(html).toContain('meta name="robots" content="index, follow"');
 	});
 
 	test("renders JSON-LD script when structuredData is an object", async () => {
 		const html = await renderMeta({
-			metaData: {
-				...baseProps.metaData,
-				structuredData: {
-					"@context": "https://schema.org",
-					"@type": "Article",
-					headline: "Example",
+			metaData: finalizePageMetaData(
+				{
+					...draftFixture(),
+					structuredData: {
+						"@context": "https://schema.org",
+						"@type": "Article",
+						headline: "Example",
+					},
 				},
-			},
+				"Chop Logic Site Title",
+			),
 		});
 		expect(html).toContain('type="application/ld+json"');
 		expect(html).toContain("schema.org");
@@ -178,18 +204,21 @@ describe("MetaData.astro", () => {
 
 	test("emits og:image dimensions and alt when openGraph image provides them", async () => {
 		const html = await renderMeta({
-			metaData: {
-				...baseProps.metaData,
-				openGraph: {
-					...baseProps.metaData.openGraph,
-					ogImage: {
-						src: "https://cdn.example.com/og.jpg",
-						width: 1200,
-						height: 630,
-						alt: "Hero alt text",
+			metaData: finalizePageMetaData(
+				{
+					...draftFixture(),
+					openGraph: {
+						...openGraphBase,
+						ogImage: {
+							src: "https://cdn.example.com/og.jpg",
+							width: 1200,
+							height: 630,
+							alt: "Hero alt text",
+						},
 					},
 				},
-			},
+				"Chop Logic Site Title",
+			),
 		});
 		expect(html).toContain('property="og:image:width" content="1200"');
 		expect(html).toContain('property="og:image:height" content="630"');

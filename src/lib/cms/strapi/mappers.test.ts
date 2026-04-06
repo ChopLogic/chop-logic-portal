@@ -2,6 +2,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
+import { DEFAULT_SITE_TITLE } from "../../../constants/defaults";
 import {
 	mapArticleToDetail,
 	mapArticleToSummary,
@@ -42,7 +43,11 @@ describe("mapArticleToSummary", () => {
 		}
 		const withPreview = { ...raw, preview: previewFixture };
 		const entity = parseArticleEntity(withPreview);
-		const summary = mapArticleToSummary("http://localhost:1337", entity);
+		const summary = mapArticleToSummary(
+			"http://localhost:1337",
+			entity,
+			DEFAULT_SITE_TITLE,
+		);
 		expect(summary.slug).toBe("article-1-test");
 		expect(summary.title).toBe("Article 1 Test");
 		expect(summary.subTitle).toBe("Article 1 sub-title");
@@ -69,7 +74,11 @@ describe("mapArticleToDetail", () => {
 		}
 		const withPreview = { ...raw, preview: previewFixture };
 		const entity = parseArticleEntity(withPreview);
-		const detail = mapArticleToDetail("http://localhost:1337", entity);
+		const detail = mapArticleToDetail(
+			"http://localhost:1337",
+			entity,
+			DEFAULT_SITE_TITLE,
+		);
 		expect(detail.bodyHtml).toContain("Lorem Ipsum");
 	});
 });
@@ -109,7 +118,11 @@ describe("mapSingletonToPage", () => {
 			},
 		};
 		const entity = parseSingletonEntity(raw);
-		const page = mapSingletonToPage("http://localhost:1337", entity);
+		const page = mapSingletonToPage(
+			"http://localhost:1337",
+			entity,
+			DEFAULT_SITE_TITLE,
+		);
 		expect(page.heroImageUrl).toBe("http://localhost:1337/uploads/hero.png");
 		expect(page.publishedAt?.toISOString()).toContain("2024-01-01");
 	});
@@ -124,7 +137,11 @@ describe("mapSingletonToPage", () => {
 			content: [],
 		};
 		const entity = parseSingletonEntity(raw);
-		const page = mapSingletonToPage("http://localhost:1337", entity);
+		const page = mapSingletonToPage(
+			"http://localhost:1337",
+			entity,
+			DEFAULT_SITE_TITLE,
+		);
 		expect(page.heading).toBe("Chop Logic Home");
 		expect(page.subHeading).toBe("A place where logic works!");
 		expect(page.heroImageUrl).toBeNull();

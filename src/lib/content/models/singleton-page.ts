@@ -1,4 +1,4 @@
-import type { MetaData } from "./meta-data";
+import type { PageMetaData } from "./meta-data";
 
 /** Singleton page (home, about-me) for the portal (CMS-agnostic). */
 
@@ -13,5 +13,5 @@ export type SingletonPage = {
 	bodyHtml: string;
 	/** Strapi `publishedAt`, when present. */
 	publishedAt: Date | null;
-	metaData: MetaData;
+	metaData: PageMetaData;
 };

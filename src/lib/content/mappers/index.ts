@@ -6,7 +6,7 @@ export {
 	resolveMediaAbsoluteUrl,
 } from "./image";
 export { mapLinks } from "./link";
-export { mapMetaData } from "./meta-data";
+export { finalizePageMetaData, mapMetaData } from "./meta-data";
 export {
 	parseRichTextDocument,
 	richTextToHtml,

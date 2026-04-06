@@ -7,10 +7,14 @@ import { createContentProvider } from "../../lib/content/provider";
 export async function getStaticPaths() {
 	const content = createContentProvider();
 	const { articles, siteConfig } = await content.getBlogIndexContent();
+	const siteTitle =
+		siteConfig.siteTitle.trim() !== ""
+			? siteConfig.siteTitle.trim()
+			: DEFAULT_SITE_TITLE;
 	const paths = await Promise.all(
 		articles.map(async (summary) => {
 			try {
-				const detail = await content.getArticleBySlug(summary.slug);
+				const detail = await content.getArticleBySlug(summary.slug, siteTitle);
 				return {
 					params: { slug: summary.slug },
 					props: { detail, siteConfig },
