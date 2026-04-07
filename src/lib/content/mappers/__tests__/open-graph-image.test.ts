@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { CmsImage } from "../models";
-import { pickOpenGraphCmsImage } from "./image";
+import type { CmsImage } from "../../models";
+import { pickOpenGraphCmsImage } from "../image";
 
 const baseImage = (): CmsImage => ({
 	documentId: "d1",

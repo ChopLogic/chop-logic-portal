@@ -13,3 +13,4 @@ export {
 	richTextToPlainText,
 } from "./rich-text";
 export { mapSiteConfig, siteConfigLogoSrc } from "./site-config";
+export { mapStructuredDataToJsonLdHtml } from "./structured-data";

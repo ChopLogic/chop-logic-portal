@@ -3,9 +3,9 @@ import {
 	DEFAULT_ROBOTS,
 	DEFAULT_SITE_TITLE,
 	OPEN_GRAPH_FALLBACK_IMAGE,
-} from "../../../constants/defaults";
-import { OgType } from "../models";
-import { finalizePageMetaData } from "./meta-data";
+} from "../../../../constants/defaults";
+import { OgType } from "../../models";
+import { finalizePageMetaData } from "../meta-data";
 
 describe("finalizePageMetaData", () => {
 	it("fills robots when missing", () => {

@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/complexity/useLiteralKeys: Access to unknown keys */
 import { DEFAULT_SITE_TITLE } from "../../constants/defaults";
 import { isRecord } from "../checks";
 import { ArticleNotFoundError } from "../content/errors";

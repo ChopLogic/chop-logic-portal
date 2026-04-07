@@ -1,10 +1,10 @@
-import type { JsonValue } from "./models/json";
+import type { JsonValue } from "../models/json";
 
 /**
  * Produces safe inner HTML for `<script type="application/ld+json">`.
  * Returns `null` when there is nothing valid to emit.
  */
-export function structuredDataToJsonLdHtml(
+export function mapStructuredDataToJsonLdHtml(
 	structuredData: JsonValue | undefined,
 ): string | null {
 	if (structuredData === undefined || structuredData === null) {

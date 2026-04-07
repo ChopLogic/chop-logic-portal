@@ -1,9 +1,8 @@
 ---
-// Import the global.css file here so that it is included on
-// all pages through the use of the <MetaData /> component.
+// Import the global.css file here
 import "../../styles/global.css";
+import { mapStructuredDataToJsonLdHtml } from "../../lib/content/mappers";
 import type { PageMetaData } from "../../lib/content/models";
-import { structuredDataToJsonLdHtml } from "../../lib/content/structured-data-json-ld";
 
 interface Props {
 	siteTitle: string;
@@ -29,7 +28,7 @@ const canonical = canonicalURL ?? new URL(Astro.url.pathname, siteRoot);
 const ogImageUrl = new URL(ogImage.src, Astro.url);
 const rssUrl = new URL("rss.xml", siteRoot);
 
-const structuredDataJsonLd = structuredDataToJsonLdHtml(structuredData);
+const structuredDataJsonLd = mapStructuredDataToJsonLdHtml(structuredData);
 const showOgDimensions = ogImage.width != null && ogImage.width > 0;
 const showOgHeight = ogImage.height != null && ogImage.height > 0;
 ---
