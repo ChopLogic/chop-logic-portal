@@ -1,4 +1,4 @@
-import { blocksToHtml, blocksToPlainText } from "../../cms/strapi/blocks";
+import { blocksToHtml, blocksToPlainText } from "../../strapi/blocks";
 import {
 	type RichTextDocument,
 	richTextDocumentSchema,

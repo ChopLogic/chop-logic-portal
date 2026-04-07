@@ -1,20 +1,20 @@
-import { DEFAULT_SITE_TITLE } from "../../../constants/defaults";
-import { isRecord } from "../../checks";
-import { ArticleNotFoundError } from "../../content/errors";
-import { mapSiteConfig } from "../../content/mappers";
+import { DEFAULT_SITE_TITLE } from "../../constants/defaults";
+import { isRecord } from "../checks";
+import { ArticleNotFoundError } from "../content/errors";
+import { mapSiteConfig } from "../content/mappers";
 import type {
 	ArticleDetail,
 	ArticleSummary,
 	SingletonPage,
 	SiteConfig,
-} from "../../content/models";
+} from "../content/models";
 import type {
 	AboutPageContent,
 	BlogIndexContent,
 	ContentPort,
 	HomeIndexContent,
 	SingletonKey,
-} from "../../content/ports";
+} from "../content/ports";
 import type { StrapiGraphqlClientConfig } from "./graphql/client";
 import { strapiGraphqlRequest } from "./graphql/client";
 import { normalizeDynamicZoneFromGraphql } from "./graphql/normalize";

@@ -1,4 +1,4 @@
-import { StrapiGraphqlContentProvider } from "../cms/strapi/strapi-graphql-content-provider";
+import { StrapiGraphqlContentProvider } from "../strapi/strapi-graphql-content-provider";
 import type { ContentPort } from "./ports";
 
 export function createContentProvider(): ContentPort {

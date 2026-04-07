@@ -1,20 +1,20 @@
-import { isRecord } from "../../checks";
+import { isRecord } from "../checks";
 import {
 	cmsImageDefaultSrc,
 	mapCmsImage,
 	mapMetaData,
-} from "../../content/mappers";
+} from "../content/mappers";
 import {
 	parseRichTextDocument,
 	richTextToHtml,
-} from "../../content/mappers/rich-text";
+} from "../content/mappers/rich-text";
 import type {
 	ArticleAuthor,
 	ArticleDetail,
 	ArticleSummary,
 	ArticleTag,
 	SingletonPage,
-} from "../../content/models";
+} from "../content/models";
 import { blocksToPlainText } from "./blocks";
 import { dynamicZoneToHtml } from "./dynamic-zone";
 import { mediaAlt, resolveMediaUrl } from "./media";
