@@ -1,5 +1,5 @@
-import { isRecord } from "../../checks";
 import type { SiteConfig } from "../models";
+import { isRecord } from "./checkers";
 import { cmsImageDefaultSrc, mapCmsImage } from "./image";
 import { mapLinks } from "./link";
 import { parseRichTextDocument, richTextToHtml } from "./rich-text";

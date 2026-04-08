@@ -3,20 +3,20 @@ import {
 	DEFAULT_SITE_DESCRIPTION,
 	DEFAULT_SITE_TITLE,
 } from "../../constants/defaults";
-import { finalizePageMetaData } from "./mappers";
-import type { PageMetaData, SiteConfig } from "./models";
+import { mapMetaData } from "./mappers";
+import type { MetaData, SiteConfig } from "./models";
 
 /**
  * Head metadata for `/blog` (no dedicated CMS page). Uses global site config
  * for title and description.
  */
-export function blogListingMetaData(siteConfig: SiteConfig): PageMetaData {
+export function blogListingMetaData(siteConfig: SiteConfig): MetaData {
 	const siteTitle = siteConfig.siteTitle || DEFAULT_SITE_TITLE;
 	const description =
 		siteConfig.description.trim() !== ""
 			? siteConfig.description
 			: DEFAULT_SITE_DESCRIPTION;
-	return finalizePageMetaData(
+	return mapMetaData(
 		{
 			...DEFAULT_META_DATA,
 			metaTitle: `${siteTitle} – Blog`,

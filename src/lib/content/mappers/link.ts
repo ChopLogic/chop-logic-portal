@@ -1,5 +1,5 @@
 /** biome-ignore-all lint/complexity/useLiteralKeys: Access to unknown keys */
-import { isRecord } from "../../checks";
+
 import {
 	type Link,
 	LinkTarget,
@@ -7,6 +7,8 @@ import {
 	ReferrerPolicy,
 	SocialPlatform,
 } from "../models";
+import { isRecord } from "./checkers";
+import { normalizeRequiredString } from "./helpers";
 
 function normalizeLinkTarget(raw: unknown): LinkTarget {
 	if (raw === "_self" || raw === "self") {
@@ -88,10 +90,10 @@ export function mapLink(raw: unknown): Link | null {
 	}
 
 	return {
-		id: String(raw["id"]),
+		id: normalizeRequiredString(raw["id"]),
 		target: normalizeLinkTarget(raw["target"]),
-		url: String(raw["url"]),
-		text: String(raw["text"]),
+		url: normalizeRequiredString(raw["url"]),
+		text: normalizeRequiredString(raw["text"]),
 		type: normalizeLinkType(raw["type"]),
 		referrerpolicy: normalizeReferrerPolicy(raw["referrerpolicy"]),
 		platform: normalizeSocialPlatform(raw["platform"]),

@@ -33,7 +33,7 @@ describe("mapLink", () => {
 
 	it("maps a complete raw record to a Link", () => {
 		const raw = minimalRaw({
-			id: 99,
+			id: "99",
 			url: "/path",
 			text: "Label",
 			target: "_self",
@@ -53,18 +53,42 @@ describe("mapLink", () => {
 		});
 	});
 
-	it("coerces id, url, and text with String()", () => {
+	it("trims id, url, and text", () => {
 		const result = mapLink(
 			minimalRaw({
-				id: null,
-				url: undefined,
-				text: 0,
+				id: "  a  ",
+				url: "  /p  ",
+				text: "  t  ",
 			}),
 		);
-		expect(result).not.toBeNull();
-		expect(result?.id).toBe("null");
-		expect(result?.url).toBe("undefined");
-		expect(result?.text).toBe("0");
+		expect(result).toEqual({
+			id: "a",
+			url: "/p",
+			text: "t",
+			target: LinkTarget.Blank,
+			type: LinkType.External,
+			referrerpolicy: ReferrerPolicy.StrictOriginWhenCrossOrigin,
+			platform: undefined,
+		});
+	});
+
+	it.each([
+		["id", { id: null }],
+		["id", { id: 99 }],
+		["url", { url: undefined }],
+		["url", { url: 1 }],
+		["text", { text: null }],
+		["text", { text: false }],
+	] as const)("throws when %s is not a string", (_field, overrides) => {
+		expect(() => mapLink(minimalRaw(overrides))).toThrow(
+			/is not a string and no default value was provided/,
+		);
+	});
+
+	it("throws when required string fields are missing on an otherwise valid record", () => {
+		expect(() => mapLink({})).toThrow(
+			/is not a string and no default value was provided/,
+		);
 	});
 
 	describe("target normalization", () => {
@@ -172,12 +196,12 @@ describe("mapLink", () => {
 		});
 	});
 
-	it("still returns a Link for an empty object (String-coerced fields)", () => {
-		const result = mapLink({});
+	it("allows empty string for id, url, and text", () => {
+		const result = mapLink(minimalRaw({ id: "", url: "", text: "   " }));
 		expect(result).toEqual({
-			id: "undefined",
-			url: "undefined",
-			text: "undefined",
+			id: "",
+			url: "",
+			text: "",
 			target: LinkTarget.Blank,
 			type: LinkType.External,
 			referrerpolicy: ReferrerPolicy.StrictOriginWhenCrossOrigin,
@@ -207,5 +231,11 @@ describe("mapLinks", () => {
 
 	it("returns an empty array when every entry is invalid", () => {
 		expect(mapLinks([null, [], undefined] as unknown[])).toEqual([]);
+	});
+
+	it("propagates errors when a record is an object but lacks required strings", () => {
+		expect(() => mapLinks([minimalRaw({ id: "ok" }), {}] as unknown[])).toThrow(
+			/is not a string and no default value was provided/,
+		);
 	});
 });

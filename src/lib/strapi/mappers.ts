@@ -1,9 +1,9 @@
-import { isRecord } from "../checks";
 import {
 	cmsImageDefaultSrc,
 	mapCmsImage,
 	mapMetaData,
 } from "../content/mappers";
+import { isRecord } from "../content/mappers/checkers";
 import {
 	parseRichTextDocument,
 	richTextToHtml,
@@ -86,7 +86,6 @@ function articleDescription(entity: StrapiArticleEntity): string {
 export function mapArticleToSummary(
 	baseUrl: string,
 	entity: StrapiArticleEntity,
-	siteTitle: string,
 ): ArticleSummary {
 	const previewImage = mapCmsImage(entity.preview);
 	const heroImageUrl = previewImage
@@ -119,16 +118,15 @@ export function mapArticleToSummary(
 		previewImage,
 		tags: mapArticleTags(entity),
 		authors: mapArticleAuthors(entity),
-		metaData: mapMetaData(entity.metaData, baseUrl, siteTitle),
+		metaData: mapMetaData(entity.metaData, baseUrl),
 	};
 }
 
 export function mapArticleToDetail(
 	baseUrl: string,
 	entity: StrapiArticleEntity,
-	siteTitle: string,
 ): ArticleDetail {
-	const summary = mapArticleToSummary(baseUrl, entity, siteTitle);
+	const summary = mapArticleToSummary(baseUrl, entity);
 	const bodyFromZone = dynamicZoneToHtml(baseUrl, entity.content);
 	const summaryHtml = (() => {
 		const doc = parseRichTextDocument(entity.summary);
@@ -150,9 +148,8 @@ function blocksToHtmlFromUnknown(raw: unknown): string {
 export function mapSingletonToPage(
 	baseUrl: string,
 	entity: StrapiSingletonEntity,
-	siteTitle: string,
 ): SingletonPage {
-	const metaData = mapMetaData(entity.metaData, baseUrl, siteTitle);
+	const metaData = mapMetaData(entity.metaData, baseUrl);
 	const heading =
 		typeof entity.heading === "string" && entity.heading.length > 0
 			? entity.heading

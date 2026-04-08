@@ -1,5 +1,5 @@
 import type { CmsImage } from "./image";
-import type { PageMetaData } from "./meta-data";
+import type { MetaData } from "./meta-data";
 
 export interface ArticleTag {
 	documentId: string;
@@ -31,7 +31,7 @@ export type ArticleSummary = {
 	previewImage: CmsImage | null;
 	tags: ArticleTag[];
 	authors: ArticleAuthor[];
-	metaData: PageMetaData;
+	metaData: MetaData;
 };
 
 export type ArticleDetail = ArticleSummary & {

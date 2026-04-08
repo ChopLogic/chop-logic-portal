@@ -1,10 +1,11 @@
 /** biome-ignore-all lint/complexity/useLiteralKeys: dynamic Strapi media keys */
-import { isRecord } from "../../checks";
+
 import type {
 	CmsImage,
 	CmsImageFormatName,
 	CmsImageFormatVariant,
 } from "../models";
+import { isRecord } from "./checkers";
 
 const FORMAT_NAMES: readonly CmsImageFormatName[] = [
 	"thumbnail",
