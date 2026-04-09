@@ -26,8 +26,8 @@ function mapFormatVariant(raw: unknown): CmsImageFormatVariant | null {
 
 	return {
 		url: normalizeRequiredString(raw["url"]),
-		width: normalizeRequiredNumber(raw["width"]),
-		height: normalizeRequiredNumber(raw["height"]),
+		width: normalizeRequiredNumber(raw["width"], 0),
+		height: normalizeRequiredNumber(raw["height"], 0),
 		mime: normalizeOptionalString(raw["mime"]),
 	};
 }
@@ -50,7 +50,7 @@ function normalizeImageFormats(formatsRaw: unknown): CmsImageFormats {
 }
 
 export function mapCmsImage(raw: unknown): CmsImage | null {
-	if (!isRecord(raw)) {
+	if (!isRecord(raw) || !raw["url"] || !raw["documentId"] || !raw["name"]) {
 		return null;
 	}
 

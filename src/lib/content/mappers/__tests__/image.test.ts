@@ -112,26 +112,35 @@ describe("mapCmsImage", () => {
 		expect(emptyOptional?.caption).toBeUndefined();
 	});
 
+	it("returns null when documentId, name, or url is missing or empty", () => {
+		expect(mapCmsImage(minimalCmsImageRaw({ documentId: null }))).toBeNull();
+		expect(mapCmsImage(minimalCmsImageRaw({ url: undefined }))).toBeNull();
+		expect(mapCmsImage(minimalCmsImageRaw({ name: "" }))).toBeNull();
+		expect(mapCmsImage(minimalCmsImageRaw({ url: "" }))).toBeNull();
+	});
+
 	it.each([
-		["documentId", { documentId: null }],
 		["name", { name: 1 }],
-		["url", { url: undefined }],
 		["width", { width: "x" }],
 		["height", { height: Number.NaN }],
 	] as const)("throws when %s is invalid", (_field, overrides) => {
 		expect(() => mapCmsImage(minimalCmsImageRaw(overrides))).toThrow();
 	});
 
-	it("throws when a format variant has a non-numeric width", () => {
-		expect(() =>
-			mapCmsImage(
-				minimalCmsImageRaw({
-					formats: {
-						small: { url: "/s.jpg", width: "nope", height: 100 },
-					},
-				}),
-			),
-		).toThrow(/is not a number and no default value was provided/);
+	it("defaults non-numeric format width and height to 0", () => {
+		const result = mapCmsImage(
+			minimalCmsImageRaw({
+				formats: {
+					small: { url: "/s.jpg", width: "nope", height: "bad" },
+				},
+			}),
+		);
+		expect(result?.formats.small).toEqual({
+			url: "/s.jpg",
+			width: 0,
+			height: 0,
+			mime: undefined,
+		});
 	});
 });
 
