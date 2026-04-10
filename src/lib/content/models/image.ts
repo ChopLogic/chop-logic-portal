@@ -8,6 +8,10 @@ export interface CmsImageFormatVariant {
 	readonly mime?: string;
 }
 
+export type CmsImageFormats = Partial<
+	Record<CmsImageFormatName, CmsImageFormatVariant>
+>;
+
 /**
  * CMS image with relative `url` as returned by Strapi. Resolve to absolute URLs
  * with helpers in `content/mappers/image` (for `astro:assets` / `<img>`).
@@ -18,7 +22,20 @@ export interface CmsImage {
 	readonly url: string;
 	readonly width: number;
 	readonly height: number;
-	readonly alternativeText: string | null;
-	readonly caption: string | null;
-	readonly formats: Partial<Record<CmsImageFormatName, CmsImageFormatVariant>>;
+	readonly alternativeText?: string;
+	readonly caption?: string;
+	readonly formats: CmsImageFormats;
 }
+
+export const IMAGE_FORMAT_NAMES: readonly CmsImageFormatName[] = [
+	"thumbnail",
+	"small",
+	"medium",
+	"large",
+];
+
+export type OpenGraphCmsImagePick = {
+	readonly src: string;
+	readonly width: number;
+	readonly height: number;
+};

@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { normalizeOptionalString, normalizeRequiredString } from "../helpers";
+import {
+	normalizeOptionalString,
+	normalizeRequiredNumber,
+	normalizeRequiredString,
+} from "../helpers";
 
 describe("normalizeOptionalString", () => {
 	it("returns trimmed string for non-empty string input", () => {
@@ -70,5 +74,44 @@ describe("normalizeRequiredString", () => {
 
 	it("does not trim the default value (default is returned as-is)", () => {
 		expect(normalizeRequiredString(null, "  padded  ")).toBe("  padded  ");
+	});
+});
+
+describe("normalizeRequiredNumber", () => {
+	it("parses numeric strings and finite numbers", () => {
+		expect(normalizeRequiredNumber(42)).toBe(42);
+		expect(normalizeRequiredNumber(" 99 ")).toBe(99);
+		expect(normalizeRequiredNumber(0)).toBe(0);
+		expect(normalizeRequiredNumber(-3.5)).toBe(-3.5);
+	});
+
+	it("coerces null and empty string to 0 via Number()", () => {
+		expect(normalizeRequiredNumber(null)).toBe(0);
+		expect(normalizeRequiredNumber("")).toBe(0);
+	});
+
+	it("throws when value is NaN and no default is provided", () => {
+		expect(() => normalizeRequiredNumber(undefined)).toThrow(
+			/is not a number and no default value was provided/,
+		);
+		expect(() => normalizeRequiredNumber(Number.NaN)).toThrow(
+			/is not a number and no default value was provided/,
+		);
+		expect(() => normalizeRequiredNumber("not-a-number")).toThrow(
+			/is not a number and no default value was provided/,
+		);
+		expect(() => normalizeRequiredNumber({})).toThrow(
+			/is not a number and no default value was provided/,
+		);
+	});
+
+	it("returns default when Number(value) is NaN and default is provided", () => {
+		expect(normalizeRequiredNumber(undefined, 10)).toBe(10);
+		expect(normalizeRequiredNumber("x", 0)).toBe(0);
+		expect(normalizeRequiredNumber(Number.NaN, -1)).toBe(-1);
+	});
+
+	it("returns parsed number when value is valid even if default is provided", () => {
+		expect(normalizeRequiredNumber("5", 999)).toBe(5);
 	});
 });

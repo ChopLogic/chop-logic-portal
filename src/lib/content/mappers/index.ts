@@ -1,6 +1,5 @@
 export {
 	cmsImageDefaultSrc,
-	cmsImageWidthsForResponsive,
 	mapCmsImage,
 	pickOpenGraphCmsImage,
 	resolveMediaAbsoluteUrl,

@@ -1,89 +1,68 @@
 /** biome-ignore-all lint/complexity/useLiteralKeys: dynamic Strapi media keys */
-
-import type {
-	CmsImage,
-	CmsImageFormatName,
-	CmsImageFormatVariant,
+import {
+	OG_IMAGE_IDEAL_WIDTH,
+	OG_IMAGE_MIN_HEIGHT,
+	OG_IMAGE_MIN_WIDTH,
+	OG_IMAGE_SOFT_MAX_WIDTH,
+} from "../../../constants/sizes";
+import {
+	type CmsImage,
+	type CmsImageFormats,
+	type CmsImageFormatVariant,
+	IMAGE_FORMAT_NAMES,
+	type OpenGraphCmsImagePick,
 } from "../models";
-import { isRecord } from "./checkers";
-
-const FORMAT_NAMES: readonly CmsImageFormatName[] = [
-	"thumbnail",
-	"small",
-	"medium",
-	"large",
-];
-
-function isFormatName(k: string): k is CmsImageFormatName {
-	return (FORMAT_NAMES as readonly string[]).includes(k);
-}
+import { isImageFormatName, isRecord } from "./checkers";
+import {
+	normalizeOptionalString,
+	normalizeRequiredNumber,
+	normalizeRequiredString,
+} from "./helpers";
 
 function mapFormatVariant(raw: unknown): CmsImageFormatVariant | null {
 	if (!isRecord(raw)) {
 		return null;
 	}
-	const url = raw["url"];
-	const width = raw["width"];
-	const height = raw["height"];
-	if (
-		typeof url !== "string" ||
-		typeof width !== "number" ||
-		typeof height !== "number"
-	) {
-		return null;
-	}
-	const mime = raw["mime"];
+
 	return {
-		url,
-		width,
-		height,
-		...(typeof mime === "string" ? { mime } : {}),
+		url: normalizeRequiredString(raw["url"]),
+		width: normalizeRequiredNumber(raw["width"]),
+		height: normalizeRequiredNumber(raw["height"]),
+		mime: normalizeOptionalString(raw["mime"]),
 	};
 }
 
-export function mapCmsImage(raw: unknown): CmsImage | null {
-	if (raw == null || !isRecord(raw)) {
-		return null;
+function normalizeImageFormats(formatsRaw: unknown): CmsImageFormats {
+	if (!isRecord(formatsRaw)) {
+		return {};
 	}
-	const documentId = raw["documentId"];
-	const name = raw["name"];
-	const url = raw["url"];
-	const width = raw["width"];
-	const height = raw["height"];
-	if (
-		typeof documentId !== "string" ||
-		typeof name !== "string" ||
-		typeof url !== "string" ||
-		typeof width !== "number" ||
-		typeof height !== "number"
-	) {
-		return null;
-	}
-	const formatsRaw = raw["formats"];
-	const formats: Partial<Record<CmsImageFormatName, CmsImageFormatVariant>> =
-		{};
-	if (isRecord(formatsRaw)) {
-		for (const [key, value] of Object.entries(formatsRaw)) {
-			if (!isFormatName(key)) {
-				continue;
-			}
-			const v = mapFormatVariant(value);
-			if (v) {
-				formats[key] = v;
-			}
+	const formats: CmsImageFormats = {};
+	for (const [key, value] of Object.entries(formatsRaw)) {
+		if (!isImageFormatName(key)) {
+			continue;
+		}
+		const v = mapFormatVariant(value);
+		if (v) {
+			formats[key] = v;
 		}
 	}
-	const alt = raw["alternativeText"];
-	const cap = raw["caption"];
+	return formats;
+}
+
+export function mapCmsImage(raw: unknown): CmsImage | null {
+	if (!isRecord(raw)) {
+		return null;
+	}
+
 	return {
-		documentId,
-		name,
-		url,
-		width,
-		height,
-		alternativeText: typeof alt === "string" ? alt : null,
-		caption: typeof cap === "string" ? cap : null,
-		formats,
+		documentId: normalizeRequiredString(raw["documentId"]),
+		name: normalizeRequiredString(raw["name"]),
+		url: normalizeRequiredString(raw["url"]),
+		width: normalizeRequiredNumber(raw["width"]),
+		height: normalizeRequiredNumber(raw["height"]),
+		alternativeText: normalizeOptionalString(raw["alternativeText"]),
+		caption: normalizeOptionalString(raw["caption"]),
+		formats: normalizeImageFormats(raw["formats"]),
 	};
 }
 
@@ -101,19 +80,6 @@ export function resolveMediaAbsoluteUrl(
 export function cmsImageDefaultSrc(image: CmsImage, baseUrl: string): string {
 	return resolveMediaAbsoluteUrl(baseUrl, image.url);
 }
-
-/** Facebook / LinkedIn style cards: aim ~1200×630; Strapi cannot crop here — we pick the best preset. */
-const OG_IDEAL_WIDTH = 1200;
-const OG_MIN_WIDTH = 600;
-const OG_MIN_HEIGHT = 315;
-/** Above this width, treat as “original scale” and deprioritise vs presets. */
-const OG_SOFT_MAX_WIDTH = Math.round(OG_IDEAL_WIDTH * 1.5);
-
-export type OpenGraphCmsImagePick = {
-	readonly src: string;
-	readonly width: number;
-	readonly height: number;
-};
 
 /**
  * Picks a Strapi `formats` variant (large → … → original) closest to recommended OG size,
@@ -134,7 +100,7 @@ export function pickOpenGraphCmsImage(
 		}
 	};
 
-	for (const name of [...FORMAT_NAMES].reverse()) {
+	for (const name of [...IMAGE_FORMAT_NAMES].reverse()) {
 		const v = image.formats[name];
 		if (v) {
 			push(v.url, v.width, v.height);
@@ -143,17 +109,17 @@ export function pickOpenGraphCmsImage(
 	push(image.url, image.width, image.height);
 
 	const meetsMinimum = (c: OpenGraphCmsImagePick) =>
-		c.width >= OG_MIN_WIDTH && c.height >= OG_MIN_HEIGHT;
+		c.width >= OG_IMAGE_MIN_WIDTH && c.height >= OG_IMAGE_MIN_HEIGHT;
 	let pool = candidates.filter(meetsMinimum);
 	if (pool.length === 0) {
 		pool = candidates;
 	}
 
 	const scoreWidth = (c: OpenGraphCmsImagePick): number => {
-		if (c.width > OG_SOFT_MAX_WIDTH) {
+		if (c.width > OG_IMAGE_SOFT_MAX_WIDTH) {
 			return c.width;
 		}
-		return Math.abs(c.width - OG_IDEAL_WIDTH);
+		return Math.abs(c.width - OG_IMAGE_IDEAL_WIDTH);
 	};
 
 	pool.sort((a, b) => {
@@ -173,15 +139,4 @@ export function pickOpenGraphCmsImage(
 		width: image.width,
 		height: image.height,
 	};
-}
-
-/** Distinct widths from the original + format variants (sorted ascending). */
-export function cmsImageWidthsForResponsive(image: CmsImage): number[] {
-	const widths = new Set<number>([image.width]);
-	for (const v of Object.values(image.formats)) {
-		if (v) {
-			widths.add(v.width);
-		}
-	}
-	return [...widths].sort((a, b) => a - b);
 }
