@@ -1,15 +1,15 @@
 ---
-import { DEFAULT_SITE_TITLE } from "../constants/defaults";
 import Layout from "../layouts/BlogPost.astro";
 import { createContentProvider } from "../lib/content/provider";
 
 const content = createContentProvider();
 const { page, siteConfig } = await content.getAboutPageContent();
-const siteTitle = siteConfig.siteTitle || DEFAULT_SITE_TITLE;
+const { siteTitle, logo } = siteConfig;
 ---
 
 <Layout
 	siteTitle={siteTitle}
+	logo={logo}
 	metaData={page.metaData}
 	title={page.heading}
 	pubDate={page.publishedAt ?? new Date()}

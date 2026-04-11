@@ -1,3 +1,4 @@
+import { DEFAULT_SITE_TITLE } from "../../../constants/defaults";
 import type { SiteConfig } from "../models";
 import { isRecord } from "./checkers";
 import { cmsImageDefaultSrc, mapCmsImage } from "./image";
@@ -27,7 +28,7 @@ export function mapSiteConfig(
 	},
 	_baseUrl: string,
 ): SiteConfig {
-	const siteTitle = entity.siteTitle ?? entity.title ?? "";
+	const siteTitle = entity.siteTitle ?? DEFAULT_SITE_TITLE;
 	const description =
 		typeof entity.description === "string" ? entity.description : "";
 

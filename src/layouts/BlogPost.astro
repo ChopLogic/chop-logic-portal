@@ -2,12 +2,13 @@
 import { Image } from "astro:assets";
 import Footer from "../components/Footer.astro";
 import FormattedDate from "../components/FormattedDate.astro";
-import Header from "../components/Header.astro";
+import Header from "../components/header/Header.astro";
 import MetaData from "../components/meta-data/MetaData.astro";
-import type { MetaData as PageMetaData } from "../lib/content/models";
+import type { CmsImage, MetaData as PageMetaData } from "../lib/content/models";
 
 type Props = {
 	siteTitle: string;
+	logo: CmsImage | null;
 	metaData: PageMetaData;
 	title: string;
 	pubDate: Date;
@@ -18,6 +19,7 @@ type Props = {
 
 const {
 	siteTitle,
+	logo,
 	metaData,
 	title,
 	pubDate,
@@ -72,7 +74,7 @@ const {
 	</head>
 
 	<body>
-		<Header />
+		<Header siteTitle={siteTitle} logo={logo} />
 		<main>
 			<article>
 				<div class="hero-image">
