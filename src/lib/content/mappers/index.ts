@@ -1,5 +1,4 @@
 export {
-	cmsImageDefaultSrc,
 	mapCmsImage,
 	pickOpenGraphCmsImage,
 	resolveMediaAbsoluteUrl,
@@ -11,5 +10,5 @@ export {
 	richTextToHtml,
 	richTextToPlainText,
 } from "./rich-text";
-export { mapSiteConfig, siteConfigLogoSrc } from "./site-config";
+export { mapSiteConfig } from "./site-config";
 export { mapStructuredDataToJsonLdHtml } from "./structured-data";

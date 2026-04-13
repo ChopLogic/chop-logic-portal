@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { CmsImage } from "../../models";
 import {
-	cmsImageDefaultSrc,
 	mapCmsImage,
 	pickOpenGraphCmsImage,
 	resolveMediaAbsoluteUrl,
@@ -19,11 +18,13 @@ function minimalCmsImageRaw(overrides: Record<string, unknown> = {}) {
 }
 
 describe("mapCmsImage", () => {
+	const baseUrl = "https://cms.example.com";
+
 	it("returns null when input is not a plain object", () => {
-		expect(mapCmsImage(null)).toBeNull();
-		expect(mapCmsImage(undefined)).toBeNull();
-		expect(mapCmsImage([])).toBeNull();
-		expect(mapCmsImage("x")).toBeNull();
+		expect(mapCmsImage(null, baseUrl)).toBeNull();
+		expect(mapCmsImage(undefined, baseUrl)).toBeNull();
+		expect(mapCmsImage([], baseUrl)).toBeNull();
+		expect(mapCmsImage("x", baseUrl)).toBeNull();
 	});
 
 	it("maps a complete Strapi-style record", () => {
@@ -45,17 +46,17 @@ describe("mapCmsImage", () => {
 			},
 		});
 
-		expect(mapCmsImage(raw)).toEqual({
+		expect(mapCmsImage(raw, baseUrl)).toEqual({
 			documentId: "doc-1",
 			name: "photo.jpg",
-			url: "/uploads/photo.jpg",
+			url: "https://cms.example.com/uploads/photo.jpg",
 			width: 800,
 			height: 600,
 			alternativeText: "Alt",
 			caption: "Cap",
 			formats: {
 				large: {
-					url: "/uploads/large.jpg",
+					url: "https://cms.example.com/uploads/large.jpg",
 					width: 1000,
 					height: 630,
 					mime: "image/jpeg",
@@ -65,13 +66,13 @@ describe("mapCmsImage", () => {
 	});
 
 	it("uses empty formats when formats is missing or not an object", () => {
-		expect(mapCmsImage(minimalCmsImageRaw())?.formats).toEqual({});
-		expect(mapCmsImage(minimalCmsImageRaw({ formats: null }))?.formats).toEqual(
-			{},
-		);
-		expect(mapCmsImage(minimalCmsImageRaw({ formats: [] }))?.formats).toEqual(
-			{},
-		);
+		expect(mapCmsImage(minimalCmsImageRaw(), baseUrl)?.formats).toEqual({});
+		expect(
+			mapCmsImage(minimalCmsImageRaw({ formats: null }), baseUrl)?.formats,
+		).toEqual({});
+		expect(
+			mapCmsImage(minimalCmsImageRaw({ formats: [] }), baseUrl)?.formats,
+		).toEqual({});
 	});
 
 	it("skips format entries that are not objects", () => {
@@ -80,16 +81,17 @@ describe("mapCmsImage", () => {
 				formats: {
 					large: "broken",
 					medium: {
-						url: "/m.jpg",
+						url: "https://cms.example.com/m.jpg",
 						width: 400,
 						height: 300,
 					},
 				},
 			}),
+			baseUrl,
 		);
 		expect(result?.formats).toEqual({
 			medium: {
-				url: "/m.jpg",
+				url: "https://cms.example.com/m.jpg",
 				width: 400,
 				height: 300,
 				mime: undefined,
@@ -98,7 +100,7 @@ describe("mapCmsImage", () => {
 	});
 
 	it("omits optional alternativeText and caption when absent or empty", () => {
-		const stripped = mapCmsImage(minimalCmsImageRaw());
+		const stripped = mapCmsImage(minimalCmsImageRaw(), baseUrl);
 		expect(stripped?.alternativeText).toBeUndefined();
 		expect(stripped?.caption).toBeUndefined();
 
@@ -107,16 +109,21 @@ describe("mapCmsImage", () => {
 				alternativeText: "",
 				caption: null,
 			}),
+			baseUrl,
 		);
 		expect(emptyOptional?.alternativeText).toBeUndefined();
 		expect(emptyOptional?.caption).toBeUndefined();
 	});
 
 	it("returns null when documentId, name, or url is missing or empty", () => {
-		expect(mapCmsImage(minimalCmsImageRaw({ documentId: null }))).toBeNull();
-		expect(mapCmsImage(minimalCmsImageRaw({ url: undefined }))).toBeNull();
-		expect(mapCmsImage(minimalCmsImageRaw({ name: "" }))).toBeNull();
-		expect(mapCmsImage(minimalCmsImageRaw({ url: "" }))).toBeNull();
+		expect(
+			mapCmsImage(minimalCmsImageRaw({ documentId: null }), baseUrl),
+		).toBeNull();
+		expect(
+			mapCmsImage(minimalCmsImageRaw({ url: undefined }), baseUrl),
+		).toBeNull();
+		expect(mapCmsImage(minimalCmsImageRaw({ name: "" }), baseUrl)).toBeNull();
+		expect(mapCmsImage(minimalCmsImageRaw({ url: "" }), baseUrl)).toBeNull();
 	});
 
 	it.each([
@@ -124,7 +131,7 @@ describe("mapCmsImage", () => {
 		["width", { width: "x" }],
 		["height", { height: Number.NaN }],
 	] as const)("throws when %s is invalid", (_field, overrides) => {
-		expect(() => mapCmsImage(minimalCmsImageRaw(overrides))).toThrow();
+		expect(() => mapCmsImage(minimalCmsImageRaw(overrides), baseUrl)).toThrow();
 	});
 
 	it("defaults non-numeric format width and height to 0", () => {
@@ -134,9 +141,10 @@ describe("mapCmsImage", () => {
 					small: { url: "/s.jpg", width: "nope", height: "bad" },
 				},
 			}),
+			baseUrl,
 		);
 		expect(result?.formats.small).toEqual({
-			url: "/s.jpg",
+			url: "https://cms.example.com/s.jpg",
 			width: 0,
 			height: 0,
 			mime: undefined,
@@ -148,44 +156,28 @@ describe("resolveMediaAbsoluteUrl", () => {
 	it("returns http(s) URLs unchanged", () => {
 		expect(
 			resolveMediaAbsoluteUrl(
-				"https://cms.example.com",
 				"https://cdn.example.com/a.jpg",
+				"https://cms.example.com",
 			),
 		).toBe("https://cdn.example.com/a.jpg");
 		expect(
 			resolveMediaAbsoluteUrl(
-				"https://cms.example.com",
 				"http://legacy.example.com/a.jpg",
+				"https://cms.example.com",
 			),
 		).toBe("http://legacy.example.com/a.jpg");
 	});
 
 	it("resolves relative paths against the base origin", () => {
 		expect(
-			resolveMediaAbsoluteUrl("https://cms.example.com", "/uploads/x.jpg"),
+			resolveMediaAbsoluteUrl("/uploads/x.jpg", "https://cms.example.com"),
 		).toBe("https://cms.example.com/uploads/x.jpg");
 		expect(
-			resolveMediaAbsoluteUrl("https://cms.example.com/", "/uploads/x.jpg"),
+			resolveMediaAbsoluteUrl("/uploads/x.jpg", "https://cms.example.com/"),
 		).toBe("https://cms.example.com/uploads/x.jpg");
 		expect(
-			resolveMediaAbsoluteUrl("https://cms.example.com/api/", "files/x.jpg"),
+			resolveMediaAbsoluteUrl("files/x.jpg", "https://cms.example.com/api/"),
 		).toBe("https://cms.example.com/api/files/x.jpg");
-	});
-});
-
-describe("cmsImageDefaultSrc", () => {
-	it("resolves the image url against baseUrl", () => {
-		const image: CmsImage = {
-			documentId: "d",
-			name: "n",
-			url: "/uploads/original.jpg",
-			width: 100,
-			height: 100,
-			formats: {},
-		};
-		expect(cmsImageDefaultSrc(image, "https://cms.example.com")).toBe(
-			"https://cms.example.com/uploads/original.jpg",
-		);
 	});
 });
 

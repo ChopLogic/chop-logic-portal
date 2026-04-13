@@ -1,5 +1,5 @@
+import { resolveMediaUrl } from "../content/mappers/media";
 import { blocksToHtml } from "./blocks";
-import { resolveMediaUrl } from "./media";
 
 function escapeHtml(text: string): string {
 	return text

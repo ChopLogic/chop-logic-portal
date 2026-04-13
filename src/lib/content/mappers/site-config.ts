@@ -1,7 +1,6 @@
 import { DEFAULT_SITE_TITLE } from "../../../constants/defaults";
 import type { SiteConfig } from "../models";
-import { isRecord } from "./checkers";
-import { cmsImageDefaultSrc, mapCmsImage } from "./image";
+import { mapCmsImage } from "./image";
 import { mapLinks } from "./link";
 import { parseRichTextDocument, richTextToHtml } from "./rich-text";
 
@@ -26,7 +25,7 @@ export function mapSiteConfig(
 		links: unknown[];
 		logo?: unknown;
 	},
-	_baseUrl: string,
+	baseUrl: string,
 ): SiteConfig {
 	const siteTitle = entity.siteTitle ?? DEFAULT_SITE_TITLE;
 	const description =
@@ -43,26 +42,11 @@ export function mapSiteConfig(
 		footerHtml = `<p>${escapeHtml(entity.footerText)}</p>`;
 	}
 
-	const logoRaw = entity.logo;
-	const logo =
-		logoRaw != null && isRecord(logoRaw) ? mapCmsImage(logoRaw) : null;
-
 	return {
 		siteTitle,
 		description,
 		footerHtml,
 		links: mapLinks(entity.links),
-		logo,
+		logo: mapCmsImage(entity.logo, baseUrl),
 	};
-}
-
-/** Absolute URL for site logo (for `<Image src={...} />`). */
-export function siteConfigLogoSrc(
-	config: SiteConfig,
-	baseUrl: string,
-): string | null {
-	if (!config.logo) {
-		return null;
-	}
-	return cmsImageDefaultSrc(config.logo, baseUrl);
 }

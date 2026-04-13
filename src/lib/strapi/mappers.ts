@@ -1,9 +1,10 @@
 import {
-	cmsImageDefaultSrc,
 	mapCmsImage,
 	mapMetaData,
+	resolveMediaAbsoluteUrl,
 } from "../content/mappers";
 import { isRecord } from "../content/mappers/checkers";
+import { mediaAlt, resolveMediaUrl } from "../content/mappers/media";
 import {
 	parseRichTextDocument,
 	richTextToHtml,
@@ -17,7 +18,6 @@ import type {
 } from "../content/models";
 import { blocksToPlainText } from "./blocks";
 import { dynamicZoneToHtml } from "./dynamic-zone";
-import { mediaAlt, resolveMediaUrl } from "./media";
 import type { StrapiArticleEntity, StrapiSingletonEntity } from "./schemas";
 
 function mapSeo(raw: unknown): { metaTitle: string; metaDescription: string } {
@@ -87,9 +87,9 @@ export function mapArticleToSummary(
 	baseUrl: string,
 	entity: StrapiArticleEntity,
 ): ArticleSummary {
-	const previewImage = mapCmsImage(entity.preview);
+	const previewImage = mapCmsImage(entity.preview, baseUrl);
 	const heroImageUrl = previewImage
-		? cmsImageDefaultSrc(previewImage, baseUrl)
+		? resolveMediaAbsoluteUrl(previewImage.url, baseUrl)
 		: null;
 	const previewAlt = previewImage?.alternativeText?.trim()
 		? previewImage.alternativeText

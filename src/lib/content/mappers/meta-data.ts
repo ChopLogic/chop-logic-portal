@@ -35,7 +35,7 @@ function normalizeOgImage(
 		return OPEN_GRAPH_FALLBACK_IMAGE;
 	}
 
-	const img = mapCmsImage(ogImageRaw);
+	const img = mapCmsImage(ogImageRaw, baseUrl);
 	if (img) {
 		const picked = pickOpenGraphCmsImage(img, baseUrl);
 		return {

@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import type { CmsImage } from "../../lib/content/models";
 import HeaderLink from "./HeaderLink.astro";
 
@@ -7,12 +8,12 @@ interface Props {
 	logo: CmsImage | null;
 }
 
-const { siteTitle } = Astro.props;
+const { siteTitle, logo } = Astro.props;
 ---
 
 <header>
+	{logo && <Image src={logo.url} alt={siteTitle} width={logo.width} height={logo.height} />}
 	<nav>
-		<h2><a href="/">{siteTitle}</a></h2>
 		<div class="internal-links">
 			<HeaderLink href="/">Home</HeaderLink>
 			<HeaderLink href="/blog">Blog</HeaderLink>
@@ -26,7 +27,6 @@ const { siteTitle } = Astro.props;
 		padding: 0 1em;
 		background: white;
 		box-shadow: 0 2px 8px rgba(var(--black), 5%);
-		color: var(--cl-accent-a0);
 	}
 	h2 {
 		margin: 0;

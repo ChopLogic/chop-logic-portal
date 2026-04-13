@@ -19,20 +19,26 @@ import {
 	normalizeRequiredString,
 } from "./helpers";
 
-function mapFormatVariant(raw: unknown): CmsImageFormatVariant | null {
+function mapFormatVariant(
+	raw: unknown,
+	baseUrl: string,
+): CmsImageFormatVariant | null {
 	if (!isRecord(raw)) {
 		return null;
 	}
 
 	return {
-		url: normalizeRequiredString(raw["url"]),
+		url: resolveMediaAbsoluteUrl(normalizeRequiredString(raw["url"]), baseUrl),
 		width: normalizeRequiredNumber(raw["width"], 0),
 		height: normalizeRequiredNumber(raw["height"], 0),
 		mime: normalizeOptionalString(raw["mime"]),
 	};
 }
 
-function normalizeImageFormats(formatsRaw: unknown): CmsImageFormats {
+function normalizeImageFormats(
+	formatsRaw: unknown,
+	baseUrl: string,
+): CmsImageFormats {
 	if (!isRecord(formatsRaw)) {
 		return {};
 	}
@@ -41,7 +47,7 @@ function normalizeImageFormats(formatsRaw: unknown): CmsImageFormats {
 		if (!isImageFormatName(key)) {
 			continue;
 		}
-		const v = mapFormatVariant(value);
+		const v = mapFormatVariant(value, baseUrl);
 		if (v) {
 			formats[key] = v;
 		}
@@ -49,7 +55,7 @@ function normalizeImageFormats(formatsRaw: unknown): CmsImageFormats {
 	return formats;
 }
 
-export function mapCmsImage(raw: unknown): CmsImage | null {
+export function mapCmsImage(raw: unknown, baseUrl: string): CmsImage | null {
 	if (!isRecord(raw) || !raw["url"] || !raw["documentId"] || !raw["name"]) {
 		return null;
 	}
@@ -57,28 +63,23 @@ export function mapCmsImage(raw: unknown): CmsImage | null {
 	return {
 		documentId: normalizeRequiredString(raw["documentId"]),
 		name: normalizeRequiredString(raw["name"]),
-		url: normalizeRequiredString(raw["url"]),
+		url: resolveMediaAbsoluteUrl(normalizeRequiredString(raw["url"]), baseUrl),
 		width: normalizeRequiredNumber(raw["width"]),
 		height: normalizeRequiredNumber(raw["height"]),
 		alternativeText: normalizeOptionalString(raw["alternativeText"]),
 		caption: normalizeOptionalString(raw["caption"]),
-		formats: normalizeImageFormats(raw["formats"]),
+		formats: normalizeImageFormats(raw["formats"], baseUrl),
 	};
 }
 
 export function resolveMediaAbsoluteUrl(
-	baseUrl: string,
 	pathOrUrl: string,
+	baseUrl: string,
 ): string {
 	if (pathOrUrl.startsWith("http://") || pathOrUrl.startsWith("https://")) {
 		return pathOrUrl;
 	}
 	return new URL(pathOrUrl, `${baseUrl.replace(/\/$/, "")}/`).toString();
-}
-
-/** Absolute URL for the default (original) asset. */
-export function cmsImageDefaultSrc(image: CmsImage, baseUrl: string): string {
-	return resolveMediaAbsoluteUrl(baseUrl, image.url);
 }
 
 /**
@@ -93,7 +94,7 @@ export function pickOpenGraphCmsImage(
 	const push = (url: string, width: number, height: number) => {
 		if (width > 0 && height > 0) {
 			candidates.push({
-				src: resolveMediaAbsoluteUrl(baseUrl, url),
+				src: resolveMediaAbsoluteUrl(url, baseUrl),
 				width,
 				height,
 			});
@@ -134,8 +135,9 @@ export function pickOpenGraphCmsImage(
 	if (best) {
 		return best;
 	}
+
 	return {
-		src: cmsImageDefaultSrc(image, baseUrl),
+		src: resolveMediaAbsoluteUrl(image.url, baseUrl),
 		width: image.width,
 		height: image.height,
 	};
