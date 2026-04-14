@@ -6,7 +6,7 @@ import { createContentProvider } from "../lib/content/provider";
 
 const provider = createContentProvider();
 const { home, siteConfig } = await provider.getHomeIndexContent();
-const { siteTitle, logo } = siteConfig;
+const { siteTitle } = siteConfig;
 ---
 
 <!doctype html>
@@ -41,7 +41,7 @@ const { siteTitle, logo } = siteConfig;
 		</style>
 	</head>
 	<body>
-		<Header siteTitle={siteTitle} logo={logo} />
+		<Header />
 		<main>
 			<div class="home-hero">
 				<h1>{home.heading}</h1>

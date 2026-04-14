@@ -1,18 +1,8 @@
 ---
-import { Image } from "astro:assets";
-import type { CmsImage } from "../../lib/content/models";
 import HeaderLink from "./HeaderLink.astro";
-
-interface Props {
-	siteTitle: string;
-	logo: CmsImage | null;
-}
-
-const { siteTitle, logo } = Astro.props;
 ---
 
 <header>
-	{logo && <Image src={logo.url} alt={siteTitle} width={logo.width} height={logo.height} />}
 	<nav>
 		<div class="internal-links">
 			<HeaderLink href="/">Home</HeaderLink>
@@ -24,18 +14,19 @@ const { siteTitle, logo } = Astro.props;
 <style>
 	header {
 		margin: 0;
-		padding: 0 1em;
-		background: white;
-		box-shadow: 0 2px 8px rgba(var(--black), 5%);
-	}
-	h2 {
-		margin: 0;
-		font-size: 1em;
-	}
-
-	h2 a,
-	h2 a.active {
-		text-decoration: none;
+		padding: 0;
+		background: var(--cl-base-background-color);
+		box-shadow: var(--cl-box-shadow);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-family: var(--cl-fancy-font);
+		font-weight: normal;
+		line-height: 1.5;
+		letter-spacing: normal;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		font-size: var(--cl-typography-h5-mobile);
 	}
 	nav {
 		display: flex;
@@ -44,12 +35,28 @@ const { siteTitle, logo } = Astro.props;
 	}
 	nav a {
 		padding: 1em 0.5em;
-		color: var(--black);
-		border-bottom: 4px solid transparent;
+		color: var(--cl-base-font-color);
 		text-decoration: none;
+	}
+	nav a:hover {
+		text-shadow: var(--cl-text-shadow);
+		text-decoration: underline;
 	}
 	nav a.active {
 		text-decoration: none;
-		border-bottom-color: var(--accent);
+		text-shadow: none;
+		cursor: default;
+		color: var(--cl-accent-a0);
+	}
+	@media (min-width: 640px) {
+		header {
+			font-size: var(--cl-typography-h5-tablet);
+		}
+	}
+
+	@media (min-width: 1024px) {
+		header {
+			font-size: var(--cl-typography-h5-desktop);
+		}
 	}
 </style>

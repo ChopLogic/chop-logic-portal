@@ -12,7 +12,7 @@ const { articles, siteConfig } = await content.getBlogIndexContent();
 const posts = articles.sort(
 	(a, b) => b.pubDate.valueOf() - a.pubDate.valueOf(),
 );
-const { siteTitle, logo } = siteConfig;
+const { siteTitle } = siteConfig;
 const listingMeta = blogListingMetaData(siteConfig);
 ---
 
@@ -91,7 +91,7 @@ const listingMeta = blogListingMetaData(siteConfig);
 		</style>
 	</head>
 	<body>
-		<Header siteTitle={siteTitle} logo={logo} />
+		<Header />
 		<main>
 			<section>
 				<ul>
