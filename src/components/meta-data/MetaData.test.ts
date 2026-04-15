@@ -68,8 +68,9 @@ describe("MetaData.astro", () => {
 		expect(html).toContain('href="/sitemap-index.xml"');
 		expect(html).toContain('type="application/rss+xml"');
 		expect(html).toContain("https://example.com/rss.xml");
-		expect(html).toContain('href="/fonts/atkinson-regular.woff"');
-		expect(html).toContain('href="/fonts/atkinson-bold.woff"');
+		expect(html).toContain('href="/fonts/Chopin-Bold.woff2"');
+		expect(html).toContain('href="/fonts/Chopin-Regular.woff2"');
+		expect(html).toContain('href="/fonts/FliegeMono-Regular.woff2"');
 	});
 
 	it("sets canonical from the request URL when canonicalURL is omitted", async () => {
