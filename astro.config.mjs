@@ -25,4 +25,13 @@ export default defineConfig({
 			},
 		],
 	},
+	vite: {
+		// chop-logic-components imports .css from JS; when externalized for SSR /
+		// prerender, Node loads raw ESM and fails on `.css`. Per Astro/Vite 7,
+		// use `resolve.noExternal` so the package is bundled through Vite (not only
+		// legacy `ssr.noExternal`).
+		resolve: {
+			noExternal: ["chop-logic-components"],
+		},
+	},
 });

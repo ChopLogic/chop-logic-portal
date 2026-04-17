@@ -1,5 +1,7 @@
 /// <reference types="astro/client" />
 
+declare module "chop-logic-components/styles/main";
+
 declare module "*.astro" {
 	const Component: import("astro/runtime/server").AstroComponentFactory;
 	export default Component;

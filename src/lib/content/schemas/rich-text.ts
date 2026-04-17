@@ -17,22 +17,20 @@ export interface RichTextNode {
 }
 
 const richTextBlockSchema: z.ZodType<RichTextNode> = z.lazy(() =>
-	z
-		.object({
-			type: z.string(),
-			children: z.array(richTextBlockSchema).optional(),
-			text: z.string().optional(),
-			level: z.number().optional(),
-			format: z.string().optional(),
-			url: z.string().optional(),
-			plainText: z.string().optional(),
-			bold: z.boolean().optional(),
-			italic: z.boolean().optional(),
-			strikethrough: z.boolean().optional(),
-			underline: z.boolean().optional(),
-			code: z.boolean().optional(),
-		})
-		.passthrough(),
+	z.looseObject({
+		type: z.string(),
+		children: z.array(richTextBlockSchema).optional(),
+		text: z.string().optional(),
+		level: z.number().optional(),
+		format: z.string().optional(),
+		url: z.string().optional(),
+		plainText: z.string().optional(),
+		bold: z.boolean().optional(),
+		italic: z.boolean().optional(),
+		strikethrough: z.boolean().optional(),
+		underline: z.boolean().optional(),
+		code: z.boolean().optional(),
+	}),
 );
 
 export const richTextDocumentSchema = z.array(richTextBlockSchema);
