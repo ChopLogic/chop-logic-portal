@@ -22,7 +22,6 @@ export type AboutPageContent = {
 	siteConfig: SiteConfig;
 };
 
-/** Content boundary: pages depend on this, not on a specific CMS. */
 export type ContentPort = {
 	listArticles(): Promise<ArticleSummary[]>;
 	getArticleBySlug(
@@ -30,9 +29,7 @@ export type ContentPort = {
 		siteTitleHint?: string,
 	): Promise<ArticleDetail>;
 	getAboutPageContent(): Promise<AboutPageContent>;
-	/** Article list plus global config in one CMS round-trip. */
 	getBlogIndexContent(): Promise<BlogIndexContent>;
-	/** Home singleton plus global config in one CMS round-trip. */
 	getHomeIndexContent(): Promise<HomeIndexContent>;
 	getSingleton(key: SingletonKey): Promise<SingletonPage>;
 	getSiteConfig(): Promise<SiteConfig>;

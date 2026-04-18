@@ -1,20 +1,20 @@
-import { DEFAULT_SITE_TITLE } from "../../../constants/defaults";
-import { isRecord } from "../../checks";
-import { ArticleNotFoundError } from "../../content/errors";
-import { mapSiteConfig } from "../../content/mappers";
+/** biome-ignore-all lint/complexity/useLiteralKeys: Access to unknown keys */
+import { ArticleNotFoundError } from "../content/errors";
+import { mapSiteConfig } from "../content/mappers";
+import { isRecord } from "../content/mappers/checkers";
 import type {
 	ArticleDetail,
 	ArticleSummary,
 	SingletonPage,
 	SiteConfig,
-} from "../../content/models";
+} from "../content/models";
 import type {
 	AboutPageContent,
 	BlogIndexContent,
 	ContentPort,
 	HomeIndexContent,
 	SingletonKey,
-} from "../../content/ports";
+} from "../content/ports";
 import type { StrapiGraphqlClientConfig } from "./graphql/client";
 import { strapiGraphqlRequest } from "./graphql/client";
 import { normalizeDynamicZoneFromGraphql } from "./graphql/normalize";
@@ -63,18 +63,12 @@ function singletonLabel(key: SingletonKey): string {
 	return key === "home" ? "Home" : "About Me";
 }
 
-function siteTitleFromConfig(config: SiteConfig): string {
-	const t = config.siteTitle.trim();
-	return t !== "" ? t : DEFAULT_SITE_TITLE;
-}
-
 export class StrapiGraphqlContentProvider implements ContentPort {
 	constructor(private readonly config: StrapiGraphqlClientConfig) {}
 
 	private mapSingletonFromGraphql(
 		document: unknown,
 		cmsLabel: string,
-		siteTitle: string,
 	): SingletonPage {
 		if (document == null || !isRecord(document)) {
 			throw new Error(
@@ -83,7 +77,7 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 		}
 		const normalized = normalizeSingletonFromGraphql(document);
 		const entity = parseSingletonEntity(normalized);
-		return mapSingletonToPage(this.config.baseUrl, entity, siteTitle);
+		return mapSingletonToPage(this.config.baseUrl, entity);
 	}
 
 	private mapSiteConfigFromGraphql(config: unknown): SiteConfig {
@@ -96,19 +90,16 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 		return mapSiteConfig(entity, this.config.baseUrl);
 	}
 
-	private mapArticleListResponse(
-		data: { articles: unknown[] },
-		siteTitle: string,
-	): ArticleSummary[] {
+	private mapArticleListResponse(data: {
+		articles: unknown[];
+	}): ArticleSummary[] {
 		const rows = Array.isArray(data.articles) ? data.articles : [];
 		const out: ArticleSummary[] = [];
 		for (const raw of rows) {
 			const normalized = normalizeArticleFromGraphql(raw);
 			const parsed = strapiArticleEntitySchema.safeParse(normalized);
 			if (parsed.success) {
-				out.push(
-					mapArticleToSummary(this.config.baseUrl, parsed.data, siteTitle),
-				);
+				out.push(mapArticleToSummary(this.config.baseUrl, parsed.data));
 			}
 		}
 		return out;
@@ -119,7 +110,7 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 			this.config,
 			ARTICLES_LIST_QUERY,
 		);
-		return this.mapArticleListResponse(data, DEFAULT_SITE_TITLE);
+		return this.mapArticleListResponse(data);
 	}
 
 	async getBlogIndexContent(): Promise<BlogIndexContent> {
@@ -129,10 +120,7 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 		}>(this.config, ARTICLES_AND_CONFIG_QUERY);
 		const siteConfig = this.mapSiteConfigFromGraphql(data.config);
 		return {
-			articles: this.mapArticleListResponse(
-				data,
-				siteTitleFromConfig(siteConfig),
-			),
+			articles: this.mapArticleListResponse(data),
 			siteConfig,
 		};
 	}
@@ -144,19 +132,12 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 		}>(this.config, ABOUT_AND_CONFIG_QUERY);
 		const siteConfig = this.mapSiteConfigFromGraphql(data.config);
 		return {
-			page: this.mapSingletonFromGraphql(
-				data.aboutMe,
-				"About Me",
-				siteTitleFromConfig(siteConfig),
-			),
+			page: this.mapSingletonFromGraphql(data.aboutMe, "About Me"),
 			siteConfig,
 		};
 	}
 
-	async getArticleBySlug(
-		slug: string,
-		siteTitleHint?: string,
-	): Promise<ArticleDetail> {
+	async getArticleBySlug(slug: string): Promise<ArticleDetail> {
 		const data = await strapiGraphqlRequest<{ articles: unknown[] }>(
 			this.config,
 			ARTICLE_BY_SLUG_QUERY,
@@ -169,8 +150,7 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 		}
 		const normalized = normalizeArticleFromGraphql(first);
 		const entity = parseArticleEntity(normalized);
-		const siteTitle = siteTitleHint?.trim() || DEFAULT_SITE_TITLE;
-		return mapArticleToDetail(this.config.baseUrl, entity, siteTitle);
+		return mapArticleToDetail(this.config.baseUrl, entity);
 	}
 
 	async getHomeIndexContent(): Promise<HomeIndexContent> {
@@ -180,11 +160,7 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 		}>(this.config, HOME_AND_CONFIG_QUERY);
 		const siteConfig = this.mapSiteConfigFromGraphql(data.config);
 		return {
-			home: this.mapSingletonFromGraphql(
-				data.home,
-				"Home",
-				siteTitleFromConfig(siteConfig),
-			),
+			home: this.mapSingletonFromGraphql(data.home, "Home"),
 			siteConfig,
 		};
 	}
@@ -205,11 +181,7 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 						)
 					).aboutMe;
 
-		return this.mapSingletonFromGraphql(
-			document,
-			singletonLabel(key),
-			DEFAULT_SITE_TITLE,
-		);
+		return this.mapSingletonFromGraphql(document, singletonLabel(key));
 	}
 
 	async getSiteConfig(): Promise<SiteConfig> {

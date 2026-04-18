@@ -1,13 +1,13 @@
 ---
-// Import the global.css file here so that it is included on
-// all pages through the use of the <MetaData /> component.
+// Import the global.css file here
 import "../../styles/global.css";
-import type { PageMetaData } from "../../lib/content/models";
-import { structuredDataToJsonLdHtml } from "../../lib/content/structured-data-json-ld";
+import "chop-logic-components/styles/main";
+import { mapStructuredDataToJsonLdHtml } from "../../lib/content/mappers";
+import type { MetaData } from "../../lib/content/models";
 
 interface Props {
 	siteTitle: string;
-	metaData: PageMetaData;
+	metaData: MetaData;
 }
 
 const { siteTitle, metaData } = Astro.props;
@@ -29,9 +29,11 @@ const canonical = canonicalURL ?? new URL(Astro.url.pathname, siteRoot);
 const ogImageUrl = new URL(ogImage.src, Astro.url);
 const rssUrl = new URL("rss.xml", siteRoot);
 
-const structuredDataJsonLd = structuredDataToJsonLdHtml(structuredData);
-const showOgDimensions = ogImage.width != null && ogImage.width > 0;
-const showOgHeight = ogImage.height != null && ogImage.height > 0;
+const structuredDataJsonLd = mapStructuredDataToJsonLdHtml(structuredData);
+const hasOgWidth = ogImage.width != null && ogImage.width > 0;
+const hasOgHeight = ogImage.height != null && ogImage.height > 0;
+const hasKeywords = !!keywords;
+const hasAuthorName = !!authorName;
 ---
 
 <!-- Global Metadata -->
@@ -40,21 +42,33 @@ const showOgHeight = ogImage.height != null && ogImage.height > 0;
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" href="/favicon.ico" />
 <link rel="sitemap" href="/sitemap-index.xml" />
-<link rel="alternate" type="application/rss+xml" title={siteTitle} href={rssUrl} />
+<link
+	rel="alternate"
+	type="application/rss+xml"
+	title={siteTitle}
+	href={rssUrl}
+/>
 
 <!-- Font preloads -->
 <link
 	rel="preload"
-	href="/fonts/atkinson-regular.woff"
+	href="/fonts/Chopin-Bold.woff2"
 	as="font"
-	type="font/woff"
+	type="font/woff2"
 	crossorigin
 />
 <link
 	rel="preload"
-	href="/fonts/atkinson-bold.woff"
+	href="/fonts/Chopin-Regular.woff2"
 	as="font"
-	type="font/woff"
+	type="font/woff2"
+	crossorigin
+/>
+<link
+	rel="preload"
+	href="/fonts/FliegeMono-Regular.woff2"
+	as="font"
+	type="font/woff2"
 	crossorigin
 />
 
@@ -64,8 +78,8 @@ const showOgHeight = ogImage.height != null && ogImage.height > 0;
 <meta name="title" content={metaTitle} />
 <meta name="description" content={metaDescription} />
 <meta name="robots" content={robots} />
-{keywords !== undefined && <meta name="keywords" content={keywords} />}
-{authorName !== undefined && <meta name="author" content={authorName} />}
+{hasKeywords && <meta name="keywords" content={keywords} />}
+{hasAuthorName && <meta name="author" content={authorName} />}
 
 <!-- Open Graph -->
 <meta property="og:type" content={ogType} />
@@ -73,13 +87,16 @@ const showOgHeight = ogImage.height != null && ogImage.height > 0;
 <meta property="og:title" content={ogTitle ?? metaTitle} />
 <meta property="og:description" content={ogDescription ?? metaDescription} />
 <meta property="og:image" content={ogImageUrl} />
-{showOgDimensions && (
-	<meta property="og:image:width" content={String(ogImage.width)} />
-)}
-{showOgHeight && (
-	<meta property="og:image:height" content={String(ogImage.height)} />
-)}
-<meta property="og:image:alt" content={ogImage.alt} />
+{
+	hasOgWidth && (
+		<meta property="og:image:width" content={String(ogImage.width)} />
+	)
+}
+{
+	hasOgHeight && (
+		<meta property="og:image:height" content={String(ogImage.height)} />
+	)
+}
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
@@ -87,10 +104,13 @@ const showOgHeight = ogImage.height != null && ogImage.height > 0;
 <meta name="twitter:title" content={ogTitle ?? metaTitle} />
 <meta name="twitter:description" content={ogDescription ?? metaDescription} />
 <meta name="twitter:image" content={ogImageUrl} />
-<meta name="twitter:image:alt" content={ogImage.alt} />
 
 {
 	structuredDataJsonLd && (
-		<script is:inline type="application/ld+json" set:html={structuredDataJsonLd} />
+		<script
+			is:inline
+			type="application/ld+json"
+			set:html={structuredDataJsonLd}
+		/>
 	)
 }

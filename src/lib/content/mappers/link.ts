@@ -1,32 +1,87 @@
 /** biome-ignore-all lint/complexity/useLiteralKeys: Access to unknown keys */
-import { isRecord } from "../../checks";
+
 import {
 	type Link,
 	LinkTarget,
 	LinkType,
 	ReferrerPolicy,
-	type SocialPlatform,
+	SocialPlatform,
 } from "../models";
+import { isRecord } from "./checkers";
+import { normalizeRequiredString } from "./helpers";
 
-function normalizeLinkTarget(raw: string): LinkTarget {
-	if (
-		raw === LinkTarget.Blank ||
-		raw === "_blank" ||
-		raw === "blank" ||
-		raw === ""
-	) {
-		return LinkTarget.Blank;
-	}
-	if (raw === LinkTarget.Self || raw === "_self" || raw === "self") {
+function normalizeLinkTarget(raw: unknown): LinkTarget {
+	if (raw === "_self" || raw === "self") {
 		return LinkTarget.Self;
-	}
-	if (raw === LinkTarget.Parent || raw === "_parent") {
+	} else if (raw === "parent" || raw === "_parent") {
 		return LinkTarget.Parent;
-	}
-	if (raw === LinkTarget.Top || raw === "_top") {
+	} else if (raw === "top" || raw === "_top") {
 		return LinkTarget.Top;
 	}
+
 	return LinkTarget.Blank;
+}
+
+function normalizeLinkType(raw: unknown): LinkType {
+	if (raw === "internal") {
+		return LinkType.Internal;
+	}
+
+	return LinkType.External;
+}
+
+function normalizeReferrerPolicy(raw: unknown): ReferrerPolicy {
+	switch (raw) {
+		case "no-referrer":
+			return ReferrerPolicy.NoReferrer;
+		case "no-referrer-when-downgrade":
+			return ReferrerPolicy.NoReferrerWhenDowngrade;
+		case "origin":
+			return ReferrerPolicy.Origin;
+		case "origin-when-cross-origin":
+			return ReferrerPolicy.OriginWhenCrossOrigin;
+		case "unsafe-url":
+			return ReferrerPolicy.UnsafeURL;
+		case "same-origin":
+			return ReferrerPolicy.SameOrigin;
+		case "strict-origin":
+			return ReferrerPolicy.StrictOrigin;
+		default:
+			return ReferrerPolicy.StrictOriginWhenCrossOrigin;
+	}
+}
+
+function normalizeSocialPlatform(raw: unknown): SocialPlatform | undefined {
+	switch (raw) {
+		case "LinkedIn":
+			return SocialPlatform.LinkedIn;
+		case "Facebook":
+			return SocialPlatform.Facebook;
+		case "Telegram":
+			return SocialPlatform.Telegram;
+		case "YouTube":
+			return SocialPlatform.YouTube;
+		case "WhatsApp":
+			return SocialPlatform.WhatsApp;
+		case "Instagram":
+			return SocialPlatform.Instagram;
+		case "TikTok":
+			return SocialPlatform.TikTok;
+		case "Reddit":
+			return SocialPlatform.Reddit;
+		case "Pinterest":
+			return SocialPlatform.Pinterest;
+		case "XTwitter":
+			return SocialPlatform.XTwitter;
+		case "Medium":
+			return SocialPlatform.Medium;
+		case "Discord":
+			return SocialPlatform.Discord;
+		case "GitHub":
+			return SocialPlatform.GitHub;
+		default:
+			return undefined;
+	}
 }
 
 export function mapLink(raw: unknown): Link | null {
@@ -34,33 +89,14 @@ export function mapLink(raw: unknown): Link | null {
 		return null;
 	}
 
-	const idRaw = raw["id"];
-	const id =
-		typeof idRaw === "number"
-			? String(idRaw)
-			: typeof idRaw === "string"
-				? idRaw
-				: "";
-
-	const targetRaw = typeof raw["target"] === "string" ? raw["target"] : "";
-	const target = normalizeLinkTarget(targetRaw);
-
 	return {
-		id,
-		url: typeof raw["url"] === "string" ? raw["url"] : "",
-		text: typeof raw["text"] === "string" ? raw["text"] : "",
-		target,
-		type:
-			typeof raw["type"] === "string"
-				? (raw["type"] as LinkType)
-				: LinkType.External,
-		referrerpolicy:
-			typeof raw["referrerpolicy"] === "string"
-				? (raw["referrerpolicy"] as ReferrerPolicy)
-				: ReferrerPolicy.StrictOriginWhenCrossOrigin,
-		...(typeof raw["platform"] === "string" && raw["platform"].length > 0
-			? { platform: raw["platform"] as SocialPlatform }
-			: {}),
+		id: normalizeRequiredString(raw["id"]),
+		target: normalizeLinkTarget(raw["target"]),
+		url: normalizeRequiredString(raw["url"]),
+		text: normalizeRequiredString(raw["text"]),
+		type: normalizeLinkType(raw["type"]),
+		referrerpolicy: normalizeReferrerPolicy(raw["referrerpolicy"]),
+		platform: normalizeSocialPlatform(raw["platform"]),
 	};
 }
 

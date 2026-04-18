@@ -1,19 +1,19 @@
 ---
 import Footer from "../components/Footer.astro";
-import Header from "../components/Header.astro";
+import Header from "../components/header/Header.astro";
 import MetaData from "../components/meta-data/MetaData.astro";
-import { DEFAULT_SITE_TITLE } from "../constants/defaults";
 import { createContentProvider } from "../lib/content/provider";
 
 const provider = createContentProvider();
 const { home, siteConfig } = await provider.getHomeIndexContent();
+const { siteTitle } = siteConfig;
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
 		<MetaData
-			siteTitle={siteConfig.siteTitle || DEFAULT_SITE_TITLE}
+			siteTitle={siteTitle}
 			metaData={home.metaData}
 		/>
 		<style>

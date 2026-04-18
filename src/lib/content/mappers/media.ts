@@ -1,6 +1,5 @@
-function isRecord(v: unknown): v is Record<string, unknown> {
-	return typeof v === "object" && v !== null && !Array.isArray(v);
-}
+/** biome-ignore-all lint/complexity/useLiteralKeys: Access to unknown keys */
+import { isRecord } from "./checkers";
 
 /**
  * Resolves Strapi upload `url` (often relative) to an absolute URL.
