@@ -1,6 +1,3 @@
-import * as fs from "node:fs";
-import * as path from "node:path";
-import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import {
 	RichTextContentType,
@@ -8,30 +5,133 @@ import {
 } from "../../models/rich-text-document";
 import { mapJsonStringToRichTextDocument } from "../rich-text-document";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const mockPath = path.join(
-	__dirname,
-	"../../../strapi/__mocks__/fetch-config-response.json",
-);
-
-function getMockFooter(): unknown[] {
-	const root = JSON.parse(fs.readFileSync(mockPath, "utf8")) as {
-		data?: { config?: { footer?: unknown[] } };
-	};
-	const footer = root.data?.config?.footer;
-	if (!Array.isArray(footer)) {
-		throw new Error("Mock footer is missing or invalid");
-	}
-	return footer;
-}
+const STRAPI_RICH_TEXT_BLOCK = [
+	{
+		type: RichTextContentType.Heading,
+		level: 1,
+		children: [{ type: RichTextContentType.Text, text: "Heading Text Lvl 1" }],
+	},
+	{
+		type: RichTextContentType.Paragraph,
+		children: [{ type: RichTextContentType.Text, text: "Regular text" }],
+	},
+	{
+		type: RichTextContentType.Paragraph,
+		children: [
+			{ type: RichTextContentType.Text, text: "Bold text", bold: true },
+		],
+	},
+	{
+		type: RichTextContentType.Paragraph,
+		children: [
+			{ type: RichTextContentType.Text, text: "Italic text", italic: true },
+		],
+	},
+	{
+		type: RichTextContentType.Paragraph,
+		children: [
+			{ type: RichTextContentType.Text, text: "Underlined", underline: true },
+		],
+	},
+	{
+		type: RichTextContentType.Paragraph,
+		children: [
+			{
+				type: RichTextContentType.Text,
+				text: "Strikethrough",
+				strikethrough: true,
+			},
+		],
+	},
+	{
+		type: RichTextContentType.Paragraph,
+		children: [
+			{ type: RichTextContentType.Text, text: "" },
+			{
+				type: RichTextContentType.Link,
+				url: "https://www.youtube.com/",
+				target: "_blank",
+				children: [{ type: RichTextContentType.Text, text: "Link text" }],
+			},
+			{ type: RichTextContentType.Text, text: "" },
+		],
+	},
+	{
+		type: RichTextContentType.Paragraph,
+		children: [
+			{
+				type: RichTextContentType.Text,
+				text: 'var test = "Inline Code Text";',
+				code: true,
+			},
+		],
+	},
+	{
+		type: RichTextContentType.List,
+		format: RichTextListFormat.Unordered,
+		children: [
+			{
+				type: RichTextContentType.ListItem,
+				children: [
+					{
+						type: RichTextContentType.Text,
+						text: "Bulleted list option 1",
+					},
+				],
+			},
+			{
+				type: RichTextContentType.List,
+				format: RichTextListFormat.Unordered,
+				indentLevel: 1,
+				children: [
+					{
+						type: RichTextContentType.ListItem,
+						children: [
+							{ type: RichTextContentType.Text, text: "Sub-option 1" },
+						],
+					},
+				],
+			},
+		],
+	},
+	{
+		type: RichTextContentType.List,
+		format: RichTextListFormat.Ordered,
+		children: [
+			{
+				type: RichTextContentType.ListItem,
+				children: [
+					{
+						type: RichTextContentType.Text,
+						text: "Numbered list option 1",
+					},
+				],
+			},
+			{
+				type: RichTextContentType.List,
+				format: RichTextListFormat.Ordered,
+				indentLevel: 1,
+				children: [
+					{
+						type: RichTextContentType.ListItem,
+						children: [
+							{ type: RichTextContentType.Text, text: "Sub-option 1A" },
+						],
+					},
+				],
+			},
+		],
+	},
+];
 
 describe("mapJsonStringToRichTextDocument", () => {
-	it("maps Strapi mock footer when passed as a single rich-text document", () => {
-		const footer = getMockFooter();
-		const result = mapJsonStringToRichTextDocument(JSON.stringify([footer]));
+	it("maps Strapi-like footer fixture when passed as one rich-text document", () => {
+		const result = mapJsonStringToRichTextDocument(
+			JSON.stringify([STRAPI_RICH_TEXT_BLOCK]),
+		);
 
 		expect(result).toHaveLength(1);
-		expect(result[0]).toHaveLength(footer.length);
+		expect(result[0]).toHaveLength(STRAPI_RICH_TEXT_BLOCK.length);
 		expect(result[0]?.[0]).toMatchObject({
 			type: RichTextContentType.Heading,
 			level: 1,
@@ -51,9 +151,10 @@ describe("mapJsonStringToRichTextDocument", () => {
 		expect(orderedList).toBeTruthy();
 	});
 
-	it("preserves inline formatting and link attributes from Strapi payload", () => {
-		const footer = getMockFooter();
-		const [doc] = mapJsonStringToRichTextDocument(JSON.stringify([footer]));
+	it("preserves inline formatting and link attributes", () => {
+		const [doc] = mapJsonStringToRichTextDocument(
+			JSON.stringify([STRAPI_RICH_TEXT_BLOCK]),
+		);
 
 		const paragraphBlocks = doc?.filter(
 			(block) => block.type === RichTextContentType.Paragraph,
@@ -118,8 +219,9 @@ describe("mapJsonStringToRichTextDocument", () => {
 	});
 
 	it("parses nested ordered and unordered lists including indentLevel", () => {
-		const footer = getMockFooter();
-		const [doc] = mapJsonStringToRichTextDocument(JSON.stringify([footer]));
+		const [doc] = mapJsonStringToRichTextDocument(
+			JSON.stringify([STRAPI_RICH_TEXT_BLOCK]),
+		);
 		const unorderedList = doc?.find(
 			(block) =>
 				block.type === RichTextContentType.List &&
@@ -169,8 +271,36 @@ describe("mapJsonStringToRichTextDocument", () => {
 	});
 
 	it("returns an empty array when payload is a single document instead of document array", () => {
-		const footer = getMockFooter();
-		expect(mapJsonStringToRichTextDocument(JSON.stringify(footer))).toEqual([]);
+		expect(
+			mapJsonStringToRichTextDocument(JSON.stringify(STRAPI_RICH_TEXT_BLOCK)),
+		).toEqual([]);
+	});
+
+	it("supports parsing multiple valid documents", () => {
+		const secondDocument = [
+			{
+				type: RichTextContentType.Paragraph,
+				children: [{ type: RichTextContentType.Text, text: "Second document" }],
+			},
+			{
+				type: RichTextContentType.Heading,
+				level: 3,
+				children: [{ type: RichTextContentType.Text, text: "Nested heading" }],
+			},
+		];
+
+		const result = mapJsonStringToRichTextDocument(
+			JSON.stringify([STRAPI_RICH_TEXT_BLOCK, secondDocument]),
+		);
+
+		expect(result).toHaveLength(2);
+		expect(result[1]?.[0]).toMatchObject({
+			type: RichTextContentType.Paragraph,
+		});
+		expect(result[1]?.[1]).toMatchObject({
+			type: RichTextContentType.Heading,
+			level: 3,
+		});
 	});
 
 	it("returns an empty array when any block in a document is invalid", () => {

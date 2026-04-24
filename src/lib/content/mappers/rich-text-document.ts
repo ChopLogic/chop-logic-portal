@@ -14,6 +14,26 @@ import {
 } from "../models/rich-text-document";
 import { isRecord } from "./checkers";
 
+function parseArrayItems<T>(
+	value: unknown,
+	mapper: (item: unknown) => T | null,
+): T[] | null {
+	if (!Array.isArray(value)) {
+		return null;
+	}
+
+	const items: T[] = [];
+	for (const item of value) {
+		const mapped = mapper(item);
+		if (!mapped) {
+			return null;
+		}
+		items.push(mapped);
+	}
+
+	return items;
+}
+
 function parseTextNode(value: unknown): RichTextNode | null {
 	if (!isRecord(value) || value["type"] !== RichTextContentType.Text) {
 		return null;
@@ -39,17 +59,13 @@ function parseLinkNode(value: unknown): RichTextLink | null {
 		return null;
 	}
 
-	if (typeof value["url"] !== "string" || !Array.isArray(value["children"])) {
+	if (typeof value["url"] !== "string") {
 		return null;
 	}
 
-	const children: RichTextNode[] = [];
-	for (const child of value["children"]) {
-		const textNode = parseTextNode(child);
-		if (!textNode) {
-			return null;
-		}
-		children.push(textNode);
+	const children = parseArrayItems(value["children"], parseTextNode);
+	if (!children) {
+		return null;
 	}
 
 	return {
@@ -69,22 +85,26 @@ function parseInlineNode(value: unknown): RichTextInlineNode | null {
 	return parseLinkNode(value);
 }
 
+function parseInlineContainer(
+	value: unknown,
+	type: RichTextContentType.Paragraph | RichTextContentType.ListItem,
+): RichTextInlineNode[] | null {
+	if (!isRecord(value) || value["type"] !== type) {
+		return null;
+	}
+
+	const children = parseArrayItems(value["children"], parseInlineNode);
+	if (!children) {
+		return null;
+	}
+
+	return children;
+}
+
 function parseParagraphBlock(value: unknown): RichTextParagraph | null {
-	if (!isRecord(value) || value["type"] !== RichTextContentType.Paragraph) {
+	const children = parseInlineContainer(value, RichTextContentType.Paragraph);
+	if (!children) {
 		return null;
-	}
-
-	if (!Array.isArray(value["children"])) {
-		return null;
-	}
-
-	const children: RichTextInlineNode[] = [];
-	for (const child of value["children"]) {
-		const inlineNode = parseInlineNode(child);
-		if (!inlineNode) {
-			return null;
-		}
-		children.push(inlineNode);
 	}
 
 	return {
@@ -102,13 +122,9 @@ function parseHeadingBlock(value: unknown): RichTextHeading | null {
 		return null;
 	}
 
-	const children: RichTextNode[] = [];
-	for (const child of value["children"]) {
-		const textNode = parseTextNode(child);
-		if (!textNode) {
-			return null;
-		}
-		children.push(textNode);
+	const children = parseArrayItems(value["children"], parseTextNode);
+	if (!children) {
+		return null;
 	}
 
 	return {
@@ -119,21 +135,9 @@ function parseHeadingBlock(value: unknown): RichTextHeading | null {
 }
 
 function parseListItemBlock(value: unknown): RichTextListItem | null {
-	if (!isRecord(value) || value["type"] !== RichTextContentType.ListItem) {
+	const children = parseInlineContainer(value, RichTextContentType.ListItem);
+	if (!children) {
 		return null;
-	}
-
-	if (!Array.isArray(value["children"])) {
-		return null;
-	}
-
-	const children: RichTextInlineNode[] = [];
-	for (const child of value["children"]) {
-		const inlineNode = parseInlineNode(child);
-		if (!inlineNode) {
-			return null;
-		}
-		children.push(inlineNode);
 	}
 
 	return {
@@ -159,13 +163,13 @@ function parseListBlock(value: unknown): RichTextList | null {
 		return null;
 	}
 
-	const children: Array<RichTextListItem | RichTextList> = [];
-	for (const child of value["children"]) {
-		const parsedChild = parseListItemBlock(child) ?? parseListBlock(child);
-		if (!parsedChild) {
-			return null;
-		}
-		children.push(parsedChild);
+	const children = parseArrayItems(
+		value["children"],
+		(child): RichTextListItem | RichTextList | null =>
+			parseListItemBlock(child) ?? parseListBlock(child),
+	);
+	if (!children) {
+		return null;
 	}
 
 	return {
@@ -188,20 +192,7 @@ function parseBlock(value: unknown): RichTextBlock | null {
 }
 
 function parseDocument(value: unknown): RichTextDocument | null {
-	if (!Array.isArray(value)) {
-		return null;
-	}
-
-	const blocks: RichTextBlock[] = [];
-	for (const item of value) {
-		const block = parseBlock(item);
-		if (!block) {
-			return null;
-		}
-		blocks.push(block);
-	}
-
-	return blocks;
+	return parseArrayItems(value, parseBlock);
 }
 
 /**
@@ -213,20 +204,7 @@ export function mapJsonStringToRichTextDocument(
 ): RichTextDocument[] {
 	try {
 		const parsed = JSON.parse(jsonString) as unknown;
-		if (!Array.isArray(parsed)) {
-			return [];
-		}
-
-		const documents: RichTextDocument[] = [];
-		for (const item of parsed) {
-			const document = parseDocument(item);
-			if (!document) {
-				return [];
-			}
-			documents.push(document);
-		}
-
-		return documents;
+		return parseArrayItems(parsed, parseDocument) ?? [];
 	} catch {
 		return [];
 	}
