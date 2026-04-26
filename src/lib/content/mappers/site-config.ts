@@ -1,14 +1,14 @@
 import { DEFAULT_SITE_TITLE } from "../../../constants/defaults";
 import type { SiteConfig } from "../models";
 import {
-	type RichTextBlock,
+	type RichTextContent,
 	RichTextContentType,
 } from "../models/rich-text-block";
 import { mapCmsImage } from "./image";
 import { mapLinks } from "./link";
 import { mapUnknownToRichTextBlock } from "./rich-text-block";
 
-function footerFromPlainText(text: string): RichTextBlock {
+function footerFromPlainText(text: string): RichTextContent {
 	return [
 		{
 			type: RichTextContentType.Paragraph,
@@ -36,7 +36,7 @@ export function mapSiteConfig(
 	const description =
 		typeof entity.description === "string" ? entity.description : "";
 
-	let footer: RichTextBlock = [];
+	let footer: RichTextContent = [];
 	if (Array.isArray(entity.footer)) {
 		footer = mapUnknownToRichTextBlock(entity.footer) ?? [];
 	} else if (

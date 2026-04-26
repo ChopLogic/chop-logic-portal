@@ -60,4 +60,4 @@ export interface RichTextList extends RichTextBaseNode {
 
 export type RichTextItem = RichTextHeading | RichTextParagraph | RichTextList;
 
-export type RichTextBlock = readonly RichTextItem[];
+export type RichTextContent = readonly RichTextItem[];

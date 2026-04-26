@@ -1,6 +1,6 @@
 /** biome-ignore-all lint/complexity/useLiteralKeys: Access to unknown keys */
 import {
-	type RichTextBlock,
+	type RichTextContent,
 	RichTextContentType,
 	type RichTextHeading,
 	type RichTextInlineNode,
@@ -191,12 +191,14 @@ function parseItem(value: unknown): RichTextItem | null {
 	);
 }
 
-function parseBlock(value: unknown): RichTextBlock | null {
+function parseBlock(value: unknown): RichTextContent | null {
 	return parseArrayItems(value, parseItem);
 }
 
 /** Parses Strapi Blocks JSON (one document: array of top-level block nodes). */
-export function mapUnknownToRichTextBlock(raw: unknown): RichTextBlock | null {
+export function mapUnknownToRichTextBlock(
+	raw: unknown,
+): RichTextContent | null {
 	return parseBlock(raw);
 }
 
@@ -206,7 +208,7 @@ export function mapUnknownToRichTextBlock(raw: unknown): RichTextBlock | null {
  */
 export function mapJsonStringToRichTextBlock(
 	jsonString: string,
-): RichTextBlock[] {
+): RichTextContent[] {
 	try {
 		const parsed = JSON.parse(jsonString) as unknown;
 		return parseArrayItems(parsed, parseBlock) ?? [];

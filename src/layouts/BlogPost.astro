@@ -5,12 +5,12 @@ import FormattedDate from "../components/FormattedDate.astro";
 import Header from "../components/header/Header.astro";
 import MetaData from "../components/meta-data/MetaData.astro";
 import type { CmsImage, MetaData as PageMetaData } from "../lib/content/models";
-import type { RichTextBlock } from "../lib/content/models/rich-text-block";
+import type { RichTextContent } from "../lib/content/models/rich-text-block";
 
 type Props = {
 	siteTitle: string;
 	logo: CmsImage | null;
-	footer: RichTextBlock;
+	footer: RichTextContent;
 	metaData: PageMetaData;
 	title: string;
 	pubDate: Date;
@@ -109,6 +109,6 @@ const {
 				</div>
 			</article>
 		</main>
-		<Footer footer={footer} />
+		<Footer content={footer} />
 	</body>
 </html>
