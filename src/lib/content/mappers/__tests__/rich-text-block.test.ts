@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import {
 	RichTextContentType,
 	RichTextListFormat,
-} from "../../models/rich-text-document";
-import { mapJsonStringToRichTextDocument } from "../rich-text-document";
+} from "../../models/rich-text-block";
+import { mapJsonStringToRichTextBlock } from "../rich-text-block";
 
 const STRAPI_RICH_TEXT_BLOCK = [
 	{
@@ -124,9 +124,9 @@ const STRAPI_RICH_TEXT_BLOCK = [
 	},
 ];
 
-describe("mapJsonStringToRichTextDocument", () => {
-	it("maps Strapi-like footer fixture when passed as one rich-text document", () => {
-		const result = mapJsonStringToRichTextDocument(
+describe("mapJsonStringToRichTextBlock", () => {
+	it("maps Strapi-like footer fixture when passed as one rich-text block", () => {
+		const result = mapJsonStringToRichTextBlock(
 			JSON.stringify([STRAPI_RICH_TEXT_BLOCK]),
 		);
 
@@ -152,7 +152,7 @@ describe("mapJsonStringToRichTextDocument", () => {
 	});
 
 	it("preserves inline formatting and link attributes", () => {
-		const [doc] = mapJsonStringToRichTextDocument(
+		const [doc] = mapJsonStringToRichTextBlock(
 			JSON.stringify([STRAPI_RICH_TEXT_BLOCK]),
 		);
 
@@ -219,7 +219,7 @@ describe("mapJsonStringToRichTextDocument", () => {
 	});
 
 	it("parses nested ordered and unordered lists including indentLevel", () => {
-		const [doc] = mapJsonStringToRichTextDocument(
+		const [doc] = mapJsonStringToRichTextBlock(
 			JSON.stringify([STRAPI_RICH_TEXT_BLOCK]),
 		);
 		const unorderedList = doc?.find(
@@ -261,26 +261,26 @@ describe("mapJsonStringToRichTextDocument", () => {
 	});
 
 	it("returns an empty array for malformed JSON", () => {
-		expect(mapJsonStringToRichTextDocument("{ not-json")).toEqual([]);
+		expect(mapJsonStringToRichTextBlock("{ not-json")).toEqual([]);
 	});
 
 	it("returns an empty array when top-level parsed value is not an array", () => {
 		expect(
-			mapJsonStringToRichTextDocument(JSON.stringify({ foo: "bar" })),
+			mapJsonStringToRichTextBlock(JSON.stringify({ foo: "bar" })),
 		).toEqual([]);
 	});
 
-	it("returns an empty array when payload is a single document instead of document array", () => {
+	it("returns an empty array when payload is a single block instead of block array", () => {
 		expect(
-			mapJsonStringToRichTextDocument(JSON.stringify(STRAPI_RICH_TEXT_BLOCK)),
+			mapJsonStringToRichTextBlock(JSON.stringify(STRAPI_RICH_TEXT_BLOCK)),
 		).toEqual([]);
 	});
 
-	it("supports parsing multiple valid documents", () => {
-		const secondDocument = [
+	it("supports parsing multiple valid blocks", () => {
+		const secondBlock = [
 			{
 				type: RichTextContentType.Paragraph,
-				children: [{ type: RichTextContentType.Text, text: "Second document" }],
+				children: [{ type: RichTextContentType.Text, text: "Second block" }],
 			},
 			{
 				type: RichTextContentType.Heading,
@@ -289,8 +289,8 @@ describe("mapJsonStringToRichTextDocument", () => {
 			},
 		];
 
-		const result = mapJsonStringToRichTextDocument(
-			JSON.stringify([STRAPI_RICH_TEXT_BLOCK, secondDocument]),
+		const result = mapJsonStringToRichTextBlock(
+			JSON.stringify([STRAPI_RICH_TEXT_BLOCK, secondBlock]),
 		);
 
 		expect(result).toHaveLength(2);
@@ -303,8 +303,8 @@ describe("mapJsonStringToRichTextDocument", () => {
 		});
 	});
 
-	it("returns an empty array when any block in a document is invalid", () => {
-		const invalidDocument = [
+	it("returns an empty array when any block in a block is invalid", () => {
+		const invalidBlock = [
 			{
 				type: RichTextContentType.Paragraph,
 				children: [{ type: RichTextContentType.Text, text: "ok" }],
@@ -316,12 +316,12 @@ describe("mapJsonStringToRichTextDocument", () => {
 		];
 
 		expect(
-			mapJsonStringToRichTextDocument(JSON.stringify([invalidDocument])),
+			mapJsonStringToRichTextBlock(JSON.stringify([invalidBlock])),
 		).toEqual([]);
 	});
 
 	it("returns an empty array when list format is invalid", () => {
-		const invalidListDocument = [
+		const invalidListBlock = [
 			{
 				type: RichTextContentType.List,
 				format: "roman",
@@ -335,12 +335,12 @@ describe("mapJsonStringToRichTextDocument", () => {
 		];
 
 		expect(
-			mapJsonStringToRichTextDocument(JSON.stringify([invalidListDocument])),
+			mapJsonStringToRichTextBlock(JSON.stringify([invalidListBlock])),
 		).toEqual([]);
 	});
 
 	it("returns an empty array when link contains non-text children", () => {
-		const invalidLinkDocument = [
+		const invalidLinkBlock = [
 			{
 				type: RichTextContentType.Paragraph,
 				children: [
@@ -359,7 +359,7 @@ describe("mapJsonStringToRichTextDocument", () => {
 		];
 
 		expect(
-			mapJsonStringToRichTextDocument(JSON.stringify([invalidLinkDocument])),
+			mapJsonStringToRichTextBlock(JSON.stringify([invalidLinkBlock])),
 		).toEqual([]);
 	});
 });

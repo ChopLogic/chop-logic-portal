@@ -58,6 +58,6 @@ export interface RichTextList extends RichTextBaseNode {
 	readonly children: readonly (RichTextListItem | RichTextList)[];
 }
 
-export type RichTextBlock = RichTextHeading | RichTextParagraph | RichTextList;
+export type RichTextItem = RichTextHeading | RichTextParagraph | RichTextList;
 
-export type RichTextDocument = readonly RichTextBlock[];
+export type RichTextBlock = readonly RichTextItem[];

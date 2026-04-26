@@ -2,16 +2,16 @@
 import {
 	type RichTextBlock,
 	RichTextContentType,
-	type RichTextDocument,
 	type RichTextHeading,
 	type RichTextInlineNode,
+	type RichTextItem,
 	type RichTextLink,
 	type RichTextList,
 	RichTextListFormat,
 	type RichTextListItem,
 	type RichTextNode,
 	type RichTextParagraph,
-} from "../models/rich-text-document";
+} from "../models/rich-text-block";
 import { isRecord } from "./checkers";
 
 function parseArrayItems<T>(
@@ -183,7 +183,7 @@ function parseListBlock(value: unknown): RichTextList | null {
 	};
 }
 
-function parseBlock(value: unknown): RichTextBlock | null {
+function parseItem(value: unknown): RichTextItem | null {
 	return (
 		parseHeadingBlock(value) ??
 		parseParagraphBlock(value) ??
@@ -191,20 +191,20 @@ function parseBlock(value: unknown): RichTextBlock | null {
 	);
 }
 
-function parseDocument(value: unknown): RichTextDocument | null {
-	return parseArrayItems(value, parseBlock);
+function parseBlock(value: unknown): RichTextBlock | null {
+	return parseArrayItems(value, parseItem);
 }
 
 /**
- * Parses a JSON string into an array of rich-text documents.
+ * Parses a JSON string into an array of rich-text blocks.
  * Returns an empty array when JSON is malformed or shape is invalid.
  */
-export function mapJsonStringToRichTextDocument(
+export function mapJsonStringToRichTextBlock(
 	jsonString: string,
-): RichTextDocument[] {
+): RichTextBlock[] {
 	try {
 		const parsed = JSON.parse(jsonString) as unknown;
-		return parseArrayItems(parsed, parseDocument) ?? [];
+		return parseArrayItems(parsed, parseBlock) ?? [];
 	} catch {
 		return [];
 	}
