@@ -191,28 +191,7 @@ function parseItem(value: unknown): RichTextItem | null {
 	);
 }
 
-function parseBlock(value: unknown): RichTextContent | null {
-	return parseArrayItems(value, parseItem);
-}
-
 /** Parses Strapi Blocks JSON (one document: array of top-level block nodes). */
-export function mapUnknownToRichTextBlock(
-	raw: unknown,
-): RichTextContent | null {
-	return parseBlock(raw);
-}
-
-/**
- * Parses a JSON string into an array of rich-text blocks.
- * Returns an empty array when JSON is malformed or shape is invalid.
- */
-export function mapJsonStringToRichTextBlock(
-	jsonString: string,
-): RichTextContent[] {
-	try {
-		const parsed = JSON.parse(jsonString) as unknown;
-		return parseArrayItems(parsed, parseBlock) ?? [];
-	} catch {
-		return [];
-	}
+export function mapRichTextBlock(raw: unknown): RichTextContent {
+	return parseArrayItems(raw, parseItem) ?? [];
 }

@@ -10,6 +10,6 @@ export {
 	richTextToHtml,
 	richTextToPlainText,
 } from "./rich-text";
-export { mapUnknownToRichTextBlock } from "./rich-text-block";
+export { mapRichTextBlock } from "./rich-text-block";
 export { mapSiteConfig } from "./site-config";
 export { mapStructuredDataToJsonLdHtml } from "./structured-data";
