@@ -1,0 +1,14 @@
+---
+import type { RichTextParagraph } from "../../lib/content/models/rich-text-block";
+import { renderRichTextInlineHtml } from "./render-rich-text-inline-html";
+
+interface Props {
+	paragraph: RichTextParagraph;
+}
+
+const { paragraph } = Astro.props;
+
+const innerHtml = paragraph.children.map(renderRichTextInlineHtml).join("");
+---
+
+<p set:html={innerHtml} />

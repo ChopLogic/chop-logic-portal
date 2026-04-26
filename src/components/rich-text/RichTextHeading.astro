@@ -1,0 +1,36 @@
+---
+import type { RichTextHeading } from "../../lib/content/models/rich-text-block";
+import { renderRichTextNodeHtml } from "./render-rich-text-inline-html";
+
+interface Props {
+	heading: RichTextHeading;
+}
+
+const { heading } = Astro.props;
+
+const level =
+	typeof heading.level === "number" &&
+	Number.isFinite(heading.level) &&
+	heading.level >= 1 &&
+	heading.level <= 6
+		? Math.trunc(heading.level)
+		: 2;
+
+const innerHtml = heading.children.map(renderRichTextNodeHtml).join("");
+---
+
+{
+	level === 1 ? (
+		<h1 set:html={innerHtml} />
+	) : level === 2 ? (
+		<h2 set:html={innerHtml} />
+	) : level === 3 ? (
+		<h3 set:html={innerHtml} />
+	) : level === 4 ? (
+		<h4 set:html={innerHtml} />
+	) : level === 5 ? (
+		<h5 set:html={innerHtml} />
+	) : (
+		<h6 set:html={innerHtml} />
+	)
+}
