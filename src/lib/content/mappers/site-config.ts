@@ -1,15 +1,20 @@
 import { DEFAULT_SITE_TITLE } from "../../../constants/defaults";
 import type { SiteConfig } from "../models";
+import {
+	type RichTextBlock,
+	RichTextContentType,
+} from "../models/rich-text-block";
 import { mapCmsImage } from "./image";
 import { mapLinks } from "./link";
-import { parseRichTextDocument, richTextToHtml } from "./rich-text";
+import { mapUnknownToRichTextBlock } from "./rich-text-block";
 
-function escapeHtml(text: string): string {
-	return text
-		.replace(/&/g, "&amp;")
-		.replace(/</g, "&lt;")
-		.replace(/>/g, "&gt;")
-		.replace(/"/g, "&quot;");
+function footerFromPlainText(text: string): RichTextBlock {
+	return [
+		{
+			type: RichTextContentType.Paragraph,
+			children: [{ type: RichTextContentType.Text, text }],
+		},
+	];
 }
 
 /**
@@ -31,21 +36,20 @@ export function mapSiteConfig(
 	const description =
 		typeof entity.description === "string" ? entity.description : "";
 
-	let footerHtml = "";
+	let footer: RichTextBlock = [];
 	if (Array.isArray(entity.footer)) {
-		const doc = parseRichTextDocument(entity.footer);
-		footerHtml = doc ? richTextToHtml(doc) : "";
+		footer = mapUnknownToRichTextBlock(entity.footer) ?? [];
 	} else if (
 		typeof entity.footerText === "string" &&
 		entity.footerText !== ""
 	) {
-		footerHtml = `<p>${escapeHtml(entity.footerText)}</p>`;
+		footer = footerFromPlainText(entity.footerText);
 	}
 
 	return {
 		siteTitle,
 		description,
-		footerHtml,
+		footer,
 		links: mapLinks(entity.links),
 		logo: mapCmsImage(entity.logo, baseUrl),
 	};

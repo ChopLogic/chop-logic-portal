@@ -31,12 +31,13 @@ export async function getStaticPaths() {
 }
 
 const { detail, siteConfig } = Astro.props;
-const { siteTitle, logo } = siteConfig;
+const { siteTitle, logo, footer } = siteConfig;
 ---
 
 <Layout
 	siteTitle={siteTitle}
 	logo={logo}
+	footer={footer}
 	metaData={detail.metaData}
 	title={detail.title}
 	pubDate={detail.pubDate}

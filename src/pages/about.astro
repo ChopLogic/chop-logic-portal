@@ -4,12 +4,13 @@ import { createContentProvider } from "../lib/content/provider";
 
 const content = createContentProvider();
 const { page, siteConfig } = await content.getAboutPageContent();
-const { siteTitle, logo } = siteConfig;
+const { siteTitle, logo, footer } = siteConfig;
 ---
 
 <Layout
 	siteTitle={siteTitle}
 	logo={logo}
+	footer={footer}
 	metaData={page.metaData}
 	title={page.heading}
 	pubDate={page.publishedAt ?? new Date()}

@@ -195,6 +195,11 @@ function parseBlock(value: unknown): RichTextBlock | null {
 	return parseArrayItems(value, parseItem);
 }
 
+/** Parses Strapi Blocks JSON (one document: array of top-level block nodes). */
+export function mapUnknownToRichTextBlock(raw: unknown): RichTextBlock | null {
+	return parseBlock(raw);
+}
+
 /**
  * Parses a JSON string into an array of rich-text blocks.
  * Returns an empty array when JSON is malformed or shape is invalid.

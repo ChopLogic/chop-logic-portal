@@ -6,7 +6,7 @@ import { createContentProvider } from "../lib/content/provider";
 
 const provider = createContentProvider();
 const { home, siteConfig } = await provider.getHomeIndexContent();
-const { siteTitle } = siteConfig;
+const { siteTitle, footer } = siteConfig;
 ---
 
 <!doctype html>
@@ -49,6 +49,6 @@ const { siteTitle } = siteConfig;
 			</div>
 			<div class="cms-body" set:html={home.bodyHtml} />
 		</main>
-		<Footer />
+		<Footer footer={footer} />
 	</body>
 </html>

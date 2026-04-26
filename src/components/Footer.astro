@@ -1,9 +1,18 @@
 ---
+import type { RichTextBlock } from "../lib/content/models/rich-text-block";
+import RichTextBlockContent from "./rich-text/RichTextBlock.astro";
+
+interface Props {
+	footer: RichTextBlock;
+}
+
+const { footer } = Astro.props;
 const today = new Date();
 ---
 
 <footer>
 	&copy; {today.getFullYear()} Your name here. All rights reserved.
+	<RichTextBlockContent content={footer} />
 	<div class="social-links">
 		<a href="https://m.webtoo.ls/@astro" target="_blank">
 			<span class="sr-only">Follow Astro on Mastodon</span>

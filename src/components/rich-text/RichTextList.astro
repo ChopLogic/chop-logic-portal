@@ -1,11 +1,9 @@
 ---
 import {
-	RichTextContentType,
 	RichTextListFormat,
 	type RichTextList as RichTextListModel,
 } from "../../lib/content/models/rich-text-block";
-import RichTextListNested from "./RichTextList.astro";
-import { renderListItemInnerHtml } from "./render-rich-text-inline-html";
+import { renderRichTextListBodyHtml } from "./render-rich-text-inline-html";
 
 interface Props {
 	list: RichTextListModel;
@@ -16,18 +14,8 @@ const { list } = Astro.props;
 const ListTag = (list.format === RichTextListFormat.Ordered ? "ol" : "ul") as
 	| "ol"
 	| "ul";
+
+const innerHtml = renderRichTextListBodyHtml(list);
 ---
 
-<ListTag data-indent-level={list.indentLevel}>
-	{
-		list.children.map((child) =>
-			child.type === RichTextContentType.ListItem ? (
-				<li set:html={renderListItemInnerHtml(child)} />
-			) : (
-				<li>
-					<RichTextListNested list={child} />
-				</li>
-			),
-		)
-	}
-</ListTag>
+<ListTag data-indent-level={list.indentLevel} set:html={innerHtml} />
