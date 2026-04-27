@@ -1,6 +1,6 @@
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { beforeAll, describe, expect, it } from "vitest";
-import Header from "./Header.astro";
+import Header from "../Header.astro";
 
 describe("Header.astro", () => {
 	let container: Awaited<ReturnType<typeof AstroContainer.create>>;
