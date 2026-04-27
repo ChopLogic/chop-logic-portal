@@ -16,6 +16,11 @@ const ListTag = (list.format === RichTextListFormat.Ordered ? "ol" : "ul") as
 	| "ul";
 
 const innerHtml = renderRichTextListBodyHtml(list);
+
+const indentProps =
+	typeof list.indentLevel === "number" && Number.isFinite(list.indentLevel)
+		? { "data-indent-level": list.indentLevel }
+		: {};
 ---
 
-<ListTag data-indent-level={list.indentLevel} set:html={innerHtml} />
+<ListTag {...indentProps} set:html={innerHtml} />

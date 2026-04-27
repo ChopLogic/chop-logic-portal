@@ -10,17 +10,16 @@ import { mapRichTextBlock } from "./rich-text-block";
 
 export function mapSiteConfig(
 	entity: {
-		siteTitle?: string;
-		title?: string;
-		description?: string;
-		footer?: unknown;
+		title: string;
+		description: string;
+		footer: unknown;
 		links: unknown[];
 		logo?: unknown;
 	},
 	baseUrl: string,
 ): SiteConfig {
 	return {
-		siteTitle: normalizeRequiredString(entity.siteTitle, DEFAULT_SITE_TITLE),
+		siteTitle: normalizeRequiredString(entity.title, DEFAULT_SITE_TITLE),
 		description: normalizeRequiredString(
 			entity.description,
 			DEFAULT_SITE_DESCRIPTION,

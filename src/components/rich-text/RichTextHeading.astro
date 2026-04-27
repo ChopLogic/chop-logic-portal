@@ -17,20 +17,9 @@ const level =
 		: 2;
 
 const innerHtml = heading.children.map(renderRichTextNodeHtml).join("");
+
+type HeadingTagName = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+const HeadingTag = `h${level}` as HeadingTagName;
 ---
 
-{
-	level === 1 ? (
-		<h1 set:html={innerHtml} />
-	) : level === 2 ? (
-		<h2 set:html={innerHtml} />
-	) : level === 3 ? (
-		<h3 set:html={innerHtml} />
-	) : level === 4 ? (
-		<h4 set:html={innerHtml} />
-	) : level === 5 ? (
-		<h5 set:html={innerHtml} />
-	) : (
-		<h6 set:html={innerHtml} />
-	)
-}
+<HeadingTag set:html={innerHtml} />
