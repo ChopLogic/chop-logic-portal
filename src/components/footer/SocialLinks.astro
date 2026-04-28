@@ -1,0 +1,44 @@
+---
+import type { Link, SocialPlatform } from "../../lib/content/models/link";
+import { LinkTarget } from "../../lib/content/models/link";
+import SocialPlatformIcon from "./SocialPlatformIcon.astro";
+
+interface Props {
+	links: Link[];
+}
+
+const { links } = Astro.props;
+
+function isSocialLink(link: Link): link is Link & { platform: SocialPlatform } {
+	return link.platform !== undefined;
+}
+
+const items = links.filter(isSocialLink);
+---
+
+{
+	items.map((link) => {
+		const rel =
+			link.target === LinkTarget.Blank ? "noopener noreferrer" : undefined;
+		return (
+			<a
+				href={link.url}
+				target={link.target}
+				rel={rel}
+				referrerpolicy={link.referrerpolicy}
+			>
+				<span class="sr-only">{link.text}</span>
+				<SocialPlatformIcon platform={link.platform} />
+			</a>
+		);
+	})
+}
+<style>
+	a {
+		text-decoration: none;
+		color: var(--cl-surface-a30);
+	}
+	a:hover {
+		color: var(--cl-info-a20);
+	}
+</style>

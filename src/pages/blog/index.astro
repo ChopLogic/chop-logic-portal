@@ -12,7 +12,7 @@ const { articles, siteConfig } = await content.getBlogIndexContent();
 const posts = articles.sort(
 	(a, b) => b.pubDate.valueOf() - a.pubDate.valueOf(),
 );
-const { siteTitle, footer } = siteConfig;
+const { siteTitle, footer, links } = siteConfig;
 const listingMeta = blogListingMetaData(siteConfig);
 ---
 
@@ -117,6 +117,6 @@ const listingMeta = blogListingMetaData(siteConfig);
 				</ul>
 			</section>
 		</main>
-		<Footer content={footer} />
+		<Footer content={footer} links={links} />
 	</body>
 </html>
