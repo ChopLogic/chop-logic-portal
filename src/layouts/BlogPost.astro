@@ -1,14 +1,21 @@
 ---
 import { Image } from "astro:assets";
-import Footer from "../components/Footer.astro";
 import FormattedDate from "../components/FormattedDate.astro";
+import Footer from "../components/footer/Footer.astro";
 import Header from "../components/header/Header.astro";
 import MetaData from "../components/meta-data/MetaData.astro";
-import type { CmsImage, MetaData as PageMetaData } from "../lib/content/models";
+import type {
+	CmsImage,
+	Link,
+	MetaData as PageMetaData,
+} from "../lib/content/models";
+import type { RichTextContent } from "../lib/content/models/rich-text-block";
 
 type Props = {
 	siteTitle: string;
 	logo: CmsImage | null;
+	footer: RichTextContent;
+	links: Link[];
 	metaData: PageMetaData;
 	title: string;
 	pubDate: Date;
@@ -19,6 +26,8 @@ type Props = {
 
 const {
 	siteTitle,
+	footer,
+	links,
 	metaData,
 	title,
 	pubDate,
@@ -106,6 +115,6 @@ const {
 				</div>
 			</article>
 		</main>
-		<Footer />
+		<Footer content={footer} links={links} />
 	</body>
 </html>

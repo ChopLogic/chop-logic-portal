@@ -1,0 +1,26 @@
+---
+import {
+	RichTextListFormat,
+	type RichTextList as RichTextListModel,
+} from "../../lib/content/models/rich-text-block";
+import { renderRichTextListBodyHtml } from "./helpers";
+
+interface Props {
+	list: RichTextListModel;
+}
+
+const { list } = Astro.props;
+
+const ListTag = (list.format === RichTextListFormat.Ordered ? "ol" : "ul") as
+	| "ol"
+	| "ul";
+
+const innerHtml = renderRichTextListBodyHtml(list);
+
+const indentProps =
+	typeof list.indentLevel === "number" && Number.isFinite(list.indentLevel)
+		? { "data-indent-level": list.indentLevel }
+		: {};
+---
+
+<ListTag {...indentProps} set:html={innerHtml} />

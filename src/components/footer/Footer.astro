@@ -1,0 +1,39 @@
+---
+import type { Link } from "../../lib/content/models/link";
+import type { RichTextContent } from "../../lib/content/models/rich-text-block";
+import RichTextBlockContent from "../rich-text/RichTextBlock.astro";
+import SocialLinks from "./SocialLinks.astro";
+
+interface Props {
+	content: RichTextContent;
+	links: Link[];
+}
+
+const { content, links } = Astro.props;
+const hasSocialLinks = links.some((l) => l.platform);
+---
+
+<footer>
+	<RichTextBlockContent content={content} />
+	{
+		hasSocialLinks && (
+			<div class="social-links">
+				<SocialLinks links={links} />
+			</div>
+		)
+	}
+</footer>
+<style>
+	footer {
+		padding: 2rem 1rem 6rem 1rem;
+		background: linear-gradient(var(--cl-surface-a10), var(--cl-surface-a0)) no-repeat;
+		color: var(--cl-base-font-color);
+		text-align: center;
+	}
+	.social-links {
+		display: flex;
+		justify-content: center;
+		gap: 1rem;
+		margin-top: 1rem;
+	}
+</style>

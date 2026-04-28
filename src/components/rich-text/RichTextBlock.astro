@@ -1,0 +1,32 @@
+---
+import {
+	type RichTextContent,
+	RichTextContentType,
+} from "../../lib/content/models/rich-text-block";
+import RichTextHeading from "./RichTextHeading.astro";
+import RichTextList from "./RichTextList.astro";
+import RichTextParagraph from "./RichTextParagraph.astro";
+
+interface Props {
+	content: RichTextContent;
+}
+
+const { content } = Astro.props;
+---
+
+<section>
+	{
+		content.map((item) => {
+			switch (item.type) {
+				case RichTextContentType.Heading:
+					return <RichTextHeading heading={item} />;
+				case RichTextContentType.Paragraph:
+					return <RichTextParagraph paragraph={item} />
+				case RichTextContentType.List:
+					return <RichTextList list={item} />
+				default:
+					return null
+			}
+		})
+	}
+</section>

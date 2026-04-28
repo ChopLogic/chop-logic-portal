@@ -6,7 +6,7 @@
 			"description": "A place where logic works!",
 			"links": [
 				{
-					"id": "27",
+					"id": "71",
 					"text": "LinkedIn",
 					"url": "https://www.linkedin.com/in/dmitrii-suroviagin/",
 					"type": "external",
@@ -15,7 +15,7 @@
 					"referrerpolicy": "strict_origin_when_cross_origin"
 				},
 				{
-					"id": "28",
+					"id": "72",
 					"text": "GitHub",
 					"url": "https://github.com/ChopLogic",
 					"type": "external",
@@ -26,11 +26,21 @@
 			],
 			"footer": [
 				{
+					"type": "heading",
+					"children": [
+						{
+							"type": "text",
+							"text": "Heading Text Lvl 1"
+						}
+					],
+					"level": 1
+				},
+				{
 					"type": "paragraph",
 					"children": [
 						{
 							"type": "text",
-							"text": "@copyright Dmitrii Suroviagin"
+							"text": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
 						}
 					]
 				},
@@ -39,51 +49,322 @@
 					"children": [
 						{
 							"type": "text",
-							"text": "All rights reserved"
+							"text": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+						}
+					]
+				},
+				{
+					"type": "heading",
+					"children": [
+						{
+							"type": "text",
+							"text": "Heading Text Lvl 2"
+						}
+					],
+					"level": 2
+				},
+				{
+					"type": "paragraph",
+					"children": [
+						{
+							"type": "text",
+							"text": "Regular text 1!"
+						}
+					]
+				},
+				{
+					"type": "paragraph",
+					"children": [
+						{
+							"type": "text",
+							"text": "Regular text2..."
+						}
+					]
+				},
+				{
+					"type": "heading",
+					"children": [
+						{
+							"type": "text",
+							"text": "Heading Text Lvl 3"
+						}
+					],
+					"level": 3
+				},
+				{
+					"type": "paragraph",
+					"children": [
+						{
+							"type": "text",
+							"text": "Regular text"
+						}
+					]
+				},
+				{
+					"type": "paragraph",
+					"children": [
+						{
+							"type": "text",
+							"text": "Bold text",
+							"bold": true
+						}
+					]
+				},
+				{
+					"type": "paragraph",
+					"children": [
+						{
+							"type": "text",
+							"text": "Italic text",
+							"italic": true
+						}
+					]
+				},
+				{
+					"type": "paragraph",
+					"children": [
+						{
+							"type": "text",
+							"text": "Underline text",
+							"underline": true
+						}
+					]
+				},
+				{
+					"type": "paragraph",
+					"children": [
+						{
+							"type": "text",
+							"text": "Strike-through text ",
+							"strikethrough": true
+						}
+					]
+				},
+				{
+					"type": "paragraph",
+					"children": [
+						{
+							"text": "",
+							"type": "text"
+						},
+						{
+							"type": "link",
+							"url": "https://www.youtube.com/",
+							"children": [
+								{
+									"text": "Link text",
+									"type": "text"
+								}
+							],
+							"target": "_blank"
+						},
+						{
+							"text": "",
+							"type": "text"
+						}
+					]
+				},
+				{
+					"type": "paragraph",
+					"children": [
+						{
+							"type": "text",
+							"text": "var test = \"Inline Code Text\";",
+							"code": true
+						}
+					]
+				},
+				{
+					"type": "list",
+					"format": "unordered",
+					"children": [
+						{
+							"type": "list-item",
+							"children": [
+								{
+									"type": "text",
+									"text": "Bulleted list option 1"
+								}
+							]
+						},
+						{
+							"type": "list",
+							"format": "unordered",
+							"indentLevel": 1,
+							"children": [
+								{
+									"type": "list-item",
+									"children": [
+										{
+											"type": "text",
+											"text": "Sub-option 1"
+										}
+									]
+								},
+								{
+									"type": "list-item",
+									"children": [
+										{
+											"type": "text",
+											"text": "Sub-option 2"
+										}
+									]
+								}
+							]
+						},
+						{
+							"type": "list-item",
+							"children": [
+								{
+									"type": "text",
+									"text": "Bulleted list option 2"
+								}
+							]
+						},
+						{
+							"type": "list-item",
+							"children": [
+								{
+									"type": "text",
+									"text": "Bulleted list option 3"
+								}
+							]
+						}
+					]
+				},
+				{
+					"type": "paragraph",
+					"children": [
+						{
+							"type": "text",
+							"text": "Regular text"
+						}
+					]
+				},
+				{
+					"type": "list",
+					"format": "ordered",
+					"children": [
+						{
+							"type": "list-item",
+							"children": [
+								{
+									"type": "text",
+									"text": "Numbered list option 1"
+								}
+							]
+						},
+						{
+							"type": "list",
+							"format": "ordered",
+							"indentLevel": 1,
+							"children": [
+								{
+									"type": "list-item",
+									"children": [
+										{
+											"type": "text",
+											"text": "Sub-option 1A"
+										}
+									]
+								},
+								{
+									"type": "list-item",
+									"children": [
+										{
+											"type": "text",
+											"text": "Sub-option 1B"
+										}
+									]
+								}
+							]
+						},
+						{
+							"type": "list-item",
+							"children": [
+								{
+									"type": "text",
+									"text": "Numbered list option 2"
+								}
+							]
+						},
+						{
+							"type": "list",
+							"format": "ordered",
+							"indentLevel": 1,
+							"children": [
+								{
+									"type": "list-item",
+									"children": [
+										{
+											"type": "text",
+											"text": "Sub-option 2A"
+										}
+									]
+								},
+								{
+									"type": "list-item",
+									"children": [
+										{
+											"type": "text",
+											"text": "Sub-option 2B"
+										}
+									]
+								}
+							]
+						},
+						{
+							"type": "list-item",
+							"children": [
+								{
+									"type": "text",
+									"text": "Numbered list option 3"
+								}
+							]
 						}
 					]
 				}
 			],
 			"logo": {
-				"documentId": "q1kzu6b3zlc7qhl9c0x5uwr1",
-				"name": "logo.png",
-				"alternativeText": null,
+				"documentId": "thzruea75b6bs101j7d4ax8p",
+				"name": "Chop-Logic-Logo-Horizontal-612x306-transparent.png",
+				"alternativeText": "Chop Logic Logo",
 				"caption": null,
 				"focalPoint": null,
-				"width": 612,
-				"height": 306,
+				"width": 570,
+				"height": 230,
 				"formats": {
 					"thumbnail": {
-						"name": "thumbnail_logo.png",
-						"hash": "thumbnail_logo_cc917a1e2d",
+						"name": "thumbnail_Chop-Logic-Logo-Horizontal-612x306-transparent.png",
+						"hash": "thumbnail_Chop_Logic_Logo_Horizontal_612x306_transparent_5503027842",
 						"ext": ".png",
 						"mime": "image/png",
 						"path": null,
 						"width": 245,
-						"height": 122,
-						"size": 13.96,
-						"sizeInBytes": 13959,
-						"url": "/uploads/thumbnail_logo_cc917a1e2d.png"
+						"height": 99,
+						"size": 14.8,
+						"sizeInBytes": 14799,
+						"url": "/uploads/thumbnail_Chop_Logic_Logo_Horizontal_612x306_transparent_5503027842.png"
 					},
 					"small": {
-						"name": "small_logo.png",
-						"hash": "small_logo_cc917a1e2d",
+						"name": "small_Chop-Logic-Logo-Horizontal-612x306-transparent.png",
+						"hash": "small_Chop_Logic_Logo_Horizontal_612x306_transparent_5503027842",
 						"ext": ".png",
 						"mime": "image/png",
 						"path": null,
 						"width": 500,
-						"height": 250,
-						"size": 32.48,
-						"sizeInBytes": 32482,
-						"url": "/uploads/small_logo_cc917a1e2d.png"
+						"height": 202,
+						"size": 34.15,
+						"sizeInBytes": 34149,
+						"url": "/uploads/small_Chop_Logic_Logo_Horizontal_612x306_transparent_5503027842.png"
 					}
 				},
-				"size": 5.17,
-				"url": "/uploads/logo_cc917a1e2d.png",
+				"size": 4.87,
+				"url": "/uploads/Chop_Logic_Logo_Horizontal_612x306_transparent_5503027842.png",
 				"previewUrl": null,
-				"updatedAt": "2026-03-21T13:30:07.786Z"
+				"updatedAt": "2026-04-14T18:22:53.119Z"
 			},
-			"updatedAt": "2026-04-01T16:04:04.256Z"
+			"updatedAt": "2026-04-25T10:11:53.262Z"
 		}
 	}
 }

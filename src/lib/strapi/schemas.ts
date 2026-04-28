@@ -62,11 +62,9 @@ export const strapiSingletonEntitySchema = z.looseObject({
 
 export const strapiConfigEntitySchema = z.looseObject({
 	documentId: z.string(),
-	siteTitle: z.string().optional(),
-	title: z.string().optional(),
-	description: z.string().optional(),
-	footerText: z.string().optional(),
-	footer: z.unknown().optional(),
+	title: z.string(),
+	description: z.string(),
+	footer: z.unknown(),
 	links: z.array(z.unknown()),
 	logo: z.unknown().nullable().optional(),
 });
