@@ -1,6 +1,6 @@
 ---
 import type { DynamicZoneReferenceList } from "../../lib/content/models/dynamic-zone";
-import CmsLink from "./CmsLink.astro";
+import Link from "../link/Link.astro";
 
 interface Props {
 	referenceList: DynamicZoneReferenceList;
@@ -27,9 +27,9 @@ const headingId = `zone-references-heading-${id}`;
 						class="zone-references-item"
 					>
 						<cite>
-							<CmsLink link={link} class="zone-references-link">
+							<Link link={link} class="zone-references-link">
 								{link.text}
-							</CmsLink>
+							</Link>
 						</cite>
 					</li>
 				))}

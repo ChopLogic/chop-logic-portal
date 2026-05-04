@@ -5,7 +5,7 @@ import {
 	LinkType,
 	ReferrerPolicy,
 } from "../../../lib/content/models/link";
-import { buildCmsLinkRel, isExternalLink } from "../cms-link";
+import { buildCmsLinkRel, isExternalLink } from "../Link.helpers";
 
 function testLink(overrides: Partial<Link> = {}): Link {
 	return {

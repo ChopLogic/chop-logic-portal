@@ -1,6 +1,6 @@
 ---
 import type { DynamicZoneEmbeddedVideo } from "../../lib/content/models/dynamic-zone";
-import CmsLink from "./CmsLink.astro";
+import Link from "../link/Link.astro";
 import { resolveEmbedVideoSource } from "./embed-video";
 
 interface Props {
@@ -36,7 +36,7 @@ const iframeTitle = link.text || heading;
 		) : (
 			<p class="zone-embedded-video-fallback">
 				This video cannot be embedded.
-				<CmsLink link={link}>Watch {link.text}</CmsLink>
+				<Link link={link}>Watch {link.text}</Link>
 			</p>
 		)
 	}

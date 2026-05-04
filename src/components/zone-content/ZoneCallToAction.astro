@@ -1,10 +1,10 @@
 ---
 import type { DynamicZoneCallToAction } from "../../lib/content/models/dynamic-zone";
 import SocialPlatformIcon from "../footer/SocialPlatformIcon.astro";
+import Link from "../link/Link.astro";
+import { isExternalLink } from "../link/Link.helpers";
 import Picture from "../picture/Picture.astro";
 import { CMS_PICTURE_SIZES } from "../picture/Picture.helpers";
-import CmsLink from "./CmsLink.astro";
-import { isExternalLink } from "./cms-link";
 
 interface Props {
 	callToAction: DynamicZoneCallToAction;
@@ -23,7 +23,7 @@ const external = isExternalLink(link);
 >
 	<h2>{heading}</h2>
 	{subHeading && <h3>{subHeading}</h3>}
-	<CmsLink link={link} class="zone-cta-card">
+	<Link link={link} class="zone-cta-card">
 		{
 			picture && (
 				<div class="zone-cta-media">
@@ -48,7 +48,7 @@ const external = isExternalLink(link);
 				{external ? "↗" : "→"}
 			</span>
 		</span>
-	</CmsLink>
+	</Link>
 </section>
 
 <style>
