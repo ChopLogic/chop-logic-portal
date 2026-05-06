@@ -1,8 +1,8 @@
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { beforeAll, describe, expect, it } from "vitest";
 import type { CmsImage } from "../../../lib/content/models/image";
-import CmsPicture from "../CmsPicture.astro";
-import { CMS_PICTURE_SIZES } from "../cms-picture";
+import Picture from "../Picture.astro";
+import { CMS_PICTURE_SIZES } from "../Picture.helpers";
 
 function testCmsImage(overrides: Partial<CmsImage> = {}): CmsImage {
 	return {
@@ -35,7 +35,7 @@ describe("CmsPicture.astro", () => {
 		sizes?: string;
 		class?: string;
 	}) {
-		return container.renderToString(CmsPicture, { props });
+		return container.renderToString(Picture, { props });
 	}
 
 	it("renders a figure with responsive image attributes", async () => {

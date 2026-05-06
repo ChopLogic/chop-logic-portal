@@ -12,7 +12,7 @@ import {
 	ReferrerPolicy,
 	SocialPlatform,
 } from "../../../lib/content/models/link";
-import { CMS_PICTURE_SIZES } from "../cms-picture";
+import { CMS_PICTURE_SIZES } from "../../picture/Picture.helpers";
 import ZoneCallToAction from "../ZoneCallToAction.astro";
 
 function testLink(overrides: Partial<Link> = {}): Link {

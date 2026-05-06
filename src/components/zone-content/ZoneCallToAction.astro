@@ -1,10 +1,10 @@
 ---
 import type { DynamicZoneCallToAction } from "../../lib/content/models/dynamic-zone";
 import SocialPlatformIcon from "../footer/SocialPlatformIcon.astro";
+import Picture from "../picture/Picture.astro";
+import { CMS_PICTURE_SIZES } from "../picture/Picture.helpers";
 import CmsLink from "./CmsLink.astro";
-import CmsPicture from "./CmsPicture.astro";
 import { isExternalLink } from "./cms-link";
-import { CMS_PICTURE_SIZES } from "./cms-picture";
 
 interface Props {
 	callToAction: DynamicZoneCallToAction;
@@ -27,7 +27,7 @@ const external = isExternalLink(link);
 		{
 			picture && (
 				<div class="zone-cta-media">
-					<CmsPicture
+					<Picture
 						item={picture}
 						sizes={CMS_PICTURE_SIZES.cta}
 						class="zone-cta-picture"

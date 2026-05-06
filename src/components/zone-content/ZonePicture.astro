@@ -1,7 +1,7 @@
 ---
 import type { DynamicZonePicture } from "../../lib/content/models/dynamic-zone";
 import FormattedDate from "../FormattedDate.astro";
-import CmsPicture from "./CmsPicture.astro";
+import Picture from "../picture/Picture.astro";
 
 interface Props {
 	picture: DynamicZonePicture;
@@ -12,7 +12,7 @@ const { item, publicationDate } = picture;
 ---
 
 <article class="zone-picture">
-	<CmsPicture item={item} class="zone-picture-media" />
+	<Picture item={item} class="zone-picture-media" />
 	<p class="zone-picture-date">
 		<FormattedDate date={publicationDate} />
 	</p>

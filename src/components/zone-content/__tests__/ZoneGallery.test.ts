@@ -5,7 +5,7 @@ import {
 	type DynamicZoneGallery,
 } from "../../../lib/content/models/dynamic-zone";
 import type { CmsImage } from "../../../lib/content/models/image";
-import { CMS_PICTURE_SIZES } from "../cms-picture";
+import { CMS_PICTURE_SIZES } from "../../picture/Picture.helpers";
 import ZoneGallery from "../ZoneGallery.astro";
 
 function testCmsImage(id: string, overrides: Partial<CmsImage> = {}): CmsImage {

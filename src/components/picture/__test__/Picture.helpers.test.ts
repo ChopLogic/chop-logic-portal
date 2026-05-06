@@ -4,7 +4,7 @@ import {
 	buildCmsPictureAttributes,
 	buildCmsPictureSrcset,
 	collectCmsPictureVariants,
-} from "../cms-picture";
+} from "../Picture.helpers";
 
 function testCmsImage(overrides: Partial<CmsImage> = {}): CmsImage {
 	return {

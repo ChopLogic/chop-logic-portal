@@ -1,7 +1,7 @@
 ---
 import type { DynamicZoneGallery } from "../../lib/content/models/dynamic-zone";
-import CmsPicture from "./CmsPicture.astro";
-import { CMS_PICTURE_SIZES } from "./cms-picture";
+import Picture from "../picture/Picture.astro";
+import { CMS_PICTURE_SIZES } from "../picture/Picture.helpers";
 
 interface Props {
 	gallery: DynamicZoneGallery;
@@ -26,7 +26,7 @@ const pictureSizes = pictureSizesByLayout[layout];
 		{
 			items.map((item) => (
 				<li class="zone-gallery-item">
-					<CmsPicture item={item} sizes={pictureSizes} />
+					<Picture item={item} sizes={pictureSizes} />
 				</li>
 			))
 		}
