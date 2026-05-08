@@ -1,0 +1,92 @@
+---
+import type { DynamicZoneReferenceList } from "../../lib/content/models/dynamic-zone";
+import CmsLink from "./CmsLink.astro";
+
+interface Props {
+	referenceList: DynamicZoneReferenceList;
+}
+
+const { referenceList } = Astro.props;
+const { id, heading, subHeading, links } = referenceList;
+const headingId = `zone-references-heading-${id}`;
+---
+
+<section
+	class="zone-references"
+	role="region"
+	aria-labelledby={headingId}
+>
+	<h2 id={headingId}>{heading}</h2>
+	{subHeading && <h3>{subHeading}</h3>}
+	{
+		links.length > 0 ? (
+			<ol class="zone-references-list">
+				{links.map((link, index) => (
+					<li
+						id={`ref-${id}-${index + 1}`}
+						class="zone-references-item"
+					>
+						<cite>
+							<CmsLink link={link} class="zone-references-link">
+								{link.text}
+							</CmsLink>
+						</cite>
+					</li>
+				))}
+			</ol>
+		) : (
+			<p class="zone-references-empty">No references yet.</p>
+		)
+	}
+</section>
+
+<style>
+	.zone-references {
+		margin-block: 2rem;
+		padding-block-start: 1.5rem;
+		border-block-start: 1px solid rgb(var(--gray-light));
+	}
+
+	.zone-references h2 {
+		margin: 0 0 0.35em;
+		font-size: 1.25rem;
+	}
+
+	.zone-references h3 {
+		margin: 0 0 1rem;
+		font-size: 1rem;
+		font-weight: normal;
+		color: rgb(var(--gray));
+	}
+
+	.zone-references-list {
+		margin: 0;
+		padding-inline-start: 1.75rem;
+		list-style: decimal;
+	}
+
+	.zone-references-item {
+		margin-block: 0.65rem;
+		padding-inline-start: 0.25rem;
+	}
+
+	.zone-references-item cite {
+		font-style: normal;
+	}
+
+	.zone-references :global(.zone-references-link) {
+		color: rgb(var(--gray-dark));
+		text-decoration: underline;
+		text-underline-offset: 0.15em;
+	}
+
+	.zone-references :global(.zone-references-link:hover) {
+		color: var(--cl-accent-a0);
+	}
+
+	.zone-references-empty {
+		margin: 0;
+		color: rgb(var(--gray));
+		font-style: italic;
+	}
+</style>
