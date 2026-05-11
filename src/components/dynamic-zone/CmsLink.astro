@@ -1,0 +1,22 @@
+---
+import type { Link } from "../../lib/content/models/link";
+import { buildCmsLinkRel } from "./cms-link";
+
+interface Props {
+	link: Link;
+	class?: string;
+}
+
+const { link, class: className } = Astro.props;
+const rel = buildCmsLinkRel(link);
+---
+
+<a
+	href={link.url}
+	target={link.target}
+	rel={rel}
+	referrerpolicy={link.referrerpolicy}
+	class:list={className}
+>
+	<slot />
+</a>

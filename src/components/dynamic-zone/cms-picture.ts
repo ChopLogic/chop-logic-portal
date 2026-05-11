@@ -28,6 +28,7 @@ export const CMS_PICTURE_SIZES = {
 	galleryMasonry:
 		"(max-width: 640px) 100vw, (max-width: 1024px) 50vw, min(33vw, 360px)",
 	galleryCarousel: "min(85vw, 420px)",
+	cta: "min(100%, 280px)",
 } as const;
 
 /** Collects Strapi format presets plus the original, sorted by width ascending. */
