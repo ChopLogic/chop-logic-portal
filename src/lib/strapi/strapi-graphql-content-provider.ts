@@ -17,11 +17,13 @@ import type { StrapiGraphqlClientConfig } from "./graphql/client";
 import { strapiGraphqlRequest } from "./graphql/client";
 import { normalizeDynamicZoneFromGraphql } from "./graphql/normalize";
 import { mapArticleToDetail, mapArticleToSummary } from "./mappers";
-import { ABOUT_AND_CONFIG_QUERY } from "./queries/about-and-config";
+import {
+	ABOUT_ME_PAGE_QUERY,
+	BLOG_PAGE_QUERY,
+	HOME_PAGE_QUERY,
+} from "./queries";
 import { ARTICLE_BY_SLUG_QUERY, ARTICLES_LIST_QUERY } from "./queries/articles";
-import { BLOG_PAGE_QUERY } from "./queries/blog";
 import { CONFIG_QUERY } from "./queries/config";
-import { HOME_AND_CONFIG_QUERY } from "./queries/home-and-config";
 import {
 	parseArticleEntity,
 	parseConfigEntity,
@@ -100,7 +102,7 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 		const data = await strapiGraphqlRequest<{
 			home: unknown;
 			config: unknown;
-		}>(this.config, HOME_AND_CONFIG_QUERY);
+		}>(this.config, HOME_PAGE_QUERY);
 		return {
 			home: this.mapDynamicContentPageFromGraphQL(data.home),
 			siteConfig: this.mapSiteConfigFromGraphql(data.config),
@@ -125,7 +127,7 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 		const data = await strapiGraphqlRequest<{
 			aboutMe: unknown;
 			config: unknown;
-		}>(this.config, ABOUT_AND_CONFIG_QUERY);
+		}>(this.config, ABOUT_ME_PAGE_QUERY);
 		return {
 			page: this.mapDynamicContentPageFromGraphQL(data.aboutMe),
 			siteConfig: this.mapSiteConfigFromGraphql(data.config),
