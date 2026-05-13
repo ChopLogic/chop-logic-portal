@@ -20,6 +20,16 @@ export interface CmsPictureAttributes {
 
 const DEFAULT_SIZES = "100vw";
 
+/** `sizes` hints for responsive CMS images in common layout contexts. */
+export const CMS_PICTURE_SIZES = {
+	fullWidth: DEFAULT_SIZES,
+	galleryGrid:
+		"(max-width: 640px) 100vw, (max-width: 1024px) 50vw, min(33vw, 360px)",
+	galleryMasonry:
+		"(max-width: 640px) 100vw, (max-width: 1024px) 50vw, min(33vw, 360px)",
+	galleryCarousel: "min(85vw, 420px)",
+} as const;
+
 /** Collects Strapi format presets plus the original, sorted by width ascending. */
 export function collectCmsPictureVariants(
 	image: CmsImage,

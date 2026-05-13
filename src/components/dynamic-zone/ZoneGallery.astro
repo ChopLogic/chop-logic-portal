@@ -1,0 +1,130 @@
+---
+import type { DynamicZoneGallery } from "../../lib/content/models/dynamic-zone";
+import CmsPicture from "./CmsPicture.astro";
+import { CMS_PICTURE_SIZES } from "./cms-picture";
+
+interface Props {
+	gallery: DynamicZoneGallery;
+}
+
+const { gallery } = Astro.props;
+const { heading, subHeading, layout, items } = gallery;
+
+const pictureSizesByLayout = {
+	grid: CMS_PICTURE_SIZES.galleryGrid,
+	masonry: CMS_PICTURE_SIZES.galleryMasonry,
+	carousel: CMS_PICTURE_SIZES.galleryCarousel,
+} as const;
+
+const pictureSizes = pictureSizesByLayout[layout];
+---
+
+<section class:list={["zone-gallery", `zone-gallery--${layout}`]}>
+	<h2>{heading}</h2>
+	{subHeading && <h3>{subHeading}</h3>}
+	<ul class="zone-gallery-items" role="list">
+		{
+			items.map((item) => (
+				<li class="zone-gallery-item">
+					<CmsPicture item={item} sizes={pictureSizes} />
+				</li>
+			))
+		}
+	</ul>
+</section>
+
+<style>
+	.zone-gallery {
+		margin-block: 2rem;
+	}
+
+	.zone-gallery h2 {
+		margin: 0 0 0.35em;
+	}
+
+	.zone-gallery h3 {
+		margin: 0 0 1rem;
+		font-weight: normal;
+		color: rgb(var(--gray));
+	}
+
+	.zone-gallery-items {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.zone-gallery :global(.cms-picture) {
+		margin: 0;
+	}
+
+	.zone-gallery :global(.cms-picture img) {
+		display: block;
+		width: 100%;
+		height: auto;
+		border-radius: 12px;
+	}
+
+	.zone-gallery :global(figcaption) {
+		margin-top: 0.5rem;
+		font-size: 0.9em;
+		color: rgb(var(--gray));
+		text-align: center;
+	}
+
+	/* Grid: uniform responsive columns */
+	.zone-gallery--grid .zone-gallery-items {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+		gap: 1rem;
+		align-items: start;
+	}
+
+	/* Masonry: CSS multi-column layout (no JS) */
+	.zone-gallery--masonry .zone-gallery-items {
+		columns: 1;
+		column-gap: 1rem;
+	}
+
+	.zone-gallery--masonry .zone-gallery-item {
+		break-inside: avoid;
+		margin-bottom: 1rem;
+	}
+
+	@media (min-width: 640px) {
+		.zone-gallery--masonry .zone-gallery-items {
+			columns: 2;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.zone-gallery--masonry .zone-gallery-items {
+			columns: 3;
+		}
+	}
+
+	/* Carousel: horizontal scroll with scroll-snap */
+	.zone-gallery--carousel .zone-gallery-items {
+		display: flex;
+		flex-direction: row;
+		gap: 1rem;
+		overflow-x: auto;
+		overflow-y: hidden;
+		scroll-snap-type: x mandatory;
+		scroll-behavior: smooth;
+		-webkit-overflow-scrolling: touch;
+		padding-block-end: 0.5rem;
+		scrollbar-gutter: stable;
+	}
+
+	.zone-gallery--carousel .zone-gallery-item {
+		flex: 0 0 min(85%, 420px);
+		scroll-snap-align: start;
+	}
+
+	@supports (scroll-snap-align: center) {
+		.zone-gallery--carousel .zone-gallery-items {
+			scroll-padding-inline: 0.5rem;
+		}
+	}
+</style>

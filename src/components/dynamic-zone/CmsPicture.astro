@@ -1,0 +1,35 @@
+---
+import type { CmsImage } from "../../lib/content/models/image";
+import { buildCmsPictureAttributes } from "./cms-picture";
+
+interface Props {
+	item: CmsImage;
+	sizes?: string;
+	class?: string;
+}
+
+const { item, sizes, class: className } = Astro.props;
+const alt = item.alternativeText ?? "";
+const {
+	src,
+	srcset,
+	sizes: resolvedSizes,
+	width,
+	height,
+} = buildCmsPictureAttributes(item, { sizes });
+---
+
+<figure class:list={["cms-picture", className]}>
+	<picture>
+		<img
+			src={src}
+			{...(srcset ? { srcset, sizes: resolvedSizes } : {})}
+			alt={alt}
+			width={width}
+			height={height}
+			loading="lazy"
+			decoding="async"
+		/>
+	</picture>
+	{item.caption && <figcaption>{item.caption}</figcaption>}
+</figure>
