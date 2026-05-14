@@ -1,0 +1,32 @@
+---
+import type { DynamicZonePicture } from "../../lib/content/models/dynamic-zone";
+import FormattedDate from "../FormattedDate.astro";
+import { buildCmsPictureAttributes } from "./cms-picture";
+
+interface Props {
+	picture: DynamicZonePicture;
+}
+
+const { picture } = Astro.props;
+const { item, publicationDate } = picture;
+const alt = item.alternativeText ?? "";
+const { src, srcset, sizes, width, height } = buildCmsPictureAttributes(item);
+---
+
+<figure class="zone-picture cms-picture">
+	<picture>
+		<img
+			src={src}
+			{...(srcset ? { srcset, sizes } : {})}
+			alt={alt}
+			width={width}
+			height={height}
+			loading="lazy"
+			decoding="async"
+		/>
+	</picture>
+	{item.caption && <figcaption>{item.caption}</figcaption>}
+	<p class="zone-picture-date">
+		<FormattedDate date={publicationDate} />
+	</p>
+</figure>
