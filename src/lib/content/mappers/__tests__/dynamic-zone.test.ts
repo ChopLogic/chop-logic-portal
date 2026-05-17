@@ -17,6 +17,7 @@ import {
 } from "../../models/link";
 import { RichTextContentType } from "../../models/rich-text-block";
 import {
+	mapDynamicZoneContent,
 	mapEmbeddedVideo,
 	mapPicture,
 	mapReferenceList,
@@ -174,6 +175,61 @@ describe("dynamic zone mappers", () => {
 			expect(result.heading).toBe("Reference list");
 			expect(result.links).toHaveLength(3);
 			expect(result.links[0]?.platform).toBe(SocialPlatform.GitHub);
+		});
+	});
+
+	describe("mapDynamicZoneContent", () => {
+		it("maps all supported blocks from the home page mock in order", () => {
+			const content = loadMockContent("fetch-home-page-response.json", "home");
+
+			const result = mapDynamicZoneContent(content);
+
+			expect(result).toHaveLength(4);
+			expect(result.map((block) => block.type)).toEqual([
+				DynamicZoneComponentType.Paragraph,
+				DynamicZoneComponentType.CallToAction,
+				DynamicZoneComponentType.EmbeddedVideo,
+				DynamicZoneComponentType.Picture,
+			]);
+		});
+
+		it("maps supported blocks from the blog page mock", () => {
+			const content = loadMockContent("fetch-blog-page-response.json", "blog");
+
+			const result = mapDynamicZoneContent(content);
+
+			expect(result).toHaveLength(3);
+			expect(result.map((block) => block.type)).toEqual([
+				DynamicZoneComponentType.Paragraph,
+				DynamicZoneComponentType.Picture,
+				DynamicZoneComponentType.CallToAction,
+			]);
+		});
+
+		it("returns an empty array when content is not an array", () => {
+			expect(mapDynamicZoneContent(null)).toEqual([]);
+			expect(mapDynamicZoneContent(undefined)).toEqual([]);
+		});
+
+		it("skips gallery blocks until a gallery mapper exists", () => {
+			const content = [
+				{
+					id: "1",
+					heading: "Gallery",
+					layout: "grid",
+					items: [
+						{
+							documentId: "img-1",
+							name: "a.jpg",
+							url: "/uploads/a.jpg",
+							width: 100,
+							height: 100,
+						},
+					],
+				},
+			];
+
+			expect(mapDynamicZoneContent(content)).toEqual([]);
 		});
 	});
 

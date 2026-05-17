@@ -1,4 +1,5 @@
 export * from "./article";
+export * from "./home-page";
 export * from "./image";
 export * from "./json";
 export * from "./link";

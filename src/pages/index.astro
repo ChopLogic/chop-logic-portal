@@ -2,6 +2,7 @@
 import Footer from "../components/footer/Footer.astro";
 import Header from "../components/header/Header.astro";
 import MetaData from "../components/meta-data/MetaData.astro";
+import ZoneContent from "../components/zone-content/ZoneContent.astro";
 import { createContentProvider } from "../lib/content/provider";
 
 const provider = createContentProvider();
@@ -33,7 +34,7 @@ const { siteTitle, footer, links } = siteConfig;
 				color: rgb(var(--gray));
 				margin-bottom: 2rem;
 			}
-			.cms-body :global(.cms-picture img) {
+			.zone-content :global(img) {
 				max-width: 100%;
 				height: auto;
 				border-radius: 12px;
@@ -44,10 +45,10 @@ const { siteTitle, footer, links } = siteConfig;
 		<Header />
 		<main>
 			<div class="home-hero">
-				<h1>{home.heading}</h1>
-				{home.subHeading && <p class="sub">{home.subHeading}</p>}
+				<h1>{home.title}</h1>
+				{home.subTitle && <p class="sub">{home.subTitle}</p>}
 			</div>
-			<div class="cms-body" set:html={home.bodyHtml} />
+			<ZoneContent content={home.content} />
 		</main>
 		<Footer content={footer} links={links} />
 	</body>

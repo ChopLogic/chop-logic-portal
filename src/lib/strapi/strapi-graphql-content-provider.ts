@@ -1,10 +1,11 @@
 /** biome-ignore-all lint/complexity/useLiteralKeys: Access to unknown keys */
 import { ArticleNotFoundError } from "../content/errors";
-import { mapSiteConfig } from "../content/mappers";
+import { mapHomePage, mapSiteConfig } from "../content/mappers";
 import { isRecord } from "../content/mappers/checkers";
 import type {
 	ArticleDetail,
 	ArticleSummary,
+	HomePage,
 	SingletonPage,
 	SiteConfig,
 } from "../content/models";
@@ -65,6 +66,16 @@ function singletonLabel(key: SingletonKey): string {
 
 export class StrapiGraphqlContentProvider implements ContentPort {
 	constructor(private readonly config: StrapiGraphqlClientConfig) {}
+
+	private mapHomeFromGraphql(document: unknown): HomePage {
+		if (document == null || !isRecord(document)) {
+			throw new Error(
+				"Home is missing, unpublished, or not returned by the CMS. Publish the single type in Strapi or check STRAPI_URL and API permissions.",
+			);
+		}
+		const entity = parseSingletonEntity(document);
+		return mapHomePage(entity, this.config.baseUrl);
+	}
 
 	private mapSingletonFromGraphql(
 		document: unknown,
@@ -160,27 +171,28 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 		}>(this.config, HOME_AND_CONFIG_QUERY);
 		const siteConfig = this.mapSiteConfigFromGraphql(data.config);
 		return {
-			home: this.mapSingletonFromGraphql(data.home, "Home"),
+			home: this.mapHomeFromGraphql(data.home),
 			siteConfig,
 		};
 	}
 
-	async getSingleton(key: SingletonKey): Promise<SingletonPage> {
-		const document =
-			key === "home"
-				? (
-						await strapiGraphqlRequest<{ home: unknown }>(
-							this.config,
-							HOME_PAGE_QUERY,
-						)
-					).home
-				: (
-						await strapiGraphqlRequest<{ aboutMe: unknown }>(
-							this.config,
-							ABOUT_ME_QUERY,
-						)
-					).aboutMe;
+	async getSingleton(key: SingletonKey): Promise<HomePage | SingletonPage> {
+		if (key === "home") {
+			const document = (
+				await strapiGraphqlRequest<{ home: unknown }>(
+					this.config,
+					HOME_PAGE_QUERY,
+				)
+			).home;
+			return this.mapHomeFromGraphql(document);
+		}
 
+		const document = (
+			await strapiGraphqlRequest<{ aboutMe: unknown }>(
+				this.config,
+				ABOUT_ME_QUERY,
+			)
+		).aboutMe;
 		return this.mapSingletonFromGraphql(document, singletonLabel(key));
 	}
 
