@@ -1,4 +1,11 @@
 export {
+	mapEmbeddedVideo,
+	mapPicture,
+	mapReferenceList,
+	mapZoneCallToAction,
+	mapZoneParagraph,
+} from "./dynamic-zone";
+export {
 	mapCmsImage,
 	pickOpenGraphCmsImage,
 	resolveMediaAbsoluteUrl,
