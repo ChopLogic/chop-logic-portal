@@ -1,18 +1,28 @@
 /** biome-ignore-all lint/complexity/useLiteralKeys: Access to unknown keys */
 import {
+	GRAPHQL_TYPENAME_TO_COMPONENT_TYPE,
+	REST_COMPONENT_TO_COMPONENT_TYPE,
+} from "../../../constants/component-types";
+import type { CmsImage, Link } from "../models";
+import {
 	type DynamicZoneCallToAction,
 	type DynamicZoneComponent,
 	DynamicZoneComponentType,
 	type DynamicZoneContent,
 	type DynamicZoneEmbeddedVideo,
+	type DynamicZoneGallery,
 	type DynamicZoneParagraph,
 	type DynamicZonePicture,
 	type DynamicZoneReferenceList,
 } from "../models/dynamic-zone";
 import { isRecord } from "./checkers";
-import { normalizeOptionalString, normalizeRequiredString } from "./helpers";
+import {
+	normalizeOptionalString,
+	normalizeRequiredDate,
+	normalizeRequiredString,
+} from "./helpers";
 import { mapCmsImage } from "./image";
-import { mapLink, mapLinks } from "./link";
+import { mapLink } from "./link";
 import { mapRichTextBlock } from "./rich-text-block";
 
 function getCmsBaseUrl(): string {
@@ -39,20 +49,33 @@ function normalizeAlignment(value: unknown): "left" | "center" | "right" {
 	return "left";
 }
 
-function parsePublicationDate(value: unknown): Date {
-	if (value instanceof Date) {
+function normalizeGalleryLayout(
+	value: unknown,
+): "grid" | "masonry" | "carousel" {
+	if (value === "masonry" || value === "carousel") {
 		return value;
 	}
+	return "grid";
+}
 
-	const raw = normalizeRequiredString(value);
-	const iso = raw.includes("T") ? raw : `${raw}T00:00:00.000Z`;
-	const date = new Date(iso);
-	if (Number.isNaN(date.getTime())) {
-		throw new Error(
-			`Value ${JSON.stringify(value)} is not a valid publication date`,
-		);
+function normalizeGalleryItems(value: unknown): CmsImage[] {
+	if (!Array.isArray(value)) {
+		return [];
 	}
-	return date;
+
+	return value
+		.map((item) => mapCmsImage(item, getCmsBaseUrl()))
+		.filter((item): item is NonNullable<typeof item> => item != null);
+}
+
+function normalizeReferenceListLinks(value: unknown): Link[] {
+	if (!Array.isArray(value)) {
+		return [];
+	}
+
+	return value
+		.map((item) => mapLink(item))
+		.filter((item): item is NonNullable<typeof item> => item != null);
 }
 
 function mapRequiredLink(raw: unknown, label: string) {
@@ -113,14 +136,13 @@ export function mapEmbeddedVideo(value: unknown): DynamicZoneEmbeddedVideo {
 
 export function mapReferenceList(value: unknown): DynamicZoneReferenceList {
 	const raw = requireRecord(value);
-	const linksRaw = raw["links"];
 
 	return {
 		type: DynamicZoneComponentType.ReferenceList,
 		id: normalizeRequiredString(raw["id"]),
 		heading: normalizeRequiredString(raw["heading"]),
 		subHeading: normalizeOptionalString(raw["subHeading"]),
-		links: Array.isArray(linksRaw) ? mapLinks(linksRaw) : [],
+		links: normalizeReferenceListLinks(raw["links"]),
 	};
 }
 
@@ -134,29 +156,23 @@ export function mapPicture(value: unknown): DynamicZonePicture {
 	return {
 		type: DynamicZoneComponentType.Picture,
 		id: normalizeRequiredString(raw["id"]),
+		publicationDate: normalizeRequiredDate(raw["publicationDate"]),
 		item,
-		publicationDate: parsePublicationDate(raw["publicationDate"]),
 	};
 }
 
-const graphQlTypenameToComponentType: Record<string, DynamicZoneComponentType> =
-	{
-		ComponentSectionsParagraph: DynamicZoneComponentType.Paragraph,
-		ComponentSectionsCallToAction: DynamicZoneComponentType.CallToAction,
-		ComponentSectionsEmbeddedVideo: DynamicZoneComponentType.EmbeddedVideo,
-		ComponentSectionsReferenceList: DynamicZoneComponentType.ReferenceList,
-		ComponentSectionsPicture: DynamicZoneComponentType.Picture,
-		ComponentSectionsGallery: DynamicZoneComponentType.Gallery,
-	};
+export function mapGallery(value: unknown): DynamicZoneGallery {
+	const raw = requireRecord(value);
 
-const restComponentToComponentType: Record<string, DynamicZoneComponentType> = {
-	"sections.paragraph": DynamicZoneComponentType.Paragraph,
-	"sections.call-to-action": DynamicZoneComponentType.CallToAction,
-	"sections.embedded-video": DynamicZoneComponentType.EmbeddedVideo,
-	"sections.reference-list": DynamicZoneComponentType.ReferenceList,
-	"sections.picture": DynamicZoneComponentType.Picture,
-	"sections.gallery": DynamicZoneComponentType.Gallery,
-};
+	return {
+		type: DynamicZoneComponentType.Gallery,
+		id: normalizeRequiredString(raw["id"]),
+		heading: normalizeRequiredString(raw["heading"]),
+		subHeading: normalizeOptionalString(raw["subHeading"]),
+		layout: normalizeGalleryLayout(raw["layout"]),
+		items: normalizeGalleryItems(raw["items"]),
+	};
+}
 
 function detectZoneBlockType(
 	block: Record<string, unknown>,
@@ -164,17 +180,17 @@ function detectZoneBlockType(
 	const typename = block["__typename"];
 	if (
 		typeof typename === "string" &&
-		graphQlTypenameToComponentType[typename]
+		GRAPHQL_TYPENAME_TO_COMPONENT_TYPE[typename]
 	) {
-		return graphQlTypenameToComponentType[typename];
+		return GRAPHQL_TYPENAME_TO_COMPONENT_TYPE[typename];
 	}
 
 	const component = block["__component"];
 	if (
 		typeof component === "string" &&
-		restComponentToComponentType[component]
+		REST_COMPONENT_TO_COMPONENT_TYPE[component]
 	) {
-		return restComponentToComponentType[component];
+		return REST_COMPONENT_TO_COMPONENT_TYPE[component];
 	}
 
 	if (Array.isArray(block["links"])) {
@@ -193,6 +209,10 @@ function detectZoneBlockType(
 		return "picture" in block
 			? DynamicZoneComponentType.CallToAction
 			: DynamicZoneComponentType.EmbeddedVideo;
+	}
+
+	if (Array.isArray(block["items"]) && block["heading"] != null) {
+		return DynamicZoneComponentType.Gallery;
 	}
 
 	return null;
@@ -219,6 +239,8 @@ function mapDynamicZoneBlock(block: unknown): DynamicZoneComponent | null {
 			return mapReferenceList(block);
 		case DynamicZoneComponentType.Picture:
 			return mapPicture(block);
+		case DynamicZoneComponentType.Gallery:
+			return mapGallery(block);
 		default:
 			return null;
 	}

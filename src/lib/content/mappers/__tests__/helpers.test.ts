@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
 	normalizeOptionalString,
+	normalizeRequiredDate,
 	normalizeRequiredNumber,
 	normalizeRequiredString,
 } from "../helpers";
@@ -38,6 +39,31 @@ describe("normalizeOptionalString", () => {
 
 	it("trims whitespace-only string to empty string (still truthy before trim)", () => {
 		expect(normalizeOptionalString("   ")).toBe("");
+	});
+});
+
+describe("normalizeRequiredDate", () => {
+	it("returns Date when passed a Date instance", () => {
+		const d = new Date("2026-03-04T12:00:00.000Z");
+		expect(normalizeRequiredDate(d)).toBe(d);
+	});
+
+	it("parses YYYY-MM-DD to UTC midnight", () => {
+		expect(normalizeRequiredDate("2026-03-04")).toEqual(
+			new Date("2026-03-04T00:00:00.000Z"),
+		);
+	});
+
+	it("accepts full ISO date-times unchanged", () => {
+		expect(normalizeRequiredDate("2026-03-04T12:34:56.000Z")).toEqual(
+			new Date("2026-03-04T12:34:56.000Z"),
+		);
+	});
+
+	it("throws for invalid date strings", () => {
+		expect(() => normalizeRequiredDate("not-a-date")).toThrow(
+			/is not a valid publication date/,
+		);
 	});
 });
 
