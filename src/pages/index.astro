@@ -1,55 +1,24 @@
 ---
-import Footer from "../components/footer/Footer.astro";
-import Header from "../components/header/Header.astro";
-import MetaData from "../components/meta-data/MetaData.astro";
-import ZoneContent from "../components/zone-content/ZoneContent.astro";
+import Layout from "../layouts/SinglePageWithDynamicContent.astro";
 import { createContentProvider } from "../lib/content/provider";
 
 const provider = createContentProvider();
 const { home, siteConfig } = await provider.getHomeIndexContent();
 const { siteTitle, footer, links } = siteConfig;
+const { title, subTitle, content, metaData, documentId, slug, updatedAt } =
+	home;
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<MetaData
-			siteTitle={siteTitle}
-			metaData={home.metaData}
-		/>
-		<style>
-			main {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 3em 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.home-hero h1 {
-				margin-top: 0;
-				text-align: center;
-			}
-			.home-hero .sub {
-				text-align: center;
-				color: rgb(var(--gray));
-				margin-bottom: 2rem;
-			}
-			.zone-content :global(img) {
-				max-width: 100%;
-				height: auto;
-				border-radius: 12px;
-			}
-		</style>
-	</head>
-	<body>
-		<Header />
-		<main>
-			<div class="home-hero">
-				<h1>{home.title}</h1>
-				{home.subTitle && <p class="sub">{home.subTitle}</p>}
-			</div>
-			<ZoneContent content={home.content} />
-		</main>
-		<Footer content={footer} links={links} />
-	</body>
-</html>
+<Layout
+	siteTitle={siteTitle}
+	footer={footer}
+	links={links}
+	title={title}
+	subTitle={subTitle}
+	content={content}
+	metaData={metaData}
+	documentId={documentId}
+	slug={slug}
+	updatedAt={updatedAt}
+	/>
+	
