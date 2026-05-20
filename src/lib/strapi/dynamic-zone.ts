@@ -32,7 +32,7 @@ function renderMediaFigure(
 	const caption =
 		typeof captionRaw === "string" && captionRaw.length > 0 ? captionRaw : "";
 	const cap = caption ? `<figcaption>${escapeHtml(caption)}</figcaption>` : "";
-	return `<figure class="cms-picture"><img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" loading="lazy" />${cap}</figure>`;
+	return `<figure class="picture"><img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" loading="lazy" />${cap}</figure>`;
 }
 
 function renderPictureComponent(baseUrl: string, picture: unknown): string {
@@ -52,7 +52,7 @@ function renderPictureComponent(baseUrl: string, picture: unknown): string {
 			outerCaption.length > 0
 				? `<figcaption>${escapeHtml(outerCaption)}</figcaption>`
 				: "";
-		return `<figure class="cms-picture"><img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" loading="lazy" />${cap}</figure>`;
+		return `<figure class="picture"><img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" loading="lazy" />${cap}</figure>`;
 	}
 	return renderMediaFigure(baseUrl, picture, alt);
 }

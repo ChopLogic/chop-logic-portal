@@ -11,9 +11,35 @@ const { picture } = Astro.props;
 const { item, publicationDate } = picture;
 ---
 
-<article class="zone-picture">
+<div class="zone-picture">
 	<Picture item={item} class="zone-picture-media" />
 	<p class="zone-picture-date">
 		<FormattedDate date={publicationDate} />
 	</p>
-</article>
+</div>
+
+<style>
+	.zone-picture-date {
+		text-align: right;
+		padding-top: var(--cl-m-gap);
+		color: var(--cl-base-font-color);
+		font-family: var(--cl-core-font);
+		font-size: var(--cl-typography-small-mobile);
+		font-weight: normal;
+		letter-spacing: normal;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+	@media (min-width: 640px) {
+		.zone-picture-date {
+			font-size: var(--cl-typography-small-tablet);
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.zone-picture-date {
+			font-size: var(--cl-typography-small-desktop);
+		}
+	}
+</style>

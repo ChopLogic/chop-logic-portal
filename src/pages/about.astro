@@ -21,11 +21,3 @@ const { siteTitle, logo, footer, links } = siteConfig;
 	{page.subHeading && <p>{page.subHeading}</p>}
 	<div class="cms-body" set:html={page.bodyHtml} />
 </Layout>
-
-<style>
-	.cms-body :global(.cms-picture img) {
-		max-width: 100%;
-		height: auto;
-		border-radius: 12px;
-	}
-</style>

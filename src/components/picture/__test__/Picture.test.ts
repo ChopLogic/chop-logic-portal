@@ -40,7 +40,7 @@ describe("CmsPicture.astro", () => {
 
 	it("renders a figure with responsive image attributes", async () => {
 		const html = await render({ item: testCmsImage() });
-		expect(html).toContain('<figure class="cms-picture"');
+		expect(html).toContain('<figure class="picture"');
 		expect(html).toContain("<picture");
 		expect(html).toContain('alt="Alt text"');
 		expect(html).toContain('sizes="100vw"');
@@ -52,7 +52,7 @@ describe("CmsPicture.astro", () => {
 			sizes: CMS_PICTURE_SIZES.galleryGrid,
 			class: "zone-gallery-item-media",
 		});
-		expect(html).toContain('class="cms-picture zone-gallery-item-media"');
+		expect(html).toContain('class="picture zone-gallery-item-media"');
 		expect(html).toContain(`sizes="${CMS_PICTURE_SIZES.galleryGrid}"`);
 	});
 });

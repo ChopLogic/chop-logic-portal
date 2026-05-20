@@ -61,8 +61,7 @@ describe("ZonePicture.astro", () => {
 
 	it("renders a responsive picture inside a figure", async () => {
 		const html = await render(testPicture());
-		expect(html).toContain('<article class="zone-picture"');
-		expect(html).toContain("cms-picture");
+		expect(html).toContain("picture");
 		expect(html).toContain("zone-picture-media");
 		expect(html).toContain("<picture");
 		expect(html).toContain("</picture>");

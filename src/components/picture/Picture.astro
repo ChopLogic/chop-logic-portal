@@ -14,22 +14,51 @@ const {
 	src,
 	srcset,
 	sizes: resolvedSizes,
-	width,
-	height,
 } = buildCmsPictureAttributes(item, { sizes });
 ---
 
-<figure class:list={["cms-picture", className]}>
+<figure class:list={["picture", className]}>
 	<picture>
 		<img
 			src={src}
 			{...(srcset ? { srcset, sizes: resolvedSizes } : {})}
 			alt={alt}
-			width={width}
-			height={height}
 			loading="lazy"
 			decoding="async"
 		/>
 	</picture>
 	{item.caption && <figcaption>{item.caption}</figcaption>}
 </figure>
+
+<style>
+	.picture img {
+		display: block;
+		max-width: 100%;
+		height: auto;
+		border-radius: var(--cl-border-radius);
+	}
+
+	.picture figcaption {
+		text-align: center;
+		padding-top: var(--cl-m-gap);
+		color: var(--cl-base-font-color);
+		font-family: var(--cl-core-font);
+		font-size: var(--cl-typography-small-mobile);
+		font-weight: normal;
+		letter-spacing: normal;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+	@media (min-width: 640px) {
+		.picture figcaption {
+			font-size: var(--cl-typography-small-tablet);
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.picture figcaption {
+			font-size: var(--cl-typography-small-desktop);
+		}
+	}
+</style>
