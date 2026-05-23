@@ -22,40 +22,68 @@ const { siteTitle, footer, links, subTitle, title, content, metaData } =
 <!doctype html>
 <html lang="en">
 	<head>
-		<MetaData
-			siteTitle={siteTitle}
-			metaData={metaData}
-		/>
+		<MetaData siteTitle={siteTitle} metaData={metaData} />
 		<style>
 			main {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 3em 1em;
-				color: rgb(var(--gray-dark));
+				padding: var(--cl-xl-gap);
+				max-width: 1200px;
+				margin: 0 auto;
 			}
-			.home-hero h1 {
-				margin-top: 0;
+
+			.page-hero {
+				padding-bottom: var(--cl-xl-gap);
 				text-align: center;
+				border-bottom: var(--cl-light-border);
 			}
-			.home-hero .sub {
-				text-align: center;
-				color: rgb(var(--gray));
-				margin-bottom: 2rem;
+
+			.page-title {
+				color: var(--cl-base-font-color);
+				font-family: var(--cl-monospace-font);
+				font-size: var(--cl-typography-h1-mobile);
+				font-weight: normal;
+				letter-spacing: normal;
+				-webkit-font-smoothing: antialiased;
+				-moz-osx-font-smoothing: grayscale;
 			}
-			.zone-content :global(img) {
-				max-width: 100%;
-				height: auto;
-				border-radius: 12px;
+			
+			.page-subtitle {
+				color: var(--cl-base-font-color);
+				font-family: var(--cl-core-font);
+				font-size: var(--cl-typography-base-mobile);
+				font-weight: normal;
+				letter-spacing: normal;
+				-webkit-font-smoothing: antialiased;
+				-moz-osx-font-smoothing: grayscale;
+				font-style: italic;
+			}
+
+			@media (min-width: 640px) {
+				.page-title {
+					font-size: var(--cl-typography-h1-tablet);
+				}
+
+				.page-subtitle {
+					font-size: var(--cl-typography-base-tablet);
+				}
+			}
+
+			@media (min-width: 1024px) {
+				.page-title {
+					font-size: var(--cl-typography-h1-desktop);
+				}
+
+				.page-subtitle {
+					font-size: var(--cl-typography-base-desktop);
+				}
 			}
 		</style>
 	</head>
 	<body>
 		<Header />
 		<main>
-			<div class="home-hero">
-				<h1>{title}</h1>
-				{subTitle && <p class="sub">{subTitle}</p>}
+			<div class="page-hero">
+				<h1 class="page-title">{title}</h1>
+				{subTitle && <p class="page-subtitle">{subTitle}</p>}
 			</div>
 			<ZoneContent content={content} />
 		</main>
