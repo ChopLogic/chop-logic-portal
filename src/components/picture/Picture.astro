@@ -1,15 +1,18 @@
 ---
+import { DEFAULT_ALT_TEXT } from "../../constants/defaults";
 import type { CmsImage } from "../../lib/content/models/image";
+import FormattedDate from "../FormattedDate.astro";
 import { buildCmsPictureAttributes } from "./Picture.helpers";
 
 interface Props {
 	item: CmsImage;
 	sizes?: string;
-	class?: string;
+	className?: string;
+	date?: Date;
 }
 
-const { item, sizes, class: className } = Astro.props;
-const alt = item.alternativeText ?? "";
+const { item, sizes, className, date } = Astro.props;
+const alt = item.alternativeText ?? DEFAULT_ALT_TEXT;
 const {
 	src,
 	srcset,
@@ -21,25 +24,33 @@ const {
 	<picture>
 		<img
 			src={src}
-			{...(srcset ? { srcset, sizes: resolvedSizes } : {})}
+			{...srcset ? { srcset, sizes: resolvedSizes } : {}}
 			alt={alt}
 			loading="lazy"
 			decoding="async"
+			class="picture__image"
 		/>
 	</picture>
-	{item.caption && <figcaption>{item.caption}</figcaption>}
+	{
+		item.caption && (
+			<figcaption class="picture__caption">
+				<span>{item.caption}</span>
+				{date && <span aria-hidden="true">|</span>}
+				{date && <FormattedDate date={date} />}
+			</figcaption>
+		)
+	}
 </figure>
 
 <style>
-	.picture img {
+	.picture__image {
 		display: block;
 		max-width: 100%;
 		height: auto;
 		border-radius: var(--cl-border-radius);
 	}
 
-	.picture figcaption {
-		text-align: center;
+	.picture__caption {
 		padding-top: var(--cl-m-gap);
 		color: var(--cl-base-font-color);
 		font-family: var(--cl-core-font);
@@ -48,16 +59,20 @@ const {
 		letter-spacing: normal;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		gap: var(--cl-s-gap);
 	}
 
 	@media (min-width: 640px) {
-		.picture figcaption {
+		.picture__caption {
 			font-size: var(--cl-typography-small-tablet);
 		}
 	}
 
 	@media (min-width: 1024px) {
-		.picture figcaption {
+		.picture__caption {
 			font-size: var(--cl-typography-small-desktop);
 		}
 	}

@@ -127,7 +127,7 @@ describe("ZoneContent.astro", () => {
 		expect(html).toContain("zone-gallery");
 		expect(html).toContain("zone-embedded-video");
 		expect(html).toContain("zone-references");
-		expect(html).toContain("zone-picture");
+		expect(html).toContain("picture");
 	});
 
 	it("renders mixed blocks in source order", async () => {

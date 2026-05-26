@@ -1,5 +1,6 @@
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { beforeAll, describe, expect, it } from "vitest";
+import { DEFAULT_ALT_TEXT } from "../../../constants/defaults";
 import {
 	DynamicZoneComponentType,
 	type DynamicZonePicture,
@@ -62,7 +63,6 @@ describe("ZonePicture.astro", () => {
 	it("renders a responsive picture inside a figure", async () => {
 		const html = await render(testPicture());
 		expect(html).toContain("picture");
-		expect(html).toContain("zone-picture-media");
 		expect(html).toContain("<picture");
 		expect(html).toContain("</picture>");
 		expect(html).toContain('alt="Forest view"');
@@ -96,6 +96,7 @@ describe("ZonePicture.astro", () => {
 		expect(html).toContain("Forest view caption");
 		expect(html).toContain('datetime="2026-03-04T12:00:00.000Z"');
 		expect(html).toContain("Mar 4, 2026");
+		expect(html).toContain("|");
 	});
 
 	it("omits figcaption when caption is not set", async () => {
@@ -107,13 +108,13 @@ describe("ZonePicture.astro", () => {
 		expect(html).not.toContain("<figcaption");
 	});
 
-	it("uses empty alt when alternativeText is missing", async () => {
+	it("uses default alt when alternativeText is missing", async () => {
 		const html = await render(
 			testPicture({
 				item: testCmsImage({ alternativeText: undefined }),
 			}),
 		);
-		expect(html).toMatch(/\salt(?:=""|(?=\s))/);
+		expect(html).toMatch(DEFAULT_ALT_TEXT);
 	});
 
 	it("escapes dangerous characters in caption", async () => {

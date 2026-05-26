@@ -9,6 +9,7 @@ import {
 export const DEFAULT_SITE_TITLE = "Chop Logic";
 export const DEFAULT_SITE_DESCRIPTION = "A place where logic works";
 export const DEFAULT_ROBOTS = "index, follow";
+export const DEFAULT_ALT_TEXT = "Chop Logic Image";
 
 export const OPEN_GRAPH_FALLBACK_IMAGE: OpenGraphImageMeta = {
 	src: fallbackOgAsset.src,

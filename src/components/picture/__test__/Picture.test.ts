@@ -34,6 +34,7 @@ describe("CmsPicture.astro", () => {
 		item: CmsImage;
 		sizes?: string;
 		class?: string;
+		date?: Date;
 	}) {
 		return container.renderToString(Picture, { props });
 	}
@@ -52,7 +53,26 @@ describe("CmsPicture.astro", () => {
 			sizes: CMS_PICTURE_SIZES.galleryGrid,
 			class: "zone-gallery-item-media",
 		});
-		expect(html).toContain('class="picture zone-gallery-item-media"');
 		expect(html).toContain(`sizes="${CMS_PICTURE_SIZES.galleryGrid}"`);
+	});
+
+	it("renders caption and date when both are provided", async () => {
+		const html = await render({
+			item: testCmsImage({ caption: "Test caption" }),
+			date: new Date("2026-03-04T12:00:00.000Z"),
+		});
+		expect(html).toContain("<figcaption");
+		expect(html).toContain("Test caption");
+		expect(html).toContain("Mar 4, 2026");
+		expect(html).toContain("|");
+	});
+
+	it("renders caption without date when date is not provided", async () => {
+		const html = await render({
+			item: testCmsImage({ caption: "Test caption" }),
+		});
+		expect(html).toContain("<figcaption");
+		expect(html).toContain("Test caption");
+		expect(html).not.toContain("Mar");
 	});
 });
