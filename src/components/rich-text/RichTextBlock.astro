@@ -14,19 +14,17 @@ interface Props {
 const { content } = Astro.props;
 ---
 
-<section>
-	{
-		content.map((item) => {
-			switch (item.type) {
-				case RichTextContentType.Heading:
-					return <RichTextHeading heading={item} />;
-				case RichTextContentType.Paragraph:
-					return <RichTextParagraph paragraph={item} />
-				case RichTextContentType.List:
-					return <RichTextList list={item} />
-				default:
-					return null
-			}
-		})
-	}
-</section>
+{
+	content.map((item) => {
+		switch (item.type) {
+			case RichTextContentType.Heading:
+				return <RichTextHeading heading={item} />;
+			case RichTextContentType.Paragraph:
+				return <RichTextParagraph paragraph={item} />;
+			case RichTextContentType.List:
+				return <RichTextList list={item} />;
+			default:
+				return null;
+		}
+	})
+}

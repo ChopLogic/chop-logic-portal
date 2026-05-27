@@ -64,17 +64,6 @@ describe("RichTextBlock.astro", () => {
 		});
 	}
 
-	it("wraps output in a section element", async () => {
-		const html = await render([
-			{
-				type: RichTextContentType.Paragraph,
-				children: [textNode("only")],
-			},
-		]);
-		expect(html).toContain("<section");
-		expect(html).toContain("</section>");
-	});
-
 	it("renders a heading block", async () => {
 		const html = await render([
 			{
@@ -139,10 +128,9 @@ describe("RichTextBlock.astro", () => {
 		expect(html.indexOf("L")).toBeGreaterThanOrEqual(0);
 	});
 
-	it("renders empty section when content is empty", async () => {
+	it("renders nothing when content is empty", async () => {
 		const html = await render([]);
-		expect(html).toContain("<section");
-		expect(html).toContain("</section>");
+		expect(html).toBe("");
 	});
 
 	it("skips unsupported top-level node types (renders null)", async () => {

@@ -11,7 +11,52 @@ const { heading, subHeading, content, alignment } = paragraph;
 ---
 
 <section class="zone-paragraph" style={`text-align: ${alignment}`}>
-	<h2>{heading}</h2>
-	{subHeading && <h3>{subHeading}</h3>}
+	<h2 class="zone-paragraph__title">{heading}</h2>
+	{subHeading && <h3 class="zone-paragraph__subtitle">{subHeading}</h3>}
 	<RichTextBlock content={content} />
 </section>
+
+<style>
+	.zone-paragraph {
+		display: flex;
+		flex-direction: column;
+		gap: var(--cl-l-gap);
+	}
+
+	.zone-paragraph__title, .zone-paragraph__subtitle {
+		color: var(--cl-base-font-color);
+		font-family: var(--cl-fancy-font);
+		font-weight: normal;
+		letter-spacing: normal;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+	.zone-paragraph__title {
+		font-size: var(--cl-typography-h2-mobile);
+	}
+
+	.zone-paragraph__subtitle {
+		font-size: var(--cl-typography-h3-mobile);
+	}
+
+	@media (min-width: 640px) {
+		.zone-paragraph__title {
+			font-size: var(--cl-typography-h2-tablet);
+		}
+
+		.zone-paragraph__subtitle {
+			font-size: var(--cl-typography-h3-tablet);
+		}
+	}
+	
+	@media (min-width: 1024px) {
+		.zone-paragraph__title {
+			font-size: var(--cl-typography-h2-desktop);
+		}
+
+		.zone-paragraph__subtitle {
+			font-size: var(--cl-typography-h3-desktop);
+		}
+	}
+</style>
