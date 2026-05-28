@@ -12,27 +12,3 @@ const innerHtml = paragraph.children.map(renderRichTextInlineHtml).join("");
 ---
 
 <p set:html={innerHtml} class="rich-text-paragraph" />
-
-<style>
-	.rich-text-paragraph {
-		color: var(--cl-base-font-color);
-		font-family: var(--cl-core-font);
-		font-size: var(--cl-typography-base-mobile);
-		font-weight: normal;
-		letter-spacing: normal;
-		-webkit-font-smoothing: antialiased;
-		-moz-osx-font-smoothing: grayscale;
-	}
-
-	@media (min-width: 640px) {
-		.rich-text-paragraph {
-			font-size: var(--cl-typography-base-tablet);
-		}
-	}
-
-	@media (min-width: 1024px) {
-		.rich-text-paragraph {
-			font-size: var(--cl-typography-base-desktop);
-		}
-	}
-</style>
