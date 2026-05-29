@@ -57,7 +57,7 @@ describe("ZoneEmbeddedVideo.astro", () => {
 		);
 		expect(html).toContain("Featured video");
 		expect(html).toContain("Watch below");
-		expect(html).toContain('class="zone-embedded-video-player"');
+		expect(html).toContain('class="zone-embedded-video__player"');
 		expect(html).toContain("<iframe");
 		expect(html).toContain(
 			'src="https://www.youtube-nocookie.com/embed/ZXnEJJu3IHQ?rel=0&amp;modestbranding=1"',
@@ -84,7 +84,7 @@ describe("ZoneEmbeddedVideo.astro", () => {
 				}),
 			}),
 		);
-		expect(html).toContain("zone-embedded-video-fallback");
+		expect(html).toContain("zone-embedded-video__fallback");
 		expect(html).not.toContain("<iframe");
 		expect(html).toContain('href="https://www.youtube.com/"');
 		expect(html).toContain("Watch YouTube channel");

@@ -23,7 +23,7 @@ const iframeTitle = link.text || heading;
 	{subHeading && <h3>{subHeading}</h3>}
 	{
 		embed ? (
-			<div class="zone-embedded-video-player">
+			<div class="zone-embedded-video__player">
 				<iframe
 					src={embed.embedUrl}
 					title={iframeTitle}
@@ -34,7 +34,7 @@ const iframeTitle = link.text || heading;
 				/>
 			</div>
 		) : (
-			<p class="zone-embedded-video-fallback">
+			<p class="zone-embedded-video__fallback">
 				This video cannot be embedded.
 				<Link link={link}>Watch {link.text}</Link>
 			</p>
@@ -44,49 +44,24 @@ const iframeTitle = link.text || heading;
 
 <style>
 	.zone-embedded-video {
-		margin-block: 2rem;
+		width: 100%;
 	}
 
-	.zone-embedded-video h2 {
-		margin: 0 0 0.35em;
-	}
-
-	.zone-embedded-video h3 {
-		margin: 0 0 1rem;
-		font-weight: normal;
-		color: rgb(var(--gray));
-	}
-
-	.zone-embedded-video-player {
+	.zone-embedded-video__player {
 		position: relative;
 		width: 100%;
-		max-width: 960px;
 		margin-inline: auto;
 		aspect-ratio: 16 / 9;
 		overflow: hidden;
-		border-radius: 12px;
-		background: rgb(var(--gray-dark));
-		box-shadow: var(--box-shadow);
+		border-radius: var(--cl-border-radius);
+		box-shadow: var(--cl-box-shadow);
 	}
 
-	.zone-embedded-video-player iframe {
+	.zone-embedded-video__player iframe {
 		position: absolute;
 		inset: 0;
 		width: 100%;
 		height: 100%;
 		border: 0;
-	}
-
-	.zone-embedded-video-fallback {
-		margin: 0;
-		padding: 1rem 1.25rem;
-		border-radius: 12px;
-		background: rgb(var(--gray-light));
-		color: rgb(var(--gray-dark));
-	}
-
-	.zone-embedded-video-fallback :global(a) {
-		margin-left: 0.35em;
-		color: var(--cl-accent-a0);
 	}
 </style>
