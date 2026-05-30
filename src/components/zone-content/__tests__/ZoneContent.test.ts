@@ -1,3 +1,5 @@
+import { loadRenderers } from "astro:container";
+import { getContainerRenderer as reactContainerRenderer } from "@astrojs/react";
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { beforeAll, describe, expect, it } from "vitest";
 import {
@@ -56,7 +58,8 @@ describe("ZoneContent.astro", () => {
 	let container: Awaited<ReturnType<typeof AstroContainer.create>>;
 
 	beforeAll(async () => {
-		container = await AstroContainer.create();
+		const renderers = await loadRenderers([reactContainerRenderer()]);
+		container = await AstroContainer.create({ renderers });
 	});
 
 	async function render(content: DynamicZoneContent) {

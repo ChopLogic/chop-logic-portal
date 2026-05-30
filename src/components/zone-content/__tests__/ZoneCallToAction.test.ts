@@ -1,3 +1,5 @@
+import { loadRenderers } from "astro:container";
+import { getContainerRenderer as reactContainerRenderer } from "@astrojs/react";
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { beforeAll, describe, expect, it } from "vitest";
 import {
@@ -63,7 +65,8 @@ describe("ZoneCallToAction.astro", () => {
 	let container: Awaited<ReturnType<typeof AstroContainer.create>>;
 
 	beforeAll(async () => {
-		container = await AstroContainer.create();
+		const renderers = await loadRenderers([reactContainerRenderer()]);
+		container = await AstroContainer.create({ renderers });
 	});
 
 	async function render(callToAction: DynamicZoneCallToAction) {
@@ -96,26 +99,6 @@ describe("ZoneCallToAction.astro", () => {
 		expect(html).toContain("<picture");
 		expect(html).toContain('alt="Logo"');
 		expect(html).toContain(`sizes="${CMS_PICTURE_SIZES.cta}"`);
-	});
-
-	it("shows external arrow for external links and internal arrow otherwise", async () => {
-		const external = await render(testCallToAction());
-		expect(external).toContain("↗");
-
-		const internal = await render(
-			testCallToAction({
-				link: testLink({ type: LinkType.Internal, url: "/about" }),
-			}),
-		);
-		expect(internal).toContain('href="/about"');
-		expect(internal).toContain("→");
-		expect(internal).not.toContain("↗");
-	});
-
-	it("renders platform icon when link has a platform", async () => {
-		const html = await render(testCallToAction());
-		expect(html).toContain("zone-cta-icon");
-		expect(html).toContain("M12 .297");
 	});
 
 	it("omits h3 when subHeading is not set", async () => {

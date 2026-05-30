@@ -1,8 +1,7 @@
 ---
+import { Button } from "chop-logic-components";
 import type { DynamicZoneCallToAction } from "../../lib/content/models/dynamic-zone";
-import SocialPlatformIcon from "../footer/SocialPlatformIcon.astro";
 import Link from "../link/Link.astro";
-import { isExternalLink } from "../link/Link.helpers";
 import Picture from "../picture/Picture.astro";
 import { CMS_PICTURE_SIZES } from "../picture/Picture.helpers";
 
@@ -12,147 +11,77 @@ interface Props {
 
 const { callToAction } = Astro.props;
 const { heading, subHeading, link, picture } = callToAction;
-const external = isExternalLink(link);
 ---
 
 <section
-	class:list={[
-		"zone-cta",
-		{ "zone-cta--with-media": Boolean(picture) },
-	]}
+	class:list={["zone-cta", { "zone-cta--with-media": Boolean(picture) }]}
 >
-	<h2>{heading}</h2>
-	{subHeading && <h3>{subHeading}</h3>}
-	<Link link={link} class="zone-cta-card">
-		{
-			picture && (
-				<div class="zone-cta-media">
-					<Picture
-						item={picture}
-						sizes={CMS_PICTURE_SIZES.cta}
-						className="zone-cta-picture"
-					/>
-				</div>
-			)
-		}
-		<span class="zone-cta-body">
-			{
-				link.platform && (
-					<span class="zone-cta-icon" aria-hidden="true">
-						<SocialPlatformIcon platform={link.platform} />
-					</span>
-				)
-			}
-			<span class="zone-cta-label">{link.text}</span>
-			<span class="zone-cta-arrow" aria-hidden="true">
-				{external ? "↗" : "→"}
-			</span>
-		</span>
+	{
+		picture && (
+			<div class="zone-cta__media">
+				<Picture item={picture} sizes={CMS_PICTURE_SIZES.cta} />
+			</div>
+		)
+	}
+	<h4 class="zone-cta__heading">{heading}</h4>
+	{subHeading && <h5 class="zone-cta__subheading">{subHeading}</h5>}
+	<Link link={link} className="zone-cta__link">
+		<Button text={link.text} />
 	</Link>
 </section>
 
 <style>
 	.zone-cta {
-		margin-block: 2rem;
-	}
-
-	.zone-cta h2 {
-		margin: 0 0 0.35em;
-	}
-
-	.zone-cta h3 {
-		margin: 0 0 1rem;
-		font-weight: normal;
-		color: rgb(var(--gray));
-	}
-
-	.zone-cta-card {
 		display: grid;
+		justify-items: center;
+		grid-template-columns: auto;
+		grid-template-areas:
+			"heading"
+			"subheading"
+			"button";
+	}
+
+	.zone-cta--with-media {
 		grid-template-columns: 1fr;
-		gap: 1rem;
-		align-items: center;
-		padding: 1rem 1.25rem;
-		border: 1px solid rgb(var(--gray-light));
-		border-radius: 12px;
-		background: rgb(var(--gray-light));
-		color: rgb(var(--gray-dark));
+		grid-row-gap: var(--cl-m-gap);
+		grid-template-rows: auto;
+		grid-template-areas:
+			"media"
+			"heading"
+			"subheading"
+			"button";
+	}
+
+	.zone-cta__heading {
+		grid-area: heading;
+	}
+
+	.zone-cta__subheading {
+		grid-area: subheading;
+	}
+
+	.zone-cta__media {
+		grid-area: media;
+	}
+
+	:global(.zone-cta__link) {
+		grid-area: button;
+		display: inline-block;
 		text-decoration: none;
-		box-shadow: var(--box-shadow);
-		transition:
-			border-color 0.2s ease,
-			transform 0.2s ease,
-			box-shadow 0.2s ease;
 	}
 
-	.zone-cta-card:hover {
-		border-color: var(--cl-accent-a0);
-		transform: translateY(-2px);
-		box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
-	}
-
-	.zone-cta-card:focus-visible {
-		outline: 2px solid var(--cl-accent-a0);
-		outline-offset: 3px;
-	}
-
-	.zone-cta--with-media .zone-cta-card {
-		grid-template-columns: minmax(0, 220px) 1fr;
-	}
-
-	.zone-cta-media {
-		min-width: 0;
-	}
-
-	.zone-cta :global(.zone-cta-picture) {
-		margin: 0;
-	}
-
-	.zone-cta :global(.zone-cta-picture img) {
-		display: block;
-		width: 100%;
-		height: auto;
-		border-radius: 8px;
-	}
-
-	.zone-cta :global(.zone-cta-picture figcaption) {
-		display: none;
-	}
-
-	.zone-cta-body {
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
-		min-width: 0;
-	}
-
-	.zone-cta-icon :global(svg) {
-		width: 1.75rem;
-		height: 1.75rem;
-		flex-shrink: 0;
-	}
-
-	.zone-cta-label {
-		flex: 1;
-		font-family: var(--cl-fancy-font);
-		font-size: 1.125rem;
-		font-weight: 600;
-		line-height: 1.3;
-	}
-
-	.zone-cta-arrow {
-		flex-shrink: 0;
-		font-size: 1.25rem;
-		color: var(--cl-accent-a0);
-		transition: transform 0.2s ease;
-	}
-
-	.zone-cta-card:hover .zone-cta-arrow {
-		transform: translateX(0.15em);
-	}
-
-	@media (max-width: 639px) {
-		.zone-cta--with-media .zone-cta-card {
-			grid-template-columns: 1fr;
+	@media (min-width: 640px) {
+		.zone-cta--with-media {
+			justify-items: start;
+			grid-row-gap: var(--cl-l-gap);
+			grid-column-gap: var(--cl-xl-gap);
+			grid-template-columns: 2fr 1fr;
+			grid-template-rows: auto;
+			grid-template-areas:
+				"media heading"
+				"media subheading"
+				"media button"
+				"media .";
 		}
 	}
 </style>

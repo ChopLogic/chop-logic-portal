@@ -4,10 +4,10 @@ import { buildCmsLinkRel } from "./Link.helpers";
 
 interface Props {
 	link: Link;
-	class?: string;
+	className?: string;
 }
 
-const { link, class: className } = Astro.props;
+const { link, className } = Astro.props;
 const rel = buildCmsLinkRel(link);
 ---
 
@@ -16,7 +16,7 @@ const rel = buildCmsLinkRel(link);
 	target={link.target}
 	rel={rel}
 	referrerpolicy={link.referrerpolicy}
-	class:list={className}
+	class={className}
 >
 	<slot />
 </a>
