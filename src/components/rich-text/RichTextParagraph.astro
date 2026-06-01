@@ -11,4 +11,4 @@ const { paragraph } = Astro.props;
 const innerHtml = paragraph.children.map(renderRichTextInlineHtml).join("");
 ---
 
-<p set:html={innerHtml} />
+<p set:html={innerHtml} class="rich-text-paragraph" />

@@ -46,6 +46,7 @@ export const METADATA_PROJECTION = `
 `;
 
 export const PARAGRAPH_PROJECTION = `
+  __typename
   id
   heading
   subHeading
@@ -54,6 +55,7 @@ export const PARAGRAPH_PROJECTION = `
 `;
 
 export const CALL_TO_ACTION_PROJECTION = `
+  __typename
   id  
   heading
   subHeading
@@ -66,6 +68,7 @@ export const CALL_TO_ACTION_PROJECTION = `
 `;
 
 export const GALLERY_PROJECTION = `
+  __typename
   id
   heading
   subHeading
@@ -76,6 +79,7 @@ export const GALLERY_PROJECTION = `
 `;
 
 export const EMBEDDED_VIDEO_PROJECTION = `
+  __typename
   id
   heading
   subHeading
@@ -85,6 +89,7 @@ export const EMBEDDED_VIDEO_PROJECTION = `
 `;
 
 export const MEDIA_PROJECTION = `
+  __typename
   id
   heading
   subHeading
@@ -104,6 +109,7 @@ export const TAG_PROJECTION = `
 `;
 
 export const REFERENCE_LIST_PROJECTION = `
+  __typename
   id
   heading
   subHeading

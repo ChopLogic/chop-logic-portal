@@ -1,0 +1,60 @@
+---
+import Footer from "../components/footer/Footer.astro";
+import Header from "../components/header/Header.astro";
+import MetaData from "../components/meta-data/MetaData.astro";
+import ZoneContent from "../components/zone-content/ZoneContent.astro";
+import type {
+	Link,
+	RichTextContent,
+	SinglePageWithDynamicContentData,
+} from "../lib/content/models";
+
+type Props = SinglePageWithDynamicContentData & {
+	siteTitle: string;
+	footer: RichTextContent;
+	links: Link[];
+};
+
+const { siteTitle, footer, links, subTitle, title, content, metaData } =
+	Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<MetaData siteTitle={siteTitle} metaData={metaData} />
+		<style>
+			main {
+				padding: var(--cl-xl-gap);
+				max-width: 1200px;
+				margin: 0 auto;
+			}
+
+			.page-hero {
+				padding-bottom: var(--cl-xl-gap);
+				text-align: center;
+				border-bottom: var(--cl-light-border);
+			}
+
+			.page-title {
+				font-family: var(--cl-monospace-font);
+				font-weight: normal;
+			}
+			
+			.page-subtitle {
+				font-style: italic;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="page-hero">
+				<h1 class="page-title">{title}</h1>
+				{subTitle && <p class="page-subtitle">{subTitle}</p>}
+			</div>
+			<ZoneContent content={content} />
+		</main>
+		<Footer content={footer} links={links} />
+	</body>
+</html>

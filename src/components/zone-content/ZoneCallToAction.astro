@@ -1,0 +1,87 @@
+---
+import { Button } from "chop-logic-components";
+import type { DynamicZoneCallToAction } from "../../lib/content/models/dynamic-zone";
+import Link from "../link/Link.astro";
+import Picture from "../picture/Picture.astro";
+import { CMS_PICTURE_SIZES } from "../picture/Picture.helpers";
+
+interface Props {
+	callToAction: DynamicZoneCallToAction;
+}
+
+const { callToAction } = Astro.props;
+const { heading, subHeading, link, picture } = callToAction;
+---
+
+<section
+	class:list={["zone-cta", { "zone-cta--with-media": Boolean(picture) }]}
+>
+	{
+		picture && (
+			<div class="zone-cta__media">
+				<Picture item={picture} sizes={CMS_PICTURE_SIZES.cta} />
+			</div>
+		)
+	}
+	<h4 class="zone-cta__heading">{heading}</h4>
+	{subHeading && <h5 class="zone-cta__subheading">{subHeading}</h5>}
+	<Link link={link} className="zone-cta__link">
+		<Button text={link.text} />
+	</Link>
+</section>
+
+<style>
+	.zone-cta {
+		display: grid;
+		justify-items: center;
+		grid-template-columns: auto;
+		grid-template-areas:
+			"heading"
+			"subheading"
+			"button";
+	}
+
+	.zone-cta--with-media {
+		grid-template-columns: 1fr;
+		grid-row-gap: var(--cl-m-gap);
+		grid-template-rows: auto;
+		grid-template-areas:
+			"media"
+			"heading"
+			"subheading"
+			"button";
+	}
+
+	.zone-cta__heading {
+		grid-area: heading;
+	}
+
+	.zone-cta__subheading {
+		grid-area: subheading;
+	}
+
+	.zone-cta__media {
+		grid-area: media;
+	}
+
+	:global(.zone-cta__link) {
+		grid-area: button;
+		display: inline-block;
+		text-decoration: none;
+	}
+
+	@media (min-width: 640px) {
+		.zone-cta--with-media {
+			justify-items: start;
+			grid-row-gap: var(--cl-l-gap);
+			grid-column-gap: var(--cl-xl-gap);
+			grid-template-columns: 2fr 1fr;
+			grid-template-rows: auto;
+			grid-template-areas:
+				"media heading"
+				"media subheading"
+				"media button"
+				"media .";
+		}
+	}
+</style>

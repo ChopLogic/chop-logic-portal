@@ -1,0 +1,122 @@
+body {
+	color: var(--cl-base-font-color);
+	font-weight: normal;
+	letter-spacing: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+p,
+span,
+a,
+li,
+time,
+div {
+	font-family: var(--cl-core-font);
+	font-size: var(--cl-typography-base-mobile);
+	margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: var(--cl-fancy-font);
+	margin: 0;
+}
+
+h1 {
+	font-size: var(--cl-typography-h1-mobile);
+}
+
+h2 {
+	font-size: var(--cl-typography-h2-mobile);
+}
+
+h3 {
+	font-size: var(--cl-typography-h3-mobile);
+}
+
+h4 {
+	font-size: var(--cl-typography-h4-mobile);
+}
+
+h5 {
+	font-size: var(--cl-typography-h5-mobile);
+}
+
+h6 {
+	font-size: var(--cl-typography-h6-mobile);
+}
+
+@media (min-width: 640px) {
+	p,
+	span,
+	a,
+	li,
+	time,
+	div {
+		font-size: var(--cl-typography-base-tablet);
+	}
+
+	h1 {
+		font-size: var(--cl-typography-h1-tablet);
+	}
+
+	h2 {
+		font-size: var(--cl-typography-h2-tablet);
+	}
+
+	h3 {
+		font-size: var(--cl-typography-h3-tablet);
+	}
+
+	h4 {
+		font-size: var(--cl-typography-h4-tablet);
+	}
+
+	h5 {
+		font-size: var(--cl-typography-h5-tablet);
+	}
+
+	h6 {
+		font-size: var(--cl-typography-h6-tablet);
+	}
+}
+
+@media (min-width: 1024px) {
+	p,
+	span,
+	a,
+	li,
+	time,
+	div {
+		font-size: var(--cl-typography-base-desktop);
+	}
+
+	h1 {
+		font-size: var(--cl-typography-h1-desktop);
+	}
+
+	h2 {
+		font-size: var(--cl-typography-h2-desktop);
+	}
+
+	h3 {
+		font-size: var(--cl-typography-h3-desktop);
+	}
+
+	h4 {
+		font-size: var(--cl-typography-h4-desktop);
+	}
+
+	h5 {
+		font-size: var(--cl-typography-h5-desktop);
+	}
+
+	h6 {
+		font-size: var(--cl-typography-h6-desktop);
+	}
+}

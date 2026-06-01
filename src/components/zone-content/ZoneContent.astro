@@ -1,0 +1,51 @@
+---
+import {
+	DynamicZoneComponentType,
+	type DynamicZoneContent,
+} from "../../lib/content/models/dynamic-zone";
+import ZoneCallToAction from "./ZoneCallToAction.astro";
+import ZoneEmbeddedVideo from "./ZoneEmbeddedVideo.astro";
+import ZoneGallery from "./ZoneGallery.astro";
+import ZoneParagraph from "./ZoneParagraph.astro";
+import ZonePicture from "./ZonePicture.astro";
+import ZoneReferenceList from "./ZoneReferenceList.astro";
+
+interface Props {
+	content: DynamicZoneContent;
+}
+
+const { content } = Astro.props;
+---
+
+<div class="zone-content">
+	{
+		content.map((item) => {
+			switch (item.type) {
+				case DynamicZoneComponentType.Paragraph:
+					return <ZoneParagraph paragraph={item} />;
+				case DynamicZoneComponentType.CallToAction:
+					return <ZoneCallToAction callToAction={item} />;
+				case DynamicZoneComponentType.Gallery:
+					return <ZoneGallery gallery={item} />;
+				case DynamicZoneComponentType.EmbeddedVideo:
+					return <ZoneEmbeddedVideo embeddedVideo={item} />;
+				case DynamicZoneComponentType.ReferenceList:
+					return <ZoneReferenceList referenceList={item} />;
+				case DynamicZoneComponentType.Picture:
+					return <ZonePicture picture={item} />;
+				default:
+					return null;
+			}
+		})
+	}
+</div>
+
+<style>
+	.zone-content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding-top: var(--cl-xl-gap);
+		gap: var(--cl-l-gap);
+	}
+</style>

@@ -1,0 +1,13 @@
+---
+import type { DynamicZonePicture } from "../../lib/content/models/dynamic-zone";
+import Picture from "../picture/Picture.astro";
+
+interface Props {
+	picture: DynamicZonePicture;
+}
+
+const { picture } = Astro.props;
+const { item, publicationDate } = picture;
+---
+
+<Picture item={item} date={publicationDate} />

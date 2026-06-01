@@ -1,0 +1,41 @@
+---
+import type { DynamicZoneReferenceList } from "../../lib/content/models/dynamic-zone";
+import Link from "../link/Link.astro";
+
+interface Props {
+	referenceList: DynamicZoneReferenceList;
+}
+
+const { referenceList } = Astro.props;
+const { id, heading, subHeading, links } = referenceList;
+const headingId = `zone-references-heading-${id}`;
+---
+
+<section
+	class="zone-references"
+	role="region"
+	aria-labelledby={headingId}
+>
+	<h2 id={headingId}>{heading}</h2>
+	{subHeading && <h3>{subHeading}</h3>}
+	{
+		links.length > 0 ? (
+			<ol class="zone-references-list">
+				{links.map((link, index) => (
+					<li
+						id={`ref-${id}-${index + 1}`}
+						class="zone-references-item"
+					>
+						<cite>
+							<Link link={link} className="zone-references-link">
+								{link.text}
+							</Link>
+						</cite>
+					</li>
+				))}
+			</ol>
+		) : (
+			<p class="zone-references-empty">No references yet.</p>
+		)
+	}
+</section>

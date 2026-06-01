@@ -1,0 +1,67 @@
+---
+import type { DynamicZoneEmbeddedVideo } from "../../lib/content/models/dynamic-zone";
+import Link from "../link/Link.astro";
+import { resolveEmbedVideoSource } from "./embed-video";
+
+interface Props {
+	embeddedVideo: DynamicZoneEmbeddedVideo;
+}
+
+const { embeddedVideo } = Astro.props;
+const { heading, subHeading, link } = embeddedVideo;
+const embed = resolveEmbedVideoSource(link.url);
+const iframeTitle = link.text || heading;
+---
+
+<section
+	class:list={[
+		"zone-embedded-video",
+		embed && `zone-embedded-video--${embed.provider}`,
+	]}
+>
+	<h2>{heading}</h2>
+	{subHeading && <h3>{subHeading}</h3>}
+	{
+		embed ? (
+			<div class="zone-embedded-video__player">
+				<iframe
+					src={embed.embedUrl}
+					title={iframeTitle}
+					loading="lazy"
+					referrerpolicy={link.referrerpolicy}
+					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+					allowfullscreen
+				/>
+			</div>
+		) : (
+			<p class="zone-embedded-video__fallback">
+				This video cannot be embedded.
+				<Link link={link}>Watch {link.text}</Link>
+			</p>
+		)
+	}
+</section>
+
+<style>
+	.zone-embedded-video {
+		width: 100%;
+	}
+
+	.zone-embedded-video__player {
+		position: relative;
+		width: 100%;
+		margin-inline: auto;
+		aspect-ratio: 16 / 9;
+		overflow: hidden;
+		border-radius: var(--cl-border-radius);
+		box-shadow: var(--cl-box-shadow);
+	}
+
+	.zone-embedded-video__player iframe {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		border: 0;
+	}
+</style>

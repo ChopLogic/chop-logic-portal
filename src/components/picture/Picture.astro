@@ -1,0 +1,61 @@
+---
+import { DEFAULT_ALT_TEXT } from "../../constants/defaults";
+import type { CmsImage } from "../../lib/content/models/image";
+import FormattedDate from "../FormattedDate.astro";
+import { buildCmsPictureAttributes } from "./Picture.helpers";
+
+interface Props {
+	item: CmsImage;
+	sizes?: string;
+	className?: string;
+	date?: Date;
+}
+
+const { item, sizes, className, date } = Astro.props;
+const alt = item.alternativeText ?? DEFAULT_ALT_TEXT;
+const {
+	src,
+	srcset,
+	sizes: resolvedSizes,
+} = buildCmsPictureAttributes(item, { sizes });
+---
+
+<figure class:list={["picture", className]}>
+	<picture>
+		<img
+			src={src}
+			{...srcset ? { srcset, sizes: resolvedSizes } : {}}
+			alt={alt}
+			loading="lazy"
+			decoding="async"
+			class="picture__image"
+		/>
+	</picture>
+	{
+		item.caption && (
+			<figcaption class="picture__caption">
+				<span>{item.caption}</span>
+				{date && <span aria-hidden="true">|</span>}
+				{date && <FormattedDate date={date} />}
+			</figcaption>
+		)
+	}
+</figure>
+
+<style>
+	.picture__image {
+		display: block;
+		max-width: 100%;
+		height: auto;
+		border-radius: var(--cl-border-radius);
+		box-shadow: var(--cl-box-shadow);
+	}
+
+	.picture__caption {
+		padding-top: var(--cl-m-gap);
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		gap: var(--cl-s-gap);
+	}
+</style>

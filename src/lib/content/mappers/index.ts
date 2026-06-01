@@ -1,4 +1,13 @@
 export {
+	mapDynamicZoneContent,
+	mapEmbeddedVideo,
+	mapPicture,
+	mapReferenceList,
+	mapZoneCallToAction,
+	mapZoneParagraph,
+} from "./dynamic-zone";
+export { mapHomePage } from "./home-page";
+export {
 	mapCmsImage,
 	pickOpenGraphCmsImage,
 	resolveMediaAbsoluteUrl,

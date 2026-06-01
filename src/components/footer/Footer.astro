@@ -25,15 +25,33 @@ const hasSocialLinks = links.some((l) => l.platform);
 </footer>
 <style>
 	footer {
-		padding: 2rem 1rem 6rem 1rem;
+		padding: 2rem 2rem 6rem 2rem;
 		background: linear-gradient(var(--cl-surface-a10), var(--cl-surface-a0)) no-repeat;
-		color: var(--cl-base-font-color);
 		text-align: center;
+		color: var(--cl-base-font-color);
+		font-family: var(--cl-core-font);
+		font-size: var(--cl-typography-small-mobile);
+		font-weight: normal;
+		letter-spacing: normal;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
 	}
 	.social-links {
 		display: flex;
 		justify-content: center;
 		gap: 1rem;
 		margin-top: 1rem;
+	}
+
+	@media (min-width: 640px) {
+		footer {
+			font-size: var(--cl-typography-small-tablet);
+		}
+	}
+
+	@media (min-width: 1024px) {
+		footer {
+			font-size: var(--cl-typography-small-desktop);
+		}
 	}
 </style>

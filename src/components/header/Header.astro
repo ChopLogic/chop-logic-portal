@@ -20,13 +20,6 @@ import HeaderLink from "./HeaderLink.astro";
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-family: var(--cl-fancy-font);
-		font-weight: normal;
-		line-height: 1.5;
-		letter-spacing: normal;
-		-webkit-font-smoothing: antialiased;
-		-moz-osx-font-smoothing: grayscale;
-		font-size: var(--cl-typography-base-mobile);
 	}
 	nav {
 		display: flex;
@@ -47,16 +40,5 @@ import HeaderLink from "./HeaderLink.astro";
 		text-shadow: none;
 		cursor: default;
 		color: var(--cl-accent-a0);
-	}
-	@media (min-width: 640px) {
-		header {
-			font-size: var(--cl-typography-base-tablet);
-		}
-	}
-
-	@media (min-width: 1024px) {
-		header {
-			font-size: var(--cl-typography-base-desktop);
-		}
 	}
 </style>

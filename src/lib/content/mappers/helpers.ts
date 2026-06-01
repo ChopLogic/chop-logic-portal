@@ -42,3 +42,19 @@ export function normalizeRequiredNumber(
 
 	return v;
 }
+
+export function normalizeRequiredDate(value: unknown): Date {
+	if (value instanceof Date) {
+		return value;
+	}
+
+	const raw = normalizeRequiredString(value);
+	const iso = raw.includes("T") ? raw : `${raw}T00:00:00.000Z`;
+	const date = new Date(iso);
+	if (Number.isNaN(date.getTime())) {
+		throw new Error(
+			`Value ${JSON.stringify(value)} is not a valid publication date`,
+		);
+	}
+	return date;
+}
