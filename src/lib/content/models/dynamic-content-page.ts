@@ -1,7 +1,7 @@
 import type { DynamicZoneContent } from "./dynamic-zone";
 import type { MetaData } from "./meta-data";
 
-export interface HomePage {
+export interface DynamicContentPage {
 	readonly documentId: string;
 	readonly title: string;
 	readonly subTitle?: string;

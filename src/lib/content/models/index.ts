@@ -1,5 +1,5 @@
 export * from "./article";
-export * from "./home-page";
+export * from "./dynamic-content-page";
 export * from "./image";
 export * from "./json";
 export * from "./link";

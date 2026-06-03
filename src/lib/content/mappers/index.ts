@@ -1,3 +1,4 @@
+export { mapDynamicContentPage } from "./dynamic-content-page";
 export {
 	mapDynamicZoneContent,
 	mapEmbeddedVideo,
@@ -6,7 +7,6 @@ export {
 	mapZoneCallToAction,
 	mapZoneParagraph,
 } from "./dynamic-zone";
-export { mapHomePage } from "./home-page";
 export {
 	mapCmsImage,
 	pickOpenGraphCmsImage,

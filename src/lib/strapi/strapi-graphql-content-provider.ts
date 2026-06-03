@@ -1,11 +1,11 @@
 /** biome-ignore-all lint/complexity/useLiteralKeys: Access to unknown keys */
 import { ArticleNotFoundError } from "../content/errors";
-import { mapHomePage, mapSiteConfig } from "../content/mappers";
+import { mapDynamicContentPage, mapSiteConfig } from "../content/mappers";
 import { isRecord } from "../content/mappers/checkers";
 import type {
 	ArticleDetail,
 	ArticleSummary,
-	HomePage,
+	DynamicContentPage,
 	SingletonPage,
 	SiteConfig,
 } from "../content/models";
@@ -67,14 +67,14 @@ function singletonLabel(key: SingletonKey): string {
 export class StrapiGraphqlContentProvider implements ContentPort {
 	constructor(private readonly config: StrapiGraphqlClientConfig) {}
 
-	private mapHomeFromGraphql(document: unknown): HomePage {
+	private mapHomeFromGraphql(document: unknown): DynamicContentPage {
 		if (document == null || !isRecord(document)) {
 			throw new Error(
 				"Home is missing, unpublished, or not returned by the CMS. Publish the single type in Strapi or check STRAPI_URL and API permissions.",
 			);
 		}
 		const entity = parseSingletonEntity(document);
-		return mapHomePage(entity, this.config.baseUrl);
+		return mapDynamicContentPage(entity, this.config.baseUrl);
 	}
 
 	private mapSingletonFromGraphql(
@@ -176,7 +176,9 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 		};
 	}
 
-	async getSingleton(key: SingletonKey): Promise<HomePage | SingletonPage> {
+	async getSingleton(
+		key: SingletonKey,
+	): Promise<DynamicContentPage | SingletonPage> {
 		if (key === "home") {
 			const document = (
 				await strapiGraphqlRequest<{ home: unknown }>(
