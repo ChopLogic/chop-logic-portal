@@ -67,10 +67,12 @@ function singletonLabel(key: SingletonKey): string {
 export class StrapiGraphqlContentProvider implements ContentPort {
 	constructor(private readonly config: StrapiGraphqlClientConfig) {}
 
-	private mapHomeFromGraphql(document: unknown): DynamicContentPage {
+	private mapDynamicContentPageFromGraphQL(
+		document: unknown,
+	): DynamicContentPage {
 		if (document == null || !isRecord(document)) {
 			throw new Error(
-				"Home is missing, unpublished, or not returned by the CMS. Publish the single type in Strapi or check STRAPI_URL and API permissions.",
+				"Page is missing, unpublished, or not returned by the CMS. Publish the single type in Strapi or check STRAPI_URL and API permissions.",
 			);
 		}
 		const entity = parseSingletonEntity(document);
@@ -143,7 +145,7 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 		}>(this.config, ABOUT_AND_CONFIG_QUERY);
 		const siteConfig = this.mapSiteConfigFromGraphql(data.config);
 		return {
-			page: this.mapSingletonFromGraphql(data.aboutMe, "About Me"),
+			page: this.mapDynamicContentPageFromGraphQL(data.aboutMe),
 			siteConfig,
 		};
 	}
@@ -171,7 +173,7 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 		}>(this.config, HOME_AND_CONFIG_QUERY);
 		const siteConfig = this.mapSiteConfigFromGraphql(data.config);
 		return {
-			home: this.mapHomeFromGraphql(data.home),
+			home: this.mapDynamicContentPageFromGraphQL(data.home),
 			siteConfig,
 		};
 	}
@@ -186,7 +188,7 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 					HOME_PAGE_QUERY,
 				)
 			).home;
-			return this.mapHomeFromGraphql(document);
+			return this.mapDynamicContentPageFromGraphQL(document);
 		}
 
 		const document = (

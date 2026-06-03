@@ -19,7 +19,7 @@ export type BlogIndexContent = {
 };
 
 export type AboutPageContent = {
-	page: SingletonPage;
+	page: DynamicContentPage;
 	siteConfig: SiteConfig;
 };
 
