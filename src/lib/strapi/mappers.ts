@@ -4,7 +4,6 @@ import {
 	resolveMediaAbsoluteUrl,
 } from "../content/mappers";
 import { isRecord } from "../content/mappers/checkers";
-import { mediaAlt, resolveMediaUrl } from "../content/mappers/media";
 import {
 	parseRichTextDocument,
 	richTextToHtml,
@@ -14,11 +13,10 @@ import type {
 	ArticleDetail,
 	ArticleSummary,
 	ArticleTag,
-	SingletonPage,
 } from "../content/models";
 import { blocksToPlainText } from "./blocks";
 import { dynamicZoneToHtml } from "./dynamic-zone";
-import type { StrapiArticleEntity, StrapiSingletonEntity } from "./schemas";
+import type { StrapiArticleEntity } from "./schemas";
 
 function mapSeo(raw: unknown): { metaTitle: string; metaDescription: string } {
 	if (!isRecord(raw)) {
@@ -143,49 +141,4 @@ export function mapArticleToDetail(
 function blocksToHtmlFromUnknown(raw: unknown): string {
 	const doc = parseRichTextDocument(raw);
 	return doc ? richTextToHtml(doc) : "";
-}
-
-export function mapSingletonToPage(
-	baseUrl: string,
-	entity: StrapiSingletonEntity,
-): SingletonPage {
-	const metaData = mapMetaData(entity.metaData, baseUrl);
-	const heading =
-		typeof entity.heading === "string" && entity.heading.length > 0
-			? entity.heading
-			: entity.title;
-	const subHeading = entity.subHeading ?? entity.subTitle ?? null;
-	const hero = entity.heroImage;
-	let heroImageUrl: string | null = null;
-	let heroImageAlt = "";
-	if (hero != null) {
-		if (isRecord(hero) && hero["__component"] === "sections.picture") {
-			heroImageUrl = resolveMediaUrl(baseUrl, hero["image"]);
-			const altText = hero["altText"];
-			heroImageAlt =
-				typeof altText === "string" ? altText : mediaAlt(hero["image"]);
-		} else {
-			heroImageUrl = resolveMediaUrl(baseUrl, hero);
-			heroImageAlt = mediaAlt(hero);
-		}
-	}
-	const publishedRaw = entity.publishedAt;
-	const publishedAt =
-		typeof publishedRaw === "string" && publishedRaw.length > 0
-			? new Date(publishedRaw)
-			: null;
-
-	return {
-		documentId: entity.documentId,
-		slug: entity.slug,
-		title: entity.title,
-		heading,
-		subHeading: typeof subHeading === "string" ? subHeading : null,
-		metaData,
-		heroImageUrl,
-		heroImageAlt,
-		bodyHtml: dynamicZoneToHtml(baseUrl, entity.content),
-		publishedAt:
-			publishedAt && !Number.isNaN(publishedAt.getTime()) ? publishedAt : null,
-	};
 }

@@ -8,7 +8,7 @@ import { blogListingMetaData } from "../../lib/content/blog-index-meta";
 import { createContentProvider } from "../../lib/content/provider";
 
 const content = createContentProvider();
-const { articles, siteConfig } = await content.getBlogIndexContent();
+const { articles, siteConfig } = await content.getBlogPageContent();
 const posts = articles.sort(
 	(a, b) => b.pubDate.valueOf() - a.pubDate.valueOf(),
 );

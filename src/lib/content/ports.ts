@@ -2,11 +2,8 @@ import type {
 	ArticleDetail,
 	ArticleSummary,
 	DynamicContentPage,
-	SingletonPage,
 	SiteConfig,
 } from "./models";
-
-export type SingletonKey = "home" | "about-me";
 
 export type HomeIndexContent = {
 	home: DynamicContentPage;
@@ -30,8 +27,7 @@ export type ContentPort = {
 		siteTitleHint?: string,
 	): Promise<ArticleDetail>;
 	getAboutPageContent(): Promise<AboutPageContent>;
-	getBlogIndexContent(): Promise<BlogIndexContent>;
-	getHomeIndexContent(): Promise<HomeIndexContent>;
-	getSingleton(key: SingletonKey): Promise<DynamicContentPage | SingletonPage>;
+	getBlogPageContent(): Promise<BlogIndexContent>;
+	getHomePageContent(): Promise<HomeIndexContent>;
 	getSiteConfig(): Promise<SiteConfig>;
 };

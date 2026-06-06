@@ -7,7 +7,7 @@ import { createContentProvider } from "../lib/content/provider";
 
 export async function GET(context) {
 	const content = createContentProvider();
-	const { articles, siteConfig } = await content.getBlogIndexContent();
+	const { articles, siteConfig } = await content.getBlogPageContent();
 	const sorted = [...articles].sort(
 		(a, b) => b.pubDate.valueOf() - a.pubDate.valueOf(),
 	);
