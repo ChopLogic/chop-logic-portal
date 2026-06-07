@@ -4,12 +4,12 @@ import Header from "../components/header/Header.astro";
 import MetaData from "../components/meta-data/MetaData.astro";
 import ZoneContent from "../components/zone-content/ZoneContent.astro";
 import type {
+	DynamicContentPage,
 	Link,
 	RichTextContent,
-	SinglePageWithDynamicContentData,
 } from "../lib/content/models";
 
-type Props = SinglePageWithDynamicContentData & {
+type Props = DynamicContentPage & {
 	siteTitle: string;
 	footer: RichTextContent;
 	links: Link[];

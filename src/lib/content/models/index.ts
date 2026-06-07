@@ -4,6 +4,5 @@ export * from "./image";
 export * from "./json";
 export * from "./link";
 export * from "./meta-data";
-export * from "./pages";
 export * from "./rich-text-block";
 export * from "./site-config";

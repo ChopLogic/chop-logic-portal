@@ -4,7 +4,7 @@ import {
 	normalizeRequiredDate,
 	normalizeRequiredNumber,
 	normalizeRequiredString,
-} from "../helpers";
+} from "../normalizers";
 
 describe("normalizeOptionalString", () => {
 	it("returns trimmed string for non-empty string input", () => {

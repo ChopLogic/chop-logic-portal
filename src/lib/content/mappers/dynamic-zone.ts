@@ -16,13 +16,13 @@ import {
 	type DynamicZoneReferenceList,
 } from "../models/dynamic-zone";
 import { isRecord } from "./checkers";
+import { mapCmsImage } from "./image";
+import { mapLink } from "./link";
 import {
 	normalizeOptionalString,
 	normalizeRequiredDate,
 	normalizeRequiredString,
-} from "./helpers";
-import { mapCmsImage } from "./image";
-import { mapLink } from "./link";
+} from "./normalizers";
 import { mapRichTextBlock } from "./rich-text-block";
 
 function getCmsBaseUrl(): string {

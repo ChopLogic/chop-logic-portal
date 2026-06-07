@@ -1,11 +1,11 @@
 import type { DynamicContentPage } from "../models/dynamic-content-page";
 import { mapDynamicZoneContent } from "./dynamic-zone";
+import { mapMetaData } from "./meta-data";
 import {
 	normalizeOptionalString,
 	normalizeRequiredDate,
 	normalizeRequiredString,
-} from "./helpers";
-import { mapMetaData } from "./meta-data";
+} from "./normalizers";
 
 export function mapDynamicContentPage(
 	entity: {
