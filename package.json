@@ -23,18 +23,18 @@
 		"test:coverage": "vitest run --coverage"
 	},
 	"dependencies": {
-		"@astrojs/mdx": "^6.0.1",
-		"@astrojs/react": "^5.0.6",
+		"@astrojs/mdx": "^6.0.2",
+		"@astrojs/react": "^5.0.7",
 		"@astrojs/rss": "^4.0.18",
 		"@astrojs/sitemap": "^3.7.3",
-		"@types/react": "^19.2.15",
+		"@types/react": "^19.2.17",
 		"@types/react-dom": "^19.2.3",
-		"astro": "^6.4.2",
+		"astro": "^6.4.4",
 		"chop-logic-components": "^4.1.1",
-		"graphql": "^16.14.0",
+		"graphql": "^16.14.1",
 		"graphql-request": "^7.4.0",
-		"react": "^19.2.6",
-		"react-dom": "^19.2.6",
+		"react": "^19.2.7",
+		"react-dom": "^19.2.7",
 		"zod": "^4.4.3"
 	},
 	"devDependencies": {
