@@ -17,7 +17,7 @@ import {
 	normalizeOptionalString,
 	normalizeRequiredNumber,
 	normalizeRequiredString,
-} from "./helpers";
+} from "./normalizers";
 
 function mapFormatVariant(
 	raw: unknown,

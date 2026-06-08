@@ -8,7 +8,7 @@ import {
 	SocialPlatform,
 } from "../models";
 import { isRecord } from "./checkers";
-import { normalizeRequiredString } from "./helpers";
+import { normalizeRequiredString } from "./normalizers";
 
 function normalizeLinkTarget(raw: unknown): LinkTarget {
 	if (raw === "_self" || raw === "self") {

@@ -1,9 +1,6 @@
 /** biome-ignore-all lint/complexity/useLiteralKeys: Access to unknown keys */
 import { isRecord } from "./checkers";
 
-/**
- * Resolves Strapi upload `url` (often relative) to an absolute URL.
- */
 export function resolveMediaUrl(
 	baseUrl: string,
 	media: unknown,
@@ -30,16 +27,4 @@ export function resolveMediaUrl(
 		return url;
 	}
 	return new URL(url, `${baseUrl}/`).toString();
-}
-
-export function mediaAlt(media: unknown): string {
-	if (!isRecord(media)) {
-		return "";
-	}
-	const alt = media["alternativeText"];
-	if (typeof alt === "string" && alt.length > 0) {
-		return alt;
-	}
-	const name = media["name"];
-	return typeof name === "string" ? name : "";
 }

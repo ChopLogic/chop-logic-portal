@@ -1,12 +1,11 @@
 /** biome-ignore-all lint/complexity/useLiteralKeys: Access to unknown keys */
 import { ArticleNotFoundError } from "../content/errors";
-import { mapHomePage, mapSiteConfig } from "../content/mappers";
+import { mapDynamicContentPage, mapSiteConfig } from "../content/mappers";
 import { isRecord } from "../content/mappers/checkers";
 import type {
 	ArticleDetail,
 	ArticleSummary,
-	HomePage,
-	SingletonPage,
+	DynamicContentPage,
 	SiteConfig,
 } from "../content/models";
 import type {
@@ -14,23 +13,16 @@ import type {
 	BlogIndexContent,
 	ContentPort,
 	HomeIndexContent,
-	SingletonKey,
 } from "../content/ports";
 import type { StrapiGraphqlClientConfig } from "./graphql/client";
 import { strapiGraphqlRequest } from "./graphql/client";
 import { normalizeDynamicZoneFromGraphql } from "./graphql/normalize";
-import {
-	mapArticleToDetail,
-	mapArticleToSummary,
-	mapSingletonToPage,
-} from "./mappers";
+import { mapArticleToDetail, mapArticleToSummary } from "./mappers";
 import { ABOUT_AND_CONFIG_QUERY } from "./queries/about-and-config";
-import { ABOUT_ME_QUERY } from "./queries/about-me";
 import { ARTICLE_BY_SLUG_QUERY, ARTICLES_LIST_QUERY } from "./queries/articles";
 import { ARTICLES_AND_CONFIG_QUERY } from "./queries/articles-and-config";
 import { CONFIG_QUERY } from "./queries/config";
 import { HOME_AND_CONFIG_QUERY } from "./queries/home-and-config";
-import { HOME_PAGE_QUERY } from "./queries/home-page";
 import {
 	parseArticleEntity,
 	parseConfigEntity,
@@ -49,46 +41,19 @@ function normalizeArticleFromGraphql(raw: unknown): unknown {
 	return next;
 }
 
-function normalizeSingletonFromGraphql(raw: unknown): unknown {
-	if (!isRecord(raw)) {
-		return raw;
-	}
-	const next: Record<string, unknown> = { ...raw };
-	if (next["content"] !== undefined) {
-		next["content"] = normalizeDynamicZoneFromGraphql(next["content"]);
-	}
-	return next;
-}
-
-function singletonLabel(key: SingletonKey): string {
-	return key === "home" ? "Home" : "About Me";
-}
-
 export class StrapiGraphqlContentProvider implements ContentPort {
 	constructor(private readonly config: StrapiGraphqlClientConfig) {}
 
-	private mapHomeFromGraphql(document: unknown): HomePage {
+	private mapDynamicContentPageFromGraphQL(
+		document: unknown,
+	): DynamicContentPage {
 		if (document == null || !isRecord(document)) {
 			throw new Error(
-				"Home is missing, unpublished, or not returned by the CMS. Publish the single type in Strapi or check STRAPI_URL and API permissions.",
+				"Page is missing, unpublished, or not returned by the CMS. Publish the single type in Strapi or check STRAPI_URL and API permissions.",
 			);
 		}
 		const entity = parseSingletonEntity(document);
-		return mapHomePage(entity, this.config.baseUrl);
-	}
-
-	private mapSingletonFromGraphql(
-		document: unknown,
-		cmsLabel: string,
-	): SingletonPage {
-		if (document == null || !isRecord(document)) {
-			throw new Error(
-				`${cmsLabel} is missing, unpublished, or not returned by the CMS. Publish the single type in Strapi or check STRAPI_URL and API permissions.`,
-			);
-		}
-		const normalized = normalizeSingletonFromGraphql(document);
-		const entity = parseSingletonEntity(normalized);
-		return mapSingletonToPage(this.config.baseUrl, entity);
+		return mapDynamicContentPage(entity, this.config.baseUrl);
 	}
 
 	private mapSiteConfigFromGraphql(config: unknown): SiteConfig {
@@ -124,7 +89,7 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 		return this.mapArticleListResponse(data);
 	}
 
-	async getBlogIndexContent(): Promise<BlogIndexContent> {
+	async getBlogPageContent(): Promise<BlogIndexContent> {
 		const data = await strapiGraphqlRequest<{
 			articles: unknown[];
 			config: unknown;
@@ -143,7 +108,7 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 		}>(this.config, ABOUT_AND_CONFIG_QUERY);
 		const siteConfig = this.mapSiteConfigFromGraphql(data.config);
 		return {
-			page: this.mapSingletonFromGraphql(data.aboutMe, "About Me"),
+			page: this.mapDynamicContentPageFromGraphQL(data.aboutMe),
 			siteConfig,
 		};
 	}
@@ -164,36 +129,16 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 		return mapArticleToDetail(this.config.baseUrl, entity);
 	}
 
-	async getHomeIndexContent(): Promise<HomeIndexContent> {
+	async getHomePageContent(): Promise<HomeIndexContent> {
 		const data = await strapiGraphqlRequest<{
 			home: unknown;
 			config: unknown;
 		}>(this.config, HOME_AND_CONFIG_QUERY);
 		const siteConfig = this.mapSiteConfigFromGraphql(data.config);
 		return {
-			home: this.mapHomeFromGraphql(data.home),
+			home: this.mapDynamicContentPageFromGraphQL(data.home),
 			siteConfig,
 		};
-	}
-
-	async getSingleton(key: SingletonKey): Promise<HomePage | SingletonPage> {
-		if (key === "home") {
-			const document = (
-				await strapiGraphqlRequest<{ home: unknown }>(
-					this.config,
-					HOME_PAGE_QUERY,
-				)
-			).home;
-			return this.mapHomeFromGraphql(document);
-		}
-
-		const document = (
-			await strapiGraphqlRequest<{ aboutMe: unknown }>(
-				this.config,
-				ABOUT_ME_QUERY,
-			)
-		).aboutMe;
-		return this.mapSingletonFromGraphql(document, singletonLabel(key));
 	}
 
 	async getSiteConfig(): Promise<SiteConfig> {

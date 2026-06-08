@@ -1,9 +1,9 @@
 ---
-import Layout from "../layouts/SinglePageWithDynamicContent.astro";
+import Layout from "../layouts/DynamicContentPage.astro";
 import { createContentProvider } from "../lib/content/provider";
 
 const provider = createContentProvider();
-const { home, siteConfig } = await provider.getHomeIndexContent();
+const { home, siteConfig } = await provider.getHomePageContent();
 const { siteTitle, footer, links } = siteConfig;
 const { title, subTitle, content, metaData, documentId, slug, updatedAt } =
 	home;

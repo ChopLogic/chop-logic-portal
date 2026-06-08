@@ -1,15 +1,16 @@
+/** biome-ignore-all lint/complexity/useLiteralKeys: Access to unknown keys */
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DynamicZoneComponentType } from "../../models/dynamic-zone";
-import { mapHomePage } from "../home-page";
+import { mapDynamicContentPage } from "../dynamic-content-page";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const mocksDir = join(__dirname, "../../../strapi/__mocks__");
 const baseUrl = "https://cms.example.com";
 
-describe("mapHomePage", () => {
+describe("mapDynamicContentPage", () => {
 	beforeEach(() => {
 		vi.stubEnv("STRAPI_URL", baseUrl);
 	});
@@ -27,7 +28,7 @@ describe("mapHomePage", () => {
 			unknown
 		>;
 
-		const page = mapHomePage(
+		const page = mapDynamicContentPage(
 			{
 				documentId: home["documentId"] as string,
 				title: home["title"] as string,

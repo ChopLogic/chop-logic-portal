@@ -12,10 +12,6 @@ export type CmsImageFormats = Partial<
 	Record<CmsImageFormatName, CmsImageFormatVariant>
 >;
 
-/**
- * CMS image with relative `url` as returned by Strapi. Resolve to absolute URLs
- * with helpers in `content/mappers/image` (for `astro:assets` / `<img>`).
- */
 export interface CmsImage {
 	readonly documentId: string;
 	readonly name: string;

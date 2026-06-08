@@ -13,8 +13,11 @@ import {
 	type OpenGraphImageMeta,
 } from "../models";
 import { isRecord } from "./checkers";
-import { normalizeOptionalString, normalizeRequiredString } from "./helpers";
 import { mapCmsImage, pickOpenGraphCmsImage } from "./image";
+import {
+	normalizeOptionalString,
+	normalizeRequiredString,
+} from "./normalizers";
 
 function normalizeOgType(raw: unknown): OgType {
 	if (

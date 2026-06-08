@@ -6,7 +6,7 @@ import { createContentProvider } from "../../lib/content/provider";
 
 export async function getStaticPaths() {
 	const content = createContentProvider();
-	const { articles, siteConfig } = await content.getBlogIndexContent();
+	const { articles, siteConfig } = await content.getBlogPageContent();
 	const siteTitle =
 		siteConfig.siteTitle.trim() !== ""
 			? siteConfig.siteTitle.trim()

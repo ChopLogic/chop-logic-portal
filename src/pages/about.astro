@@ -1,23 +1,23 @@
 ---
-import Layout from "../layouts/BlogPost.astro";
+import Layout from "../layouts/DynamicContentPage.astro";
 import { createContentProvider } from "../lib/content/provider";
 
-const content = createContentProvider();
-const { page, siteConfig } = await content.getAboutPageContent();
-const { siteTitle, logo, footer, links } = siteConfig;
+const provider = createContentProvider();
+const { page, siteConfig } = await provider.getAboutPageContent();
+const { siteTitle, footer, links } = siteConfig;
+const { title, subTitle, content, metaData, documentId, slug, updatedAt } =
+	page;
 ---
 
 <Layout
 	siteTitle={siteTitle}
-	logo={logo}
 	footer={footer}
 	links={links}
-	metaData={page.metaData}
-	title={page.heading}
-	pubDate={page.publishedAt ?? new Date()}
-	heroImageUrl={page.heroImageUrl}
-	heroImageAlt={page.heroImageAlt}
->
-	{page.subHeading && <p>{page.subHeading}</p>}
-	<div class="cms-body" set:html={page.bodyHtml} />
-</Layout>
+	title={title}
+	subTitle={subTitle}
+	content={content}
+	metaData={metaData}
+	documentId={documentId}
+	slug={slug}
+	updatedAt={updatedAt}
+/>
