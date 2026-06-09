@@ -10,7 +10,8 @@ export type HomeIndexContent = {
 	siteConfig: SiteConfig;
 };
 
-export type BlogIndexContent = {
+export type BlogPageContent = {
+	page: DynamicContentPage;
 	articles: ArticleSummary[];
 	siteConfig: SiteConfig;
 };
@@ -27,7 +28,7 @@ export type ContentPort = {
 		siteTitleHint?: string,
 	): Promise<ArticleDetail>;
 	getAboutPageContent(): Promise<AboutPageContent>;
-	getBlogPageContent(): Promise<BlogIndexContent>;
+	getBlogPageContent(): Promise<BlogPageContent>;
 	getHomePageContent(): Promise<HomeIndexContent>;
 	getSiteConfig(): Promise<SiteConfig>;
 };

@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/complexity/useLiteralKeys: Access to unknown keys */
 import { ArticleNotFoundError } from "../content/errors";
 import { mapDynamicContentPage, mapSiteConfig } from "../content/mappers";
 import { isRecord } from "../content/mappers/checkers";
@@ -10,7 +9,7 @@ import type {
 } from "../content/models";
 import type {
 	AboutPageContent,
-	BlogIndexContent,
+	BlogPageContent,
 	ContentPort,
 	HomeIndexContent,
 } from "../content/ports";
@@ -20,7 +19,7 @@ import { normalizeDynamicZoneFromGraphql } from "./graphql/normalize";
 import { mapArticleToDetail, mapArticleToSummary } from "./mappers";
 import { ABOUT_AND_CONFIG_QUERY } from "./queries/about-and-config";
 import { ARTICLE_BY_SLUG_QUERY, ARTICLES_LIST_QUERY } from "./queries/articles";
-import { ARTICLES_AND_CONFIG_QUERY } from "./queries/articles-and-config";
+import { BLOG_PAGE_QUERY } from "./queries/blog";
 import { CONFIG_QUERY } from "./queries/config";
 import { HOME_AND_CONFIG_QUERY } from "./queries/home-and-config";
 import {
@@ -89,15 +88,36 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 		return this.mapArticleListResponse(data);
 	}
 
-	async getBlogPageContent(): Promise<BlogIndexContent> {
+	async getSiteConfig(): Promise<SiteConfig> {
+		const data = await strapiGraphqlRequest<{ config: unknown }>(
+			this.config,
+			CONFIG_QUERY,
+		);
+		return this.mapSiteConfigFromGraphql(data.config);
+	}
+
+	async getHomePageContent(): Promise<HomeIndexContent> {
+		const data = await strapiGraphqlRequest<{
+			home: unknown;
+			config: unknown;
+		}>(this.config, HOME_AND_CONFIG_QUERY);
+		return {
+			home: this.mapDynamicContentPageFromGraphQL(data.home),
+			siteConfig: this.mapSiteConfigFromGraphql(data.config),
+		};
+	}
+
+	async getBlogPageContent(): Promise<BlogPageContent> {
 		const data = await strapiGraphqlRequest<{
 			articles: unknown[];
+			blog: unknown;
 			config: unknown;
-		}>(this.config, ARTICLES_AND_CONFIG_QUERY);
-		const siteConfig = this.mapSiteConfigFromGraphql(data.config);
+		}>(this.config, BLOG_PAGE_QUERY);
+
 		return {
 			articles: this.mapArticleListResponse(data),
-			siteConfig,
+			page: this.mapDynamicContentPageFromGraphQL(data.blog),
+			siteConfig: this.mapSiteConfigFromGraphql(data.config),
 		};
 	}
 
@@ -106,10 +126,9 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 			aboutMe: unknown;
 			config: unknown;
 		}>(this.config, ABOUT_AND_CONFIG_QUERY);
-		const siteConfig = this.mapSiteConfigFromGraphql(data.config);
 		return {
 			page: this.mapDynamicContentPageFromGraphQL(data.aboutMe),
-			siteConfig,
+			siteConfig: this.mapSiteConfigFromGraphql(data.config),
 		};
 	}
 
@@ -127,25 +146,5 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 		const normalized = normalizeArticleFromGraphql(first);
 		const entity = parseArticleEntity(normalized);
 		return mapArticleToDetail(this.config.baseUrl, entity);
-	}
-
-	async getHomePageContent(): Promise<HomeIndexContent> {
-		const data = await strapiGraphqlRequest<{
-			home: unknown;
-			config: unknown;
-		}>(this.config, HOME_AND_CONFIG_QUERY);
-		const siteConfig = this.mapSiteConfigFromGraphql(data.config);
-		return {
-			home: this.mapDynamicContentPageFromGraphQL(data.home),
-			siteConfig,
-		};
-	}
-
-	async getSiteConfig(): Promise<SiteConfig> {
-		const data = await strapiGraphqlRequest<{ config: unknown }>(
-			this.config,
-			CONFIG_QUERY,
-		);
-		return this.mapSiteConfigFromGraphql(data.config);
 	}
 }
