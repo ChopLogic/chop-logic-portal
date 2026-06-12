@@ -9,15 +9,14 @@ import {
 	PARAGRAPH_PROJECTION,
 } from "./projections";
 
-/** Single round-trip for the home page (hero + site-wide metadata). */
-export const HOME_AND_CONFIG_QUERY = /* GraphQL */ `
-  query FetchHomeAndConfig {
-    home {
+export const ABOUT_ME_PAGE_QUERY = /* GraphQL */ `
+  query FetchAboutMePage {
+    aboutMe {
       documentId
+      updatedAt
       title
       subTitle
       slug
-      updatedAt
       content {
         ... on ComponentSectionsParagraph {
           ${PARAGRAPH_PROJECTION}
