@@ -4,19 +4,6 @@ import { createContentProvider } from "../lib/content/provider";
 
 const provider = createContentProvider();
 const { home, siteConfig } = await provider.getHomePageContent();
-const { siteTitle, footer, links } = siteConfig;
-const { title, subTitle, content, metaData, id, slug, updatedAt } = home;
 ---
 
-<Layout
-	siteTitle={siteTitle}
-	footer={footer}
-	links={links}
-	title={title}
-	subTitle={subTitle}
-	content={content}
-	metaData={metaData}
-	id={id}
-	slug={slug}
-	updatedAt={updatedAt}
-/>
+<Layout {...home} {...siteConfig} />
