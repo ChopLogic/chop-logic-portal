@@ -16,7 +16,7 @@ export interface ArticleSummary {
 	readonly subTitle?: string;
 	readonly slug: string;
 	readonly publicationDate: Date;
-	readonly summary: RichTextContent;
+	readonly excerpt: string;
 	readonly updatedAt?: Date;
 	readonly preview?: CmsImage;
 	readonly tags: Tag[];
@@ -24,6 +24,7 @@ export interface ArticleSummary {
 }
 
 export type ArticlePage = ArticleSummary & {
+	readonly summary: RichTextContent;
 	readonly content: DynamicZoneContent;
 	readonly metaData: MetaData;
 };

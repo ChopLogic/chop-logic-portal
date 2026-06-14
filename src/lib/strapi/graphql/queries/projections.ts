@@ -129,7 +129,7 @@ export const ARTICLE_SUMMARY_PROJECTION = `
   slug
   publicationDate
   updatedAt
-  summary
+  excerpt
   preview {
     ${IMAGE_PROJECTION}
   }

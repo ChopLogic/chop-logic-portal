@@ -23,6 +23,7 @@ export function mapArticlePage(
 		slug: normalizeRequiredString(entity.slug),
 		updatedAt: normalizeRequiredDate(entity.updatedAt),
 		content: mapDynamicZoneContent(entity.content),
+		excerpt: normalizeRequiredString(entity.excerpt),
 		summary: mapRichTextBlock(entity.summary),
 		authors: mapArticleAuthorConnections(entity.authors_connection?.nodes),
 		tags: mapTags(entity.tags),
@@ -38,7 +39,7 @@ export function mapArticleSummary(entity: StrapiArticleEntity): ArticleSummary {
 		publicationDate: normalizeRequiredDate(entity.publicationDate),
 		slug: normalizeRequiredString(entity.slug),
 		updatedAt: normalizeRequiredDate(entity.updatedAt),
-		summary: mapRichTextBlock(entity.summary),
+		excerpt: normalizeRequiredString(entity.excerpt),
 		authors: mapArticleAuthorConnections(entity.authors_connection?.nodes),
 		tags: mapTags(entity.tags),
 	};
