@@ -8,7 +8,7 @@ interface Props {
 }
 
 const { embeddedVideo } = Astro.props;
-const { heading, subHeading, link } = embeddedVideo;
+const { heading, subHeading, link, aspectRatio = "16/9" } = embeddedVideo;
 const embed = resolveEmbedVideoSource(link.url);
 const iframeTitle = link.text || heading;
 ---
@@ -23,7 +23,7 @@ const iframeTitle = link.text || heading;
 	{subHeading && <h3>{subHeading}</h3>}
 	{
 		embed ? (
-			<div class="zone-embedded-video__player">
+			<div class="zone-embedded-video__player" style={{aspectRatio}}>
 				<iframe
 					src={embed.embedUrl}
 					title={iframeTitle}
@@ -46,15 +46,14 @@ const iframeTitle = link.text || heading;
 	.zone-embedded-video {
 		width: 100%;
 		display: flex;
-  flex-direction: column;
-  gap: var(--cl-l-gap);
+        flex-direction: column;
+        gap: var(--cl-l-gap);
 	}
 
 	.zone-embedded-video__player {
 		position: relative;
 		width: 100%;
 		margin-inline: auto;
-		aspect-ratio: 16 / 9;
 		overflow: hidden;
 		border-radius: var(--cl-border-radius);
 		box-shadow: var(--cl-box-shadow);

@@ -9,9 +9,10 @@ interface Props {
 	sizes?: string;
 	className?: string;
 	date?: Date;
+	aspectRatio?: string;
 }
 
-const { item, sizes, className, date } = Astro.props;
+const { item, sizes, className, date, aspectRatio } = Astro.props;
 const alt = item.alternativeText ?? DEFAULT_ALT_TEXT;
 const {
 	src,
@@ -29,6 +30,7 @@ const {
 			loading="lazy"
 			decoding="async"
 			class="picture__image"
+			style={{aspectRatio}}
 		/>
 	</picture>
 	{

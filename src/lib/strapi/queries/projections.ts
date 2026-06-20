@@ -56,7 +56,7 @@ export const PARAGRAPH_PROJECTION = `
 
 export const CALL_TO_ACTION_PROJECTION = `
   __typename
-  id  
+  id
   heading
   subHeading
   picture {
@@ -73,6 +73,7 @@ export const GALLERY_PROJECTION = `
   heading
   subHeading
   layout
+  aspectRatio
   items {
     ${IMAGE_PROJECTION}
   }
@@ -83,6 +84,7 @@ export const EMBEDDED_VIDEO_PROJECTION = `
   id
   heading
   subHeading
+  aspectRatio
   link {
     ${LINK_PROJECTION}
   }
@@ -94,6 +96,7 @@ export const MEDIA_PROJECTION = `
   heading
   subHeading
   publicationDate
+  aspectRatio
   item {
     ${IMAGE_PROJECTION}
   }

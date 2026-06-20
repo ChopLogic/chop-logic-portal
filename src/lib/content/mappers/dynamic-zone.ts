@@ -131,6 +131,7 @@ export function mapEmbeddedVideo(value: unknown): DynamicZoneEmbeddedVideo {
 		heading: normalizeRequiredString(raw["heading"]),
 		subHeading: normalizeOptionalString(raw["subHeading"]),
 		link: mapRequiredLink(raw["link"], "Embedded video"),
+		aspectRatio: normalizeOptionalString(raw["aspectRatio"]),
 	};
 }
 
@@ -158,6 +159,7 @@ export function mapPicture(value: unknown): DynamicZonePicture {
 		id: normalizeRequiredString(raw["id"]),
 		publicationDate: normalizeRequiredDate(raw["publicationDate"]),
 		item,
+		aspectRatio: normalizeOptionalString(raw["aspectRatio"]),
 	};
 }
 
@@ -171,6 +173,7 @@ export function mapGallery(value: unknown): DynamicZoneGallery {
 		subHeading: normalizeOptionalString(raw["subHeading"]),
 		layout: normalizeGalleryLayout(raw["layout"]),
 		items: normalizeGalleryItems(raw["items"]),
+		aspectRatio: normalizeOptionalString(raw["aspectRatio"]),
 	};
 }
 

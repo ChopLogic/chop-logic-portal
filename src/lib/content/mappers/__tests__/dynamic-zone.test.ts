@@ -69,6 +69,7 @@ const homeEmbeddedVideoBlock = {
 	id: "7",
 	heading: "YouTube Video Title",
 	subHeading: " 732 bytes of Python just borked every Linux machine on earth… ",
+	aspectRatio: "16/9",
 	link: {
 		id: "23",
 		text: "YouTube Video Title",
@@ -83,6 +84,7 @@ const homeEmbeddedVideoBlock = {
 const homePictureBlock = {
 	id: "5",
 	publicationDate: "2026-03-04T00:00:00.000Z",
+	aspectRatio: "2/1",
 	item: {
 		documentId: "gqg6jhtzay1wox6e01g9zcb7",
 		name: "home-picture.jpg",
@@ -155,6 +157,7 @@ const aboutGalleryBlock = {
 	heading: "Gallery heading",
 	subHeading: "Gallery subheading",
 	layout: "carousel",
+	aspectRatio: "16/9",
 	items: [
 		{
 			documentId: "gallery-item-1",
@@ -243,6 +246,7 @@ describe("dynamic zone mappers", () => {
 			expect(mapped.type).toBe(DynamicZoneComponentType.Gallery);
 			expect(mapped.id).toBe("2");
 			expect(mapped.layout).toBe("carousel");
+			expect(mapped.aspectRatio).toBe("16/9");
 			expect(Array.isArray(mapped.items)).toBe(true);
 		});
 
@@ -354,6 +358,7 @@ describe("dynamic zone mappers", () => {
 
 			expect(result.type).toBe(DynamicZoneComponentType.EmbeddedVideo);
 			expect(result.id).toBe("7");
+			expect(result.aspectRatio).toBe("16/9");
 			expect(result.link.platform).toBe(SocialPlatform.YouTube);
 			expect(result.link.text).toBe("YouTube Video Title");
 		});
@@ -421,6 +426,7 @@ describe("dynamic zone mappers", () => {
 
 			expect(result.type).toBe(DynamicZoneComponentType.Picture);
 			expect(result.id).toBe("5");
+			expect(result.aspectRatio).toBe("2/1");
 			expect(result.item.documentId).toBe("gqg6jhtzay1wox6e01g9zcb7");
 			expect(result.publicationDate).toEqual(
 				new Date("2026-03-04T00:00:00.000Z"),

@@ -14,7 +14,7 @@ import type {
 import type { DynamicZoneGallery } from "../../lib/content/models/dynamic-zone";
 import {
 	buildCmsPictureAttributes,
-	CMS_PICTURE_SIZES,
+	// CMS_PICTURE_SIZES,
 } from "../picture/Picture.helpers";
 
 interface Props {
@@ -24,13 +24,13 @@ interface Props {
 const { gallery } = Astro.props;
 const { heading, subHeading, layout, items } = gallery;
 
-const pictureSizesByLayout = {
-	grid: CMS_PICTURE_SIZES.galleryGrid,
-	masonry: CMS_PICTURE_SIZES.galleryMasonry,
-	carousel: CMS_PICTURE_SIZES.galleryCarousel,
-} as const;
+// const pictureSizesByLayout = {
+// 	grid: CMS_PICTURE_SIZES.galleryGrid,
+// 	masonry: CMS_PICTURE_SIZES.galleryMasonry,
+// 	carousel: CMS_PICTURE_SIZES.galleryCarousel,
+// } as const;
 
-const pictureSizes = pictureSizesByLayout[layout];
+// const pictureSizes = pictureSizesByLayout[layout];
 
 // const sourceMediaByFormatVariantName: Record<CmsImageFormatName, string> = {
 // 	thumbnail: "(width <= 400px)",
@@ -55,7 +55,6 @@ function mapCMSImageFormatsToSources(formats: CmsImageFormats): ImageSource[] {
 		if (formatName === "thumbnail") continue;
 
 		const variant = formats[formatName] as CmsImageFormatVariant;
-		console.log("variant", variant);
 		sources.push({
 			src: variant.url,
 			type: variant.mime,
@@ -90,10 +89,9 @@ function mapCMSImageToGalleryItem(image: CmsImage): GalleryItem {
 	};
 }
 
-console.log("pictureSizes", pictureSizes);
 const galleryItems = items.map(mapCMSImageToGalleryItem);
 
-// console.log('galleryItems', galleryItems)
+console.log("gallery", gallery);
 ---
 
 <section class:list={["zone-gallery", `zone-gallery--${layout}`]}>

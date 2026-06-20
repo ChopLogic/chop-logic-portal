@@ -35,6 +35,7 @@ describe("CmsPicture.astro", () => {
 		sizes?: string;
 		class?: string;
 		date?: Date;
+		aspectRatio?: string;
 	}) {
 		return container.renderToString(Picture, { props });
 	}

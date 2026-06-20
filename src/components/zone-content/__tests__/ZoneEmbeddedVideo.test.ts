@@ -33,6 +33,7 @@ function testEmbeddedVideo(
 		heading: "Featured video",
 		subHeading: "Watch below",
 		link: testLink(),
+		aspectRatio: "16/9",
 		...overrides,
 	};
 }

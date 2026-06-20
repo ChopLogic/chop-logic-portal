@@ -7,7 +7,7 @@ interface Props {
 }
 
 const { picture } = Astro.props;
-const { item, publicationDate } = picture;
+const { item, publicationDate, aspectRatio } = picture;
 ---
 
-<Picture item={item} date={publicationDate} />
+<Picture item={item} date={publicationDate} aspectRatio={aspectRatio} />

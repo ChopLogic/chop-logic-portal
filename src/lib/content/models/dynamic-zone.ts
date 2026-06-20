@@ -36,6 +36,7 @@ export interface DynamicZoneGallery {
 	readonly subHeading?: string;
 	readonly layout: "grid" | "masonry" | "carousel";
 	readonly items: CmsImage[];
+	readonly aspectRatio?: string;
 }
 
 export interface DynamicZoneEmbeddedVideo {
@@ -43,6 +44,7 @@ export interface DynamicZoneEmbeddedVideo {
 	readonly id: string;
 	readonly heading: string;
 	readonly subHeading?: string;
+	readonly aspectRatio?: string;
 	readonly link: Link;
 }
 
@@ -59,6 +61,7 @@ export interface DynamicZonePicture {
 	readonly id: string;
 	readonly item: CmsImage;
 	readonly publicationDate: Date;
+	readonly aspectRatio?: string;
 }
 
 export type DynamicZoneComponent =
