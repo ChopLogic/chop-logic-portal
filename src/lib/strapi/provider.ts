@@ -1,46 +1,35 @@
 import { ArticleNotFoundError } from "../content/errors";
 import { mapDynamicContentPage, mapSiteConfig } from "../content/mappers";
+import { mapArticlePage, mapArticleSummary } from "../content/mappers/article";
 import { isRecord } from "../content/mappers/checkers";
 import type {
-	ArticleDetail,
+	ArticlePage,
 	ArticleSummary,
 	DynamicContentPage,
 	SiteConfig,
 } from "../content/models";
 import type {
 	AboutPageContent,
+	ArticlePageContent,
 	BlogPageContent,
 	ContentPort,
 	HomeIndexContent,
 } from "../content/ports";
 import type { StrapiGraphqlClientConfig } from "./graphql/client";
 import { strapiGraphqlRequest } from "./graphql/client";
-import { normalizeDynamicZoneFromGraphql } from "./graphql/normalize";
-import { mapArticleToDetail, mapArticleToSummary } from "./mappers";
 import {
 	ABOUT_ME_PAGE_QUERY,
+	ARTICLE_PAGE_BY_SLUG_QUERY,
 	BLOG_PAGE_QUERY,
 	HOME_PAGE_QUERY,
-} from "./queries";
-import { ARTICLE_BY_SLUG_QUERY, ARTICLES_LIST_QUERY } from "./queries/articles";
-import { CONFIG_QUERY } from "./queries/config";
+} from "./graphql/queries";
+import { CONFIG_QUERY } from "./graphql/queries/config";
 import {
 	parseArticleEntity,
+	parseArticleSummaryEntity,
 	parseConfigEntity,
 	parseSingletonEntity,
-	strapiArticleEntitySchema,
 } from "./schemas";
-
-function normalizeArticleFromGraphql(raw: unknown): unknown {
-	if (!isRecord(raw)) {
-		return raw;
-	}
-	const next: Record<string, unknown> = { ...raw };
-	if (next["content"] !== undefined) {
-		next["content"] = normalizeDynamicZoneFromGraphql(next["content"]);
-	}
-	return next;
-}
 
 export class StrapiGraphqlContentProvider implements ContentPort {
 	constructor(private readonly config: StrapiGraphqlClientConfig) {}
@@ -53,8 +42,19 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 				"Page is missing, unpublished, or not returned by the CMS. Publish the single type in Strapi or check STRAPI_URL and API permissions.",
 			);
 		}
-		const entity = parseSingletonEntity(document);
-		return mapDynamicContentPage(entity, this.config.baseUrl);
+		return mapDynamicContentPage(
+			parseSingletonEntity(document),
+			this.config.baseUrl,
+		);
+	}
+
+	private mapArticlePageFromGraphQL(document: unknown): ArticlePage {
+		if (document == null || !isRecord(document)) {
+			throw new Error(
+				"Article is missing, unpublished, or not returned by the CMS. Publish the article in Strapi or check STRAPI_URL and API permissions.",
+			);
+		}
+		return mapArticlePage(parseArticleEntity(document), this.config.baseUrl);
 	}
 
 	private mapSiteConfigFromGraphql(config: unknown): SiteConfig {
@@ -63,31 +63,15 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 				"Global config is missing, unpublished, or not returned by the CMS. Publish the Config single type in Strapi or check STRAPI_URL and API permissions.",
 			);
 		}
-		const entity = parseConfigEntity(config);
-		return mapSiteConfig(entity, this.config.baseUrl);
+		return mapSiteConfig(parseConfigEntity(config), this.config.baseUrl);
 	}
 
-	private mapArticleListResponse(data: {
-		articles: unknown[];
-	}): ArticleSummary[] {
-		const rows = Array.isArray(data.articles) ? data.articles : [];
-		const out: ArticleSummary[] = [];
-		for (const raw of rows) {
-			const normalized = normalizeArticleFromGraphql(raw);
-			const parsed = strapiArticleEntitySchema.safeParse(normalized);
-			if (parsed.success) {
-				out.push(mapArticleToSummary(this.config.baseUrl, parsed.data));
-			}
-		}
-		return out;
-	}
-
-	async listArticles(): Promise<ArticleSummary[]> {
-		const data = await strapiGraphqlRequest<{ articles: unknown[] }>(
-			this.config,
-			ARTICLES_LIST_QUERY,
+	private mapArticleSummariesListResponse(
+		summaries: unknown[],
+	): ArticleSummary[] {
+		return summaries.map((summary) =>
+			mapArticleSummary(parseArticleSummaryEntity(summary)),
 		);
-		return this.mapArticleListResponse(data);
 	}
 
 	async getSiteConfig(): Promise<SiteConfig> {
@@ -117,7 +101,7 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 		}>(this.config, BLOG_PAGE_QUERY);
 
 		return {
-			articles: this.mapArticleListResponse(data),
+			articles: this.mapArticleSummariesListResponse(data.articles),
 			page: this.mapDynamicContentPageFromGraphQL(data.blog),
 			siteConfig: this.mapSiteConfigFromGraphql(data.config),
 		};
@@ -134,19 +118,20 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 		};
 	}
 
-	async getArticleBySlug(slug: string): Promise<ArticleDetail> {
-		const data = await strapiGraphqlRequest<{ articles: unknown[] }>(
-			this.config,
-			ARTICLE_BY_SLUG_QUERY,
-			{ slug },
-		);
+	async getArticlePageBySlug(slug: string): Promise<ArticlePageContent> {
+		const data = await strapiGraphqlRequest<{
+			articles: unknown[];
+			config: unknown;
+		}>(this.config, ARTICLE_PAGE_BY_SLUG_QUERY, { slug });
 		const rows = Array.isArray(data.articles) ? data.articles : [];
-		const first = rows[0];
-		if (first === undefined) {
+		const article = rows[0];
+		if (article === undefined) {
 			throw new ArticleNotFoundError(slug);
 		}
-		const normalized = normalizeArticleFromGraphql(first);
-		const entity = parseArticleEntity(normalized);
-		return mapArticleToDetail(this.config.baseUrl, entity);
+
+		return {
+			siteConfig: this.mapSiteConfigFromGraphql(data.config),
+			page: this.mapArticlePageFromGraphQL(article),
+		};
 	}
 }

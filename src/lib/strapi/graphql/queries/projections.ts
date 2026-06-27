@@ -109,6 +109,7 @@ export const TAG_PROJECTION = `
   slug
   publishedAt
   updatedAt
+  color
 `;
 
 export const REFERENCE_LIST_PROJECTION = `
@@ -118,5 +119,28 @@ export const REFERENCE_LIST_PROJECTION = `
   subHeading
   links {
     ${LINK_PROJECTION}
+  }
+`;
+
+export const ARTICLE_SUMMARY_PROJECTION = `
+  documentId
+  title
+  subTitle
+  slug
+  publicationDate
+  updatedAt
+  summary
+  preview {
+    ${IMAGE_PROJECTION}
+  }
+  tags {
+    ${TAG_PROJECTION}
+  }
+  authors_connection {
+    nodes {
+      name
+      email
+      documentId
+    }
   }
 `;

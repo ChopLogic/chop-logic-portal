@@ -5,8 +5,7 @@ import { createContentProvider } from "../lib/content/provider";
 const provider = createContentProvider();
 const { home, siteConfig } = await provider.getHomePageContent();
 const { siteTitle, footer, links } = siteConfig;
-const { title, subTitle, content, metaData, documentId, slug, updatedAt } =
-	home;
+const { title, subTitle, content, metaData, id, slug, updatedAt } = home;
 ---
 
 <Layout
@@ -17,7 +16,7 @@ const { title, subTitle, content, metaData, documentId, slug, updatedAt } =
 	subTitle={subTitle}
 	content={content}
 	metaData={metaData}
-	documentId={documentId}
+	id={id}
 	slug={slug}
 	updatedAt={updatedAt}
 />

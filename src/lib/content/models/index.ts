@@ -6,3 +6,4 @@ export * from "./link";
 export * from "./meta-data";
 export * from "./rich-text-block";
 export * from "./site-config";
+export * from "./tag";

@@ -1,20 +1,15 @@
 ---
-import { DEFAULT_SITE_TITLE } from "../../constants/defaults";
-import Layout from "../../layouts/BlogPost.astro";
+// import Layout from "../../layouts/BlogPost.astro";
 import { ArticleNotFoundError } from "../../lib/content/errors";
 import { createContentProvider } from "../../lib/content/provider";
 
 export async function getStaticPaths() {
 	const content = createContentProvider();
 	const { articles, siteConfig } = await content.getBlogPageContent();
-	const siteTitle =
-		siteConfig.siteTitle.trim() !== ""
-			? siteConfig.siteTitle.trim()
-			: DEFAULT_SITE_TITLE;
 	const paths = await Promise.all(
 		articles.map(async (summary) => {
 			try {
-				const detail = await content.getArticleBySlug(summary.slug, siteTitle);
+				const detail = await content.getArticlePageBySlug(summary.slug);
 				return {
 					params: { slug: summary.slug },
 					props: { detail, siteConfig },
@@ -30,11 +25,11 @@ export async function getStaticPaths() {
 	return paths.filter((p): p is NonNullable<typeof p> => p !== null);
 }
 
-const { detail, siteConfig } = Astro.props;
-const { siteTitle, logo, footer, links } = siteConfig;
+// const { detail, siteConfig } = Astro.props;
+// const { siteTitle, logo, footer, links } = siteConfig;
 ---
 
-<Layout
+<!-- <Layout
 	siteTitle={siteTitle}
 	logo={logo}
 	footer={footer}
@@ -54,4 +49,4 @@ const { siteTitle, logo, footer, links } = siteConfig;
 	.article-body :global(section) {
 		margin-bottom: 1.5rem;
 	}
-</style>
+</style> -->

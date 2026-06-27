@@ -2,6 +2,7 @@ import {
 	DEFAULT_SITE_DESCRIPTION,
 	DEFAULT_SITE_TITLE,
 } from "../../../constants/defaults";
+import type { StrapiConfigEntity } from "../../strapi/schemas";
 import type { SiteConfig } from "../models";
 import { mapCmsImage } from "./image";
 import { mapLinks } from "./link";
@@ -9,13 +10,7 @@ import { normalizeRequiredString } from "./normalizers";
 import { mapRichTextBlock } from "./rich-text-block";
 
 export function mapSiteConfig(
-	entity: {
-		title: string;
-		description: string;
-		footer: unknown;
-		links: unknown[];
-		logo?: unknown;
-	},
+	entity: StrapiConfigEntity,
 	baseUrl: string,
 ): SiteConfig {
 	return {

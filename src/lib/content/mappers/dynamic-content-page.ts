@@ -1,3 +1,4 @@
+import type { StrapiDynamicContentPageEntity } from "../../strapi/schemas";
 import type { DynamicContentPage } from "../models/dynamic-content-page";
 import { mapDynamicZoneContent } from "./dynamic-zone";
 import { mapMetaData } from "./meta-data";
@@ -8,19 +9,11 @@ import {
 } from "./normalizers";
 
 export function mapDynamicContentPage(
-	entity: {
-		documentId: string;
-		title: string;
-		subTitle?: string | null;
-		slug: string;
-		updatedAt?: string;
-		content?: unknown;
-		metaData?: unknown;
-	},
+	entity: StrapiDynamicContentPageEntity,
 	baseUrl: string,
 ): DynamicContentPage {
 	return {
-		documentId: entity.documentId,
+		id: entity.documentId,
 		title: normalizeRequiredString(entity.title),
 		subTitle: normalizeOptionalString(entity.subTitle),
 		slug: normalizeRequiredString(entity.slug),

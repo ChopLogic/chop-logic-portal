@@ -11,6 +11,7 @@ const baseUrl = "https://cms.example.com";
 
 function minimalEntity(
 	overrides: Partial<{
+		documentId: string;
 		title: string;
 		description: string;
 		footer: unknown;
@@ -20,6 +21,7 @@ function minimalEntity(
 ) {
 	return {
 		title: "  My Site  ",
+		documentId: "config-id",
 		description: "  Site tagline  ",
 		footer: [
 			{

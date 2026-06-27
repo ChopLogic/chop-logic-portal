@@ -1,11 +1,11 @@
 import {
+	ARTICLE_SUMMARY_PROJECTION,
 	CALL_TO_ACTION_PROJECTION,
 	IMAGE_PROJECTION,
 	LINK_PROJECTION,
 	MEDIA_PROJECTION,
 	METADATA_PROJECTION,
 	PARAGRAPH_PROJECTION,
-	TAG_PROJECTION,
 } from "./projections";
 
 export const BLOG_PAGE_QUERY = /* GraphQL */ `
@@ -32,26 +32,7 @@ export const BLOG_PAGE_QUERY = /* GraphQL */ `
         }
     }
     articles(sort: ["publicationDate:desc"], pagination: { limit: 100 }) {
-      documentId
-      title
-      subTitle
-      slug
-      publicationDate
-      updatedAt
-      summary
-      preview {
-        ${IMAGE_PROJECTION}
-      }
-      tags {
-        ${TAG_PROJECTION}
-      }
-      authors_connection {
-        nodes {
-          name
-          email
-          documentId
-        }
-      }
+      ${ARTICLE_SUMMARY_PROJECTION}
     }
     config {
       documentId

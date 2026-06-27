@@ -6,8 +6,7 @@ const provider = createContentProvider();
 const { siteConfig, page, articles } = await provider.getBlogPageContent();
 console.log("articles", articles);
 const { siteTitle, footer, links } = siteConfig;
-const { title, subTitle, content, metaData, documentId, slug, updatedAt } =
-	page;
+const { title, subTitle, content, metaData, id, slug, updatedAt } = page;
 ---
 
 <Layout
@@ -18,7 +17,7 @@ const { title, subTitle, content, metaData, documentId, slug, updatedAt } =
 	subTitle={subTitle}
 	content={content}
 	metaData={metaData}
-	documentId={documentId}
+	id={id}
 	slug={slug}
 	updatedAt={updatedAt}
 />

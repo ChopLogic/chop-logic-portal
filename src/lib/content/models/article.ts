@@ -1,39 +1,29 @@
+import type { DynamicZoneContent } from "./dynamic-zone";
 import type { CmsImage } from "./image";
 import type { MetaData } from "./meta-data";
+import type { RichTextContent } from "./rich-text-block";
+import type { Tag } from "./tag";
 
-export interface ArticleTag {
-	documentId: string;
-	name: string;
-	slug: string;
-	description: string | null;
+export interface ArticleAuthorConnection {
+	readonly id: string;
+	readonly name: string;
+	readonly email: string;
 }
 
-export interface ArticleAuthor {
-	documentId: string;
-	name: string;
-	email: string;
+export interface ArticleSummary {
+	readonly id: string;
+	readonly title: string;
+	readonly subTitle?: string;
+	readonly slug: string;
+	readonly publicationDate: Date;
+	readonly summary: RichTextContent;
+	readonly updatedAt?: Date;
+	readonly preview?: CmsImage;
+	readonly tags: Tag[];
+	readonly authors: ArticleAuthorConnection[];
 }
 
-/** Article list and detail shapes for the portal (CMS-agnostic). */
-
-export type ArticleSummary = {
-	documentId: string;
-	slug: string;
-	title: string;
-	subTitle: string | null;
-	description: string;
-	pubDate: Date;
-	updatedDate?: Date;
-	/** Absolute URL for the default preview image, or null. */
-	heroImageUrl: string | null;
-	heroImageAlt: string;
-	/** Full image payload when the CMS provides formats (optional). */
-	previewImage: CmsImage | null;
-	tags: ArticleTag[];
-	authors: ArticleAuthor[];
-	metaData: MetaData;
-};
-
-export type ArticleDetail = ArticleSummary & {
-	bodyHtml: string;
+export type ArticlePage = ArticleSummary & {
+	readonly content: DynamicZoneContent;
+	readonly metaData: MetaData;
 };

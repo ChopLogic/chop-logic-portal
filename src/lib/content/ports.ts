@@ -1,5 +1,5 @@
 import type {
-	ArticleDetail,
+	ArticlePage,
 	ArticleSummary,
 	DynamicContentPage,
 	SiteConfig,
@@ -21,12 +21,13 @@ export type AboutPageContent = {
 	siteConfig: SiteConfig;
 };
 
+export type ArticlePageContent = {
+	page: ArticlePage;
+	siteConfig: SiteConfig;
+};
+
 export type ContentPort = {
-	listArticles(): Promise<ArticleSummary[]>;
-	getArticleBySlug(
-		slug: string,
-		siteTitleHint?: string,
-	): Promise<ArticleDetail>;
+	getArticlePageBySlug(slug: string): Promise<ArticlePageContent>;
 	getAboutPageContent(): Promise<AboutPageContent>;
 	getBlogPageContent(): Promise<BlogPageContent>;
 	getHomePageContent(): Promise<HomeIndexContent>;

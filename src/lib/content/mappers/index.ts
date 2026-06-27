@@ -1,3 +1,4 @@
+export { mapArticleAuthorConnections } from "./author";
 export { mapDynamicContentPage } from "./dynamic-content-page";
 export {
 	mapDynamicZoneContent,
@@ -14,11 +15,7 @@ export {
 } from "./image";
 export { mapLinks } from "./link";
 export { mapMetaData } from "./meta-data";
-export {
-	parseRichTextDocument,
-	richTextToHtml,
-	richTextToPlainText,
-} from "./rich-text";
 export { mapRichTextBlock } from "./rich-text-block";
 export { mapSiteConfig } from "./site-config";
 export { mapStructuredDataToJsonLdHtml } from "./structured-data";
+export { mapTags } from "./tag";
