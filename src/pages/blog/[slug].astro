@@ -5,14 +5,14 @@ import { createContentProvider } from "../../lib/content/provider";
 
 export async function getStaticPaths() {
 	const content = createContentProvider();
-	const { articles, siteConfig } = await content.getBlogPageContent();
+	const { articles } = await content.getBlogPageContent();
 	const paths = await Promise.all(
-		articles.map(async (summary) => {
+		articles.map(async (item) => {
 			try {
-				const article = await content.getArticlePageBySlug(summary.slug);
+				const article = await content.getArticlePageBySlug(item.slug);
 				return {
-					params: { slug: summary.slug },
-					props: { article, siteConfig },
+					params: { slug: item.slug },
+					props: { article },
 				};
 			} catch (e) {
 				if (e instanceof ArticleNotFoundError) {
