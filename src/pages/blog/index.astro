@@ -1,10 +1,9 @@
 ---
-import Layout from "../../layouts/DynamicContentPage.astro";
+import Layout from "../../layouts/BlogPageLayout.astro";
 import { createContentProvider } from "../../lib/content/provider";
 
 const provider = createContentProvider();
-const { siteConfig, page, articles } = await provider.getBlogPageContent();
-console.log("articles", articles);
+const content = await provider.getBlogPageContent();
 ---
 
-<Layout {...page} {...siteConfig} />
+<Layout {...content} />

@@ -70,7 +70,10 @@ export class StrapiGraphqlContentProvider implements ContentPort {
 		summaries: unknown[],
 	): ArticleSummary[] {
 		return summaries.map((summary) =>
-			mapArticleSummary(parseArticleSummaryEntity(summary)),
+			mapArticleSummary(
+				parseArticleSummaryEntity(summary),
+				this.config.baseUrl,
+			),
 		);
 	}
 

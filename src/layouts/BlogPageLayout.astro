@@ -1,0 +1,68 @@
+---
+import { type ImageProps, PreviewCard } from "chop-logic-components";
+import Footer from "../components/footer/Footer.astro";
+import Header from "../components/header/Header.astro";
+import MetaData from "../components/meta-data/MetaData.astro";
+import ZoneContent from "../components/zone-content/ZoneContent.astro";
+import { DEFAULT_ALT_TEXT } from "../constants/defaults";
+import type { BlogPageContent } from "../lib/content/ports";
+
+type Props = BlogPageContent;
+
+const { page, articles, siteConfig } = Astro.props;
+const { siteTitle, footer, links } = siteConfig;
+const { title, subTitle, content, metaData } = page;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<MetaData siteTitle={siteTitle} metaData={metaData} />
+		<style>
+			main {
+				padding: var(--cl-xl-gap);
+				max-width: 1200px;
+				margin: 0 auto;
+			}
+
+			.page-hero {
+				padding-bottom: var(--cl-xl-gap);
+				text-align: center;
+				border-bottom: var(--cl-light-border);
+			}
+
+			.page-title {
+				font-family: var(--cl-monospace-font);
+				font-weight: normal;
+			}
+
+			.page-subtitle {
+				font-style: italic;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="page-hero">
+				<h1 class="page-title">{title}</h1>
+				{subTitle && <p class="page-subtitle">{subTitle}</p>}
+			</div>
+			<ZoneContent content={content} />
+			<div>
+			{articles.map(article => {
+			console.log(article)
+
+			const image: ImageProps = {
+	  src: article.preview?.url ?? '',
+    alt: article.preview?.alternativeText ?? DEFAULT_ALT_TEXT
+			}
+
+			return <PreviewCard link={`/blog/${article.slug}`} title={article.title} image={image} authors={[]} tags={[]} summary={article.excerpt}   />
+
+			})}
+			</div>
+		</main>
+		<Footer content={footer} links={links} />
+	</body>
+</html>

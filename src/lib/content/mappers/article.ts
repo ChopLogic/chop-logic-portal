@@ -2,6 +2,7 @@ import type { StrapiArticleEntity } from "../../strapi/schemas";
 import type { ArticlePage, ArticleSummary } from "../models";
 import { mapArticleAuthorConnections } from "./author";
 import { mapDynamicZoneContent } from "./dynamic-zone";
+import { mapCmsImage } from "./image";
 import { mapMetaData } from "./meta-data";
 import {
 	normalizeOptionalString,
@@ -31,7 +32,10 @@ export function mapArticlePage(
 	};
 }
 
-export function mapArticleSummary(entity: StrapiArticleEntity): ArticleSummary {
+export function mapArticleSummary(
+	entity: StrapiArticleEntity,
+	baseUrl: string,
+): ArticleSummary {
 	return {
 		id: entity.documentId,
 		title: normalizeRequiredString(entity.title),
@@ -42,5 +46,6 @@ export function mapArticleSummary(entity: StrapiArticleEntity): ArticleSummary {
 		excerpt: normalizeRequiredString(entity.excerpt),
 		authors: mapArticleAuthorConnections(entity.authors_connection?.nodes),
 		tags: mapTags(entity.tags),
+		preview: mapCmsImage(entity.preview, baseUrl) ?? undefined,
 	};
 }
