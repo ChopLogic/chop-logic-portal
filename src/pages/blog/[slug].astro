@@ -1,6 +1,7 @@
 ---
 import { StrapiGraphQLClient } from "@api/client";
 import {
+	ArticlePageNavigation,
 	ArticleSummary,
 	HeroBlockComponent,
 	ZoneContentComponent,
@@ -27,14 +28,14 @@ export async function getStaticPaths() {
 			const page = await service.getArticlePageBySlug(slug);
 			return {
 				params: { slug },
-				props: { page, siteUrl },
+				props: { page, siteUrl, slugs, currentSlug: slug },
 			};
 		}),
 	);
 	return paths.filter((p): p is NonNullable<typeof p> => p !== null);
 }
 
-const { page, siteUrl } = Astro.props;
+const { page, siteUrl, slugs, currentSlug } = Astro.props;
 const {
 	siteTitle,
 	footer,
@@ -54,7 +55,8 @@ const {
 	links={links}
 	metaData={metaData}
 	siteUrl={siteUrl}
->
+>	
+	<ArticlePageNavigation slugs={slugs} currentSlug={currentSlug} />
 	<HeroBlockComponent title={title} subTitle={subTitle} />
 	<ArticleSummary content={summary} tags={tags} />
 	<ZoneContentComponent content={content} />

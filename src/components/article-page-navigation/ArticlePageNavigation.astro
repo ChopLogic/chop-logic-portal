@@ -1,0 +1,30 @@
+---
+import { IconName, Link } from "chop-logic-components";
+
+interface Props {
+	slugs: string[];
+	currentSlug: string;
+}
+
+const { slugs, currentSlug } = Astro.props;
+const currentIndex = slugs.indexOf(currentSlug);
+const prevIndex = (currentIndex - 1 + slugs.length) % slugs.length;
+const nextIndex = (currentIndex + 1) % slugs.length;
+const prevSlug = `/blog/${slugs[prevIndex]}`;
+const nextSlug = `/blog/${slugs[nextIndex]}`;
+---
+
+<div class="article-page-navigation">
+    <Link icon={IconName.ChevronLeft} href={prevSlug}>Previous Article</Link>
+    <Link icon={IconName.ChevronRight} href={nextSlug} iconPosition="right"
+        >Next article</Link
+    >
+</div>
+
+<style>
+    .article-page-navigation {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+</style>
