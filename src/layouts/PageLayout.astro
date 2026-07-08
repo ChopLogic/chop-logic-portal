@@ -1,0 +1,36 @@
+---
+import Footer from "../components/footer/Footer.astro";
+import Header from "../components/header/Header.astro";
+import MetaDataComponent from "../components/meta-data/MetaData.astro";
+import type { Link, MetaData, RichTextContent } from "../lib/content/models";
+
+type Props = {
+	siteTitle: string;
+	footer: RichTextContent;
+	links: Link[];
+	metaData: MetaData;
+};
+
+const { siteTitle, footer, links, metaData } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<MetaDataComponent siteTitle={siteTitle} metaData={metaData} />
+		<style>
+			main {
+				padding: var(--cl-xl-gap);
+				max-width: 1200px;
+				margin: 0 auto;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<slot />
+		</main>
+		<Footer content={footer} links={links} />
+	</body>
+</html>

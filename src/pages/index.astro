@@ -1,9 +1,34 @@
 ---
-import Layout from "../layouts/DynamicContentPageLayout.astro";
+import ZoneContent from "../components/zone-content/ZoneContent.astro";
+import Layout from "../layouts/PageLayout.astro";
 import { createContentProvider } from "../lib/content/provider";
 
 const provider = createContentProvider();
 const { home, siteConfig } = await provider.getHomePageContent();
+const { siteTitle, footer, links } = siteConfig;
+const { title, subTitle, content, metaData } = home;
 ---
 
-<Layout {...home} {...siteConfig} />
+<Layout siteTitle={siteTitle} footer={footer} links={links} metaData={metaData} >
+    <div class="page-hero">
+				   <h1 class="page-title">{title}</h1>
+				{subTitle && <p class="page-subtitle">{subTitle}</p>}
+			</div>
+			<ZoneContent content={content} />
+</Layout>
+<style>
+.page-hero {
+				padding-bottom: var(--cl-xl-gap);
+				text-align: center;
+				border-bottom: var(--cl-light-border);
+			}
+
+			.page-title {
+				font-family: var(--cl-monospace-font);
+				font-weight: normal;
+			}
+
+			.page-subtitle {
+				font-style: italic;
+			}
+</style>
