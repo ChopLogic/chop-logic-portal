@@ -1,5 +1,7 @@
 ---
-import Layout from "../../layouts/ArticlePageLayout.astro";
+import HeroBlock from "../../components/hero-block/HeroBlock.astro";
+import ZoneContent from "../../components/zone-content/ZoneContent.astro";
+import Layout from "../../layouts/PageLayout.astro";
 import { ArticleNotFoundError } from "../../lib/content/errors";
 import { createContentProvider } from "../../lib/content/provider";
 
@@ -27,6 +29,11 @@ export async function getStaticPaths() {
 
 const { article } = Astro.props;
 const { page, siteConfig } = article;
+const { siteTitle, footer, links } = siteConfig;
+const { title, subTitle, content, metaData } = page;
 ---
 
-<Layout {...page} {...siteConfig}  />
+<Layout siteTitle={siteTitle} footer={footer} links={links} metaData={metaData}>
+	<HeroBlock title={title} subTitle={subTitle} />
+	<ZoneContent content={content} />
+</Layout>
