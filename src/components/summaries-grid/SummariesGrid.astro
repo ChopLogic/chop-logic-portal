@@ -1,0 +1,41 @@
+---
+import { type ImageProps, PreviewCard } from "chop-logic-components";
+import { DEFAULT_ALT_TEXT } from "../../constants/defaults";
+import type { ArticleSummary } from "../../lib/content/models";
+
+type Props = {
+	summaries: ArticleSummary[];
+};
+
+const { summaries } = Astro.props;
+---
+
+	<div>
+		{
+			summaries.map((summaries) => {
+
+				const image: ImageProps = {
+					src: summaries.preview?.url ?? "",
+					alt: summaries.preview?.alternativeText ?? DEFAULT_ALT_TEXT,
+				};
+
+				return (
+					<PreviewCard
+						link={`/blog/${summaries.slug}`}
+						title={summaries.title}
+						image={image}
+						authors={[]}
+						tags={[]}
+						summary={summaries.excerpt}
+					/>
+				);
+			})
+		}
+	</div>
+<style>
+	main {
+		padding: var(--cl-xl-gap);
+		max-width: 1200px;
+		margin: 0 auto;
+	}
+</style>

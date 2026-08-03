@@ -1,8 +1,7 @@
 ---
-import { type ImageProps, PreviewCard } from "chop-logic-components";
 import HeroBlock from "../../components/hero-block/HeroBlock.astro";
+import SummariesGrid from "../../components/summaries-grid/SummariesGrid.astro";
 import ZoneContent from "../../components/zone-content/ZoneContent.astro";
-import { DEFAULT_ALT_TEXT } from "../../constants/defaults";
 import Layout from "../../layouts/PageLayout.astro";
 import { createContentProvider } from "../../lib/content/provider";
 
@@ -15,34 +14,5 @@ const { title, subTitle, content, metaData } = page;
 <Layout siteTitle={siteTitle} footer={footer} links={links} metaData={metaData}>
 	<HeroBlock title={title} subTitle={subTitle} />
 	<ZoneContent content={content} />
-	<div>
-		{
-			articles.map((article) => {
-				console.log(article);
-
-				const image: ImageProps = {
-					src: article.preview?.url ?? "",
-					alt: article.preview?.alternativeText ?? DEFAULT_ALT_TEXT,
-				};
-
-				return (
-					<PreviewCard
-						link={`/blog/${article.slug}`}
-						title={article.title}
-						image={image}
-						authors={[]}
-						tags={[]}
-						summary={article.excerpt}
-					/>
-				);
-			})
-		}
-	</div>
+	<SummariesGrid summaries={articles} />
 </Layout>
-<style>
-	main {
-		padding: var(--cl-xl-gap);
-		max-width: 1200px;
-		margin: 0 auto;
-	}
-</style>

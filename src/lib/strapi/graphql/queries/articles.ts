@@ -46,6 +46,7 @@ export const ARTICLE_PAGE_BY_SLUG_QUERY = /* GraphQL */ `
       slug
       publicationDate
       updatedAt
+      excerpt
       summary
       preview {
         ${IMAGE_PROJECTION}
