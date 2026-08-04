@@ -1,112 +1,36 @@
 ---
-import {
-	Gallery,
-	type GalleryItem,
-	type ImageSource,
-} from "chop-logic-components";
-import { DEFAULT_ALT_TEXT } from "../../constants/defaults";
-import type {
-	CmsImage,
-	CmsImageFormatName,
-	CmsImageFormats,
-	CmsImageFormatVariant,
-} from "../../lib/content/models";
+import { Gallery } from "chop-logic-components";
 import type { DynamicZoneGallery } from "../../lib/content/models/dynamic-zone";
-import {
-	buildCmsPictureAttributes,
-	// CMS_PICTURE_SIZES,
-} from "../picture/Picture.helpers";
+import { mapCMSImageToGalleryItem } from "./gallery";
 
 interface Props {
 	gallery: DynamicZoneGallery;
 }
 
 const { gallery } = Astro.props;
-const { heading, subHeading, layout, items } = gallery;
+const { heading, subHeading, layout, items, aspectRatio } = gallery;
 
-// const pictureSizesByLayout = {
-// 	grid: CMS_PICTURE_SIZES.galleryGrid,
-// 	masonry: CMS_PICTURE_SIZES.galleryMasonry,
-// 	carousel: CMS_PICTURE_SIZES.galleryCarousel,
-// } as const;
-
-// const pictureSizes = pictureSizesByLayout[layout];
-
-// const sourceMediaByFormatVariantName: Record<CmsImageFormatName, string> = {
-// 	thumbnail: "(width <= 400px)",
-// 	small: "(width >= 600px)",
-// 	medium: "(width >= 1000px)",
-// 	large: "(width >= 1200px)"
-// }
-
-const sourceDescriptorByFormatVariantName: Record<CmsImageFormatName, string> =
-	{
-		thumbnail: "250w",
-		small: "500w",
-		medium: "750w",
-		large: "1000w",
-	};
-
-function mapCMSImageFormatsToSources(formats: CmsImageFormats): ImageSource[] {
-	const sources: ImageSource[] = [];
-
-	for (const format in formats) {
-		const formatName = format as CmsImageFormatName;
-		if (formatName === "thumbnail") continue;
-
-		const variant = formats[formatName] as CmsImageFormatVariant;
-		sources.push({
-			src: variant.url,
-			type: variant.mime,
-			// media: sourceMediaByFormatVariantName[formatName as CmsImageFormatName],
-			descriptor: sourceDescriptorByFormatVariantName[formatName],
-		});
-	}
-
-	return sources;
-}
-
-function mapCMSImageToGalleryItem(image: CmsImage): GalleryItem {
-	const { src, sizes: resolvedSizes } = buildCmsPictureAttributes(image);
-
-	return {
-		src: src,
-		alt: image?.alternativeText ?? DEFAULT_ALT_TEXT,
-		// sizes: pictureSizes,
-		sources: mapCMSImageFormatsToSources(image.formats),
-		sizes: resolvedSizes,
-		// aspectRatio: '16/9'
-		// caption: image?.caption,
-		// sources?: ImageSource[];
-		// sizes?: string;
-		// width?: number | string;
-		// height?: number | string;
-		// aspectRatio?: string;
-		// loading?: 'lazy' | 'eager';
-		// decoding?: 'sync' | 'async' | 'auto';
-		// className?: string;
-		// decorative?: boolean;
-	};
-}
-
-const galleryItems = items.map(mapCMSImageToGalleryItem);
+const galleryItems = items.map((image) =>
+	mapCMSImageToGalleryItem(image, aspectRatio),
+);
 ---
 
 <section class:list={["zone-gallery", `zone-gallery--${layout}`]}>
 	<h2>{heading}</h2>
 	{subHeading && <h3>{subHeading}</h3>}
-	<Gallery client:load images={galleryItems} layout={'carousel'} enableFullscreen />
+	<Gallery
+		client:load
+		images={galleryItems}
+		layout={layout}
+		enableFullscreen
+	/>
 </section>
 
 <style>
 	.zone-gallery {
 		width: 100%;
 		display: flex;
-  flex-direction: column;
-  gap: var(--cl-l-gap);
-	}
-
-	.zone-gallery :global(.cl-image__img) {
-		aspect-ratio: 16/9;
+		flex-direction: column;
+		gap: var(--cl-l-gap);
 	}
 </style>

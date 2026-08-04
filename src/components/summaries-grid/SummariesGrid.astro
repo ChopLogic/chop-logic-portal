@@ -10,28 +10,27 @@ type Props = {
 const { summaries } = Astro.props;
 ---
 
-	<div>
-		{
-			summaries.map((summaries) => {
+<div>
+	{
+		summaries.map((summaries) => {
+			const image: ImageProps = {
+				src: summaries.preview?.url ?? "",
+				alt: summaries.preview?.alternativeText ?? DEFAULT_ALT_TEXT,
+			};
 
-				const image: ImageProps = {
-					src: summaries.preview?.url ?? "",
-					alt: summaries.preview?.alternativeText ?? DEFAULT_ALT_TEXT,
-				};
-
-				return (
-					<PreviewCard
-						link={`/blog/${summaries.slug}`}
-						title={summaries.title}
-						image={image}
-						authors={[]}
-						tags={[]}
-						summary={summaries.excerpt}
-					/>
-				);
-			})
-		}
-	</div>
+			return (
+				<PreviewCard
+					link={`/blog/${summaries.slug}`}
+					title={summaries.title}
+					image={image}
+					authors={[]}
+					tags={[]}
+					summary={summaries.excerpt}
+				/>
+			);
+		})
+	}
+</div>
 <style>
 	main {
 		padding: var(--cl-xl-gap);
