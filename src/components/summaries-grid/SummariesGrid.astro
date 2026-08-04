@@ -2,7 +2,7 @@
 import { type ImageProps, PreviewCard } from "chop-logic-components";
 import { DEFAULT_ALT_TEXT } from "../../constants/defaults";
 import type { ArticleSummary } from "../../lib/content/models";
-import { mapStrapiAuthorConnectionToAuthorPreview } from "./helpers";
+import { getPreviewAuthors, getPreviewTags } from "./helpers";
 
 type Props = {
 	summaries: ArticleSummary[];
@@ -20,19 +20,13 @@ const { summaries } = Astro.props;
 				aspectRatio: "16/9",
 			};
 
-			console.log("authors", summary.authors);
-
-			const authors = summary.authors.map(
-				mapStrapiAuthorConnectionToAuthorPreview,
-			);
-
 			return (
 				<PreviewCard
 					link={`/blog/${summary.slug}`}
 					title={summary.title}
 					image={image}
-					authors={authors}
-					tags={[]}
+					authors={getPreviewAuthors(summary.authors)}
+					tags={getPreviewTags(summary.tags)}
 					summary={summary.excerpt}
 					className="summaries-grid__summary"
 				/>

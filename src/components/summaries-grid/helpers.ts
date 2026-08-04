@@ -1,7 +1,7 @@
-import type { Author } from "chop-logic-components";
-import type { ArticleAuthorConnection } from "../../lib/content/models";
+import type { Author, TagData } from "chop-logic-components";
+import type { ArticleAuthorConnection, Tag } from "../../lib/content/models";
 
-export function mapStrapiAuthorConnectionToAuthorPreview(
+function mapStrapiAuthorConnectionToAuthorPreview(
 	author: ArticleAuthorConnection,
 ): Author {
 	const avatarUrl =
@@ -13,4 +13,23 @@ export function mapStrapiAuthorConnectionToAuthorPreview(
 		imageUrl: avatarUrl,
 		tooltip: author.role,
 	};
+}
+
+function mapStrapiTagToPreviewTag(tag: Tag): TagData {
+	return {
+		id: tag.id,
+		name: tag.name,
+		description: tag.description,
+		color: tag.color,
+	};
+}
+
+export function getPreviewAuthors(
+	connections: ArticleAuthorConnection[],
+): Author[] {
+	return connections.map(mapStrapiAuthorConnectionToAuthorPreview);
+}
+
+export function getPreviewTags(tags: Tag[]): TagData[] {
+	return tags.map(mapStrapiTagToPreviewTag);
 }
