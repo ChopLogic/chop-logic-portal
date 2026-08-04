@@ -2,6 +2,7 @@
 import { type ImageProps, PreviewCard } from "chop-logic-components";
 import { DEFAULT_ALT_TEXT } from "../../constants/defaults";
 import type { ArticleSummary } from "../../lib/content/models";
+import { mapStrapiAuthorConnectionToAuthorPreview } from "./helpers";
 
 type Props = {
 	summaries: ArticleSummary[];
@@ -12,21 +13,27 @@ const { summaries } = Astro.props;
 
 <div class="summaries-grid">
 	{
-		summaries.map((summaries) => {
+		summaries.map((summary) => {
 			const image: ImageProps = {
-				src: summaries.preview?.url ?? "",
-				alt: summaries.preview?.alternativeText ?? DEFAULT_ALT_TEXT,
+				src: summary.preview?.url ?? "",
+				alt: summary.preview?.alternativeText ?? DEFAULT_ALT_TEXT,
 				aspectRatio: "16/9",
 			};
 
+			console.log("authors", summary.authors);
+
+			const authors = summary.authors.map(
+				mapStrapiAuthorConnectionToAuthorPreview,
+			);
+
 			return (
 				<PreviewCard
-					link={`/blog/${summaries.slug}`}
-					title={summaries.title}
+					link={`/blog/${summary.slug}`}
+					title={summary.title}
 					image={image}
-					authors={[]}
+					authors={authors}
 					tags={[]}
-					summary={summaries.excerpt}
+					summary={summary.excerpt}
 					className="summaries-grid__summary"
 				/>
 			);
@@ -39,7 +46,7 @@ const { summaries } = Astro.props;
 		grid-template-columns: 1fr;
 		grid-template-rows: auto;
 		gap: var(--cl-l-gap);
-		
+		padding-top: var(--cl-xl-gap);
 	}
 
 	.summaries-grid__summary {

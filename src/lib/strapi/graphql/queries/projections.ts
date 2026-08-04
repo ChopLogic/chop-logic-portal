@@ -141,6 +141,10 @@ export const ARTICLE_SUMMARY_PROJECTION = `
       name
       email
       documentId
+      role
+      avatar {
+        ${IMAGE_PROJECTION}
+      }
     }
   }
 `;

@@ -26,7 +26,10 @@ export function mapArticlePage(
 		content: mapDynamicZoneContent(entity.content),
 		excerpt: normalizeRequiredString(entity.excerpt),
 		summary: mapRichTextBlock(entity.summary),
-		authors: mapArticleAuthorConnections(entity.authors_connection?.nodes),
+		authors: mapArticleAuthorConnections(
+			entity.authors_connection?.nodes,
+			baseUrl,
+		),
 		tags: mapTags(entity.tags),
 		metaData: mapMetaData(entity.metaData, baseUrl),
 	};
@@ -44,7 +47,10 @@ export function mapArticleSummary(
 		slug: normalizeRequiredString(entity.slug),
 		updatedAt: normalizeRequiredDate(entity.updatedAt),
 		excerpt: normalizeRequiredString(entity.excerpt),
-		authors: mapArticleAuthorConnections(entity.authors_connection?.nodes),
+		authors: mapArticleAuthorConnections(
+			entity.authors_connection?.nodes,
+			baseUrl,
+		),
 		tags: mapTags(entity.tags),
 		preview: mapCmsImage(entity.preview, baseUrl) ?? undefined,
 	};

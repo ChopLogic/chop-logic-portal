@@ -1,4 +1,4 @@
-import { LINK_PROJECTION } from "./projections";
+import { IMAGE_PROJECTION, LINK_PROJECTION } from "./projections";
 
 export const AUTHORS_QUERY = /* GraphQL */ `
     query FetchAllAuthors {
@@ -11,6 +11,9 @@ export const AUTHORS_QUERY = /* GraphQL */ `
             createdAt
             updatedAt
             bio
+            avatar {
+                ${IMAGE_PROJECTION}
+            }
             socialLinks {
                 ${LINK_PROJECTION}
             }
