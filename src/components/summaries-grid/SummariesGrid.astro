@@ -10,12 +10,13 @@ type Props = {
 const { summaries } = Astro.props;
 ---
 
-<div>
+<div class="summaries-grid">
 	{
 		summaries.map((summaries) => {
 			const image: ImageProps = {
 				src: summaries.preview?.url ?? "",
 				alt: summaries.preview?.alternativeText ?? DEFAULT_ALT_TEXT,
+				aspectRatio: "16/9",
 			};
 
 			return (
@@ -26,15 +27,36 @@ const { summaries } = Astro.props;
 					authors={[]}
 					tags={[]}
 					summary={summaries.excerpt}
+					className="summaries-grid__summary"
 				/>
 			);
 		})
 	}
 </div>
 <style>
-	main {
-		padding: var(--cl-xl-gap);
-		max-width: 1200px;
-		margin: 0 auto;
+	.summaries-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		grid-template-rows: auto;
+		gap: var(--cl-l-gap);
+		
+	}
+
+	.summaries-grid__summary {
+		width: auto;
+		min-width: 0;
+		min-height: 0;
+	}
+
+	@media (min-width: 640px) {
+		.summaries-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.summaries-grid {
+			grid-template-columns: repeat(3, 1fr);
+		}
 	}
 </style>
