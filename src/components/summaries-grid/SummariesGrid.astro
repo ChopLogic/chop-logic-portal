@@ -1,8 +1,7 @@
 ---
-import { type ImageProps, PreviewCard } from "chop-logic-components";
-import { DEFAULT_ALT_TEXT } from "../../constants/defaults";
+import { PreviewCard } from "chop-logic-components";
 import type { ArticleSummary } from "../../lib/content/models";
-import { getPreviewAuthors, getPreviewTags } from "./helpers";
+import { getPreviewAuthors, getPreviewImage, getPreviewTags } from "./helpers";
 
 type Props = {
 	summaries: ArticleSummary[];
@@ -14,17 +13,13 @@ const { summaries } = Astro.props;
 <div class="summaries-grid">
 	{
 		summaries.map((summary) => {
-			const image: ImageProps = {
-				src: summary.preview?.url ?? "",
-				alt: summary.preview?.alternativeText ?? DEFAULT_ALT_TEXT,
-				aspectRatio: "16/9",
-			};
+
 
 			return (
 				<PreviewCard
 					link={`/blog/${summary.slug}`}
 					title={summary.title}
-					image={image}
+					image={getPreviewImage(summary.preview)}
 					authors={getPreviewAuthors(summary.authors)}
 					tags={getPreviewTags(summary.tags)}
 					summary={summary.excerpt}

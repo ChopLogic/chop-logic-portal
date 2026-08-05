@@ -1,3 +1,4 @@
+import type { ImageProps } from "chop-logic-components";
 import fallbackOgAsset from "../assets/Chop-Logic-Logo-Horizontal-612x306-white-bg.png";
 import {
 	type MetaData,
@@ -15,6 +16,12 @@ export const OPEN_GRAPH_FALLBACK_IMAGE: OpenGraphImageMeta = {
 	src: fallbackOgAsset.src,
 	width: fallbackOgAsset.width,
 	height: fallbackOgAsset.height,
+};
+
+export const DEFAULT_IMAGE: ImageProps = {
+	src: fallbackOgAsset.src,
+	loading: "lazy",
+	alt: DEFAULT_ALT_TEXT,
 };
 
 export const DEFAULT_OPEN_GRAPH: OpenGraph = {
