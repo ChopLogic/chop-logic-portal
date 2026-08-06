@@ -1,0 +1,46 @@
+fragment ImageFields on UploadFile {
+    url
+    name
+    mime
+    documentId
+    alternativeText
+    caption
+    width
+    height
+    previewUrl
+    size
+    formats
+    focalPoint
+}
+
+fragment LinkFields on ComponentSectionsLink {
+    id
+    platform
+    url
+    text
+    target
+    referrerpolicy
+    type
+}
+
+fragment OpenGraphFields on ComponentSharedOpenGraph {
+    ogTitle
+    ogDescription
+    ogType
+    ogImage {
+        ...ImageFields
+    }
+}
+
+fragment MetaDataFields on ComponentSharedSeo {
+    authorName
+    canonicalURL
+    keywords
+    metaDescription
+    metaTitle
+    robots
+    structuredData
+    openGraph {
+    ...OpenGraphFields
+    }
+}

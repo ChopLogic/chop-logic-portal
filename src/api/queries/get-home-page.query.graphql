@@ -1,0 +1,64 @@
+query GetHomePage {
+  home {
+    documentId
+    slug
+    title
+    subTitle
+    publishedAt
+    updatedAt
+    content {
+      ... on ComponentSectionsParagraph {
+        __typename
+        id
+        heading
+        subHeading
+        alignment
+        content
+      }
+      ... on ComponentSectionsGallery {
+        __typename
+        id
+        heading
+        subHeading
+        layout
+        aspectRatio
+        items {
+          ...ImageFields
+        }
+      }
+      ... on ComponentSectionsCallToAction {
+        __typename
+        id
+        heading
+        subHeading
+        link {
+          ...LinkFields
+        }
+        picture {
+          ...ImageFields
+        }
+      }
+      ... on ComponentSectionsEmbeddedVideo {
+        __typename
+        id
+        heading
+        subHeading
+        aspectRatio
+        link {
+          ...LinkFields
+        }
+      }
+      ... on ComponentSectionsMedia {
+        __typename
+        id
+        heading
+        subHeading
+        aspectRatio
+        publicationDate
+        item {
+          ...ImageFields
+        }
+      }
+    }
+  }
+}

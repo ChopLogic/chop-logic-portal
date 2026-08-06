@@ -6,8 +6,8 @@
 		"node": ">=22.12.0"
 	},
 	"scripts": {
-		"dev": "astro dev",
-		"build": "astro build",
+		"dev": "npm run typegen && astro dev",
+		"build": "npm run typegen && astro build",
 		"preview": "astro preview",
 		"astro": "astro",
 		"prepare": "husky",
@@ -20,7 +20,8 @@
 		"check": "biome check . && npm run typecheck && npm run astro:check && npm run test:ci",
 		"test": "vitest",
 		"test:ci": "vitest run --passWithNoTests",
-		"test:coverage": "vitest run --coverage"
+		"test:coverage": "vitest run --coverage",
+		"typegen": "graphql-codegen"
 	},
 	"dependencies": {
 		"@astrojs/mdx": "^7.0.5",
@@ -31,6 +32,7 @@
 		"@types/react-dom": "^19.2.4",
 		"astro": "^7.1.6",
 		"chop-logic-components": "^4.4.0",
+		"dotenv": "^17.4.2",
 		"graphql": "^16.14.1",
 		"graphql-request": "^7.4.0",
 		"react": "^19.2.8",
@@ -42,6 +44,9 @@
 		"@biomejs/biome": "^2.5.6",
 		"@commitlint/cli": "^21.2.1",
 		"@commitlint/config-conventional": "^21.2.0",
+		"@graphql-codegen/cli": "^7.2.0",
+		"@graphql-codegen/typescript": "^6.1.0",
+		"@graphql-codegen/typescript-operations": "^6.1.5",
 		"@vitest/coverage-v8": "^4.1.10",
 		"husky": "^9.1.7",
 		"lint-staged": "^17.3.0",
