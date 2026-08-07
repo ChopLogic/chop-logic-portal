@@ -10,8 +10,8 @@ const { home, siteConfig } = await provider.getHomePageContent();
 const { siteTitle, footer, links } = siteConfig;
 const { title, subTitle, content, metaData } = home;
 const service = new PageService();
-const homepage = await service.getHomePage();
-console.log("homepage", homepage);
+const homepage = await service.getArticlePageBySlug("article-4-test");
+console.log("PAGE", homepage);
 ---
 
 <Layout siteTitle={siteTitle} footer={footer} links={links} metaData={metaData}>
