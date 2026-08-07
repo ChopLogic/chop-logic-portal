@@ -1,17 +1,17 @@
-import { executeQuery } from "../api/client";
+import { executeQuery } from "@api/client";
 import {
 	ABOUT_ME_PAGE_QUERY,
 	ARTICLE_PAGE_BY_SLUG_QUERY,
 	BLOG_PAGE_QUERY,
 	HOME_PAGE_QUERY,
-} from "../api/queries";
+} from "@api/queries";
 import type {
 	AboutMe,
 	Article,
 	Blog,
 	Config,
 	Home,
-} from "../api/types/generated";
+} from "@api/types/generated";
 
 type HomePageResponse = { home: Home; config: Config };
 
