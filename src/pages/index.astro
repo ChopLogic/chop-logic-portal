@@ -1,4 +1,6 @@
 ---
+import { StrapiClient } from "@api/client";
+import { ConfigService } from "@services/config.service";
 import HeroBlock from "../components/hero-block/HeroBlock.astro";
 import ZoneContent from "../components/zone-content/ZoneContent.astro";
 import Layout from "../layouts/PageLayout.astro";
@@ -9,7 +11,13 @@ const provider = createContentProvider();
 const { home, siteConfig } = await provider.getHomePageContent();
 const { siteTitle, footer, links } = siteConfig;
 const { title, subTitle, content, metaData } = home;
-const service = new PageService();
+
+const config = new ConfigService();
+const client = new StrapiClient({
+	apiEndpoint: config.getApiUrl(),
+	token: config.getApiToken(),
+});
+const service = new PageService(client);
 const homepage = await service.getArticlePageBySlug("article-4-test");
 console.log("PAGE", homepage);
 ---

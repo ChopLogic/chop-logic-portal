@@ -1,45 +1,41 @@
-import { executeQuery } from "@api/client";
 import {
 	ABOUT_ME_PAGE_QUERY,
 	ARTICLE_PAGE_BY_SLUG_QUERY,
 	BLOG_PAGE_QUERY,
 	HOME_PAGE_QUERY,
 } from "@api/queries";
+import type { Client } from "@models/interfaces";
 import type {
-	AboutMe,
-	Article,
-	Blog,
-	Config,
-	Home,
-} from "@api/types/generated";
+	AboutMePageResponse,
+	ArticlePageResponse,
+	BlogPageResponse,
+	HomePageResponse,
+	PageRepository,
+} from "@models/repositories";
 
-type HomePageResponse = { home: Home; config: Config };
+export class PageService implements PageRepository {
+	constructor(private client: Client) {}
 
-type AboutMePageResponse = { aboutMe: AboutMe; config: Config };
-
-type BlogPageResponse = { blog: Blog; articles: Article[]; config: Config };
-
-type ArticlePageResponse = { articles: Article[]; config: Config };
-
-export class PageService {
 	async getHomePage(): Promise<HomePageResponse> {
-		const response = await executeQuery<HomePageResponse>(HOME_PAGE_QUERY);
+		const response =
+			await this.client.executeQuery<HomePageResponse>(HOME_PAGE_QUERY);
 		return response;
 	}
 
 	async getAboutMePage(): Promise<AboutMePageResponse> {
 		const response =
-			await executeQuery<AboutMePageResponse>(ABOUT_ME_PAGE_QUERY);
+			await this.client.executeQuery<AboutMePageResponse>(ABOUT_ME_PAGE_QUERY);
 		return response;
 	}
 
 	async getBlogPage(): Promise<BlogPageResponse> {
-		const response = await executeQuery<BlogPageResponse>(BLOG_PAGE_QUERY);
+		const response =
+			await this.client.executeQuery<BlogPageResponse>(BLOG_PAGE_QUERY);
 		return response;
 	}
 
 	async getArticlePageBySlug(slug: string): Promise<ArticlePageResponse> {
-		const response = await executeQuery<ArticlePageResponse>(
+		const response = await this.client.executeQuery<ArticlePageResponse>(
 			ARTICLE_PAGE_BY_SLUG_QUERY,
 			{ slug },
 		);

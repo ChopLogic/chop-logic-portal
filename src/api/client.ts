@@ -1,3 +1,4 @@
+import type { Client } from "@models/interfaces";
 import {
 	GraphQLClient,
 	type RequestDocument,
@@ -5,15 +6,45 @@ import {
 } from "graphql-request";
 import { AuthenticationError, GraphQLError, NetworkError } from "./errors";
 
-const STRAPI_URL = import.meta.env.STRAPI_URL;
-const STRAPI_API_TOKEN = import.meta.env.STRAPI_API_TOKEN;
-const GRAPHQL_ENDPOINT = `${STRAPI_URL}/graphql`;
+export class StrapiClient implements Client {
+	private client: {
+		request: <T = unknown>(
+			document: RequestDocument,
+			variables?: Variables,
+		) => Promise<T>;
+		raw: GraphQLClient;
+	};
 
-const client = new GraphQLClient(GRAPHQL_ENDPOINT, {
-	headers: {
-		Authorization: `Bearer ${STRAPI_API_TOKEN}`,
-	},
-});
+	constructor({
+		apiEndpoint,
+		token,
+	}: { apiEndpoint: string; token: string | null }) {
+		const graphqlEndpoint = `${apiEndpoint}/graphql`;
+
+		const rawClient = new GraphQLClient(graphqlEndpoint, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		});
+
+		this.client = {
+			request: async <T = unknown>(
+				document: RequestDocument,
+				variables?: Variables,
+			): Promise<T> => {
+				return handleRequest(() => rawClient.request<T>(document, variables));
+			},
+			raw: rawClient,
+		};
+	}
+
+	async executeQuery<T = unknown>(
+		query: string,
+		variables?: Record<string, unknown>,
+	): Promise<T> {
+		return this.client.request<T>(query, variables);
+	}
+}
 
 async function handleRequest<T>(requestFn: () => Promise<T>): Promise<T> {
 	try {
@@ -56,21 +87,4 @@ async function handleRequest<T>(requestFn: () => Promise<T>): Promise<T> {
 		// Re-throw unknown errors
 		throw error;
 	}
-}
-
-export const graphqlClient = {
-	request: async <T = unknown>(
-		document: RequestDocument,
-		variables?: Variables,
-	): Promise<T> => {
-		return handleRequest(() => client.request<T>(document, variables));
-	},
-	raw: client,
-};
-
-export async function executeQuery<T = unknown>(
-	query: string,
-	variables?: Record<string, unknown>,
-): Promise<T> {
-	return graphqlClient.request<T>(query, variables);
 }
