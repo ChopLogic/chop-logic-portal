@@ -17,6 +17,8 @@
 			"@assets/*": ["./src/assets/*"],
 			"@components/*": ["./src/components/*"],
 			"@layouts/*": ["./src/layouts/*"],
+			"@models/*": ["./src/models/*"],
+			"@mappers/*": ["./src/mappers/*"],
 			"@pages/*": ["./src/pages/*"],
 			"@services/*": ["./src/services/*"],
 			"@styles/*": ["./src/styles/*"]
