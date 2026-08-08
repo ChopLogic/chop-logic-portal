@@ -17,10 +17,10 @@
 			"@assets/*": ["./src/assets/*"],
 			"@components/*": ["./src/components/*"],
 			"@layouts/*": ["./src/layouts/*"],
-			"@models/*": ["./src/models/*"],
+			"@models": ["./src/models/index"],
 			"@mappers/*": ["./src/mappers/*"],
 			"@pages/*": ["./src/pages/*"],
-			"@services/*": ["./src/services/*"],
+			"@services": ["./src/services/index"],
 			"@styles/*": ["./src/styles/*"]
 		}
 	}

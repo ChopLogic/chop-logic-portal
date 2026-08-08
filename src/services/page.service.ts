@@ -4,14 +4,14 @@ import {
 	BLOG_PAGE_QUERY,
 	HOME_PAGE_QUERY,
 } from "@api/queries";
-import type { Client } from "@models/interfaces";
 import type {
 	AboutMePageResponse,
 	ArticlePageResponse,
 	BlogPageResponse,
+	Client,
 	HomePageResponse,
 	PageRepository,
-} from "@models/repositories";
+} from "@models";
 
 export class PageService implements PageRepository {
 	constructor(private client: Client) {}

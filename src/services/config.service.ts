@@ -1,4 +1,4 @@
-import type { Config } from "@models/interfaces";
+import type { Config } from "@models";
 
 export class ConfigService implements Config {
 	private config: Record<string, string | undefined>;

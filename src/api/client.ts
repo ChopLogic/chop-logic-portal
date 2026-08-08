@@ -1,4 +1,4 @@
-import type { Client } from "@models/interfaces";
+import type { Client } from "@models";
 import {
 	GraphQLClient,
 	type RequestDocument,
@@ -6,7 +6,7 @@ import {
 } from "graphql-request";
 import { AuthenticationError, GraphQLError, NetworkError } from "./errors";
 
-export class StrapiClient implements Client {
+export class StrapiGraphQLClient implements Client {
 	private client: {
 		request: <T = unknown>(
 			document: RequestDocument,
