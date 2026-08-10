@@ -7,8 +7,7 @@ export class ConfigService implements Config {
 		this.config = {
 			STRAPI_URL: import.meta.env.STRAPI_URL,
 			STRAPI_API_TOKEN: import.meta.env.STRAPI_API_TOKEN,
-			NODE_ENV: import.meta.env.NODE_ENV,
-			BASE_URL: import.meta.env.BASE_URL,
+			PUBLIC_SITE_URL: import.meta.env.PUBLIC_SITE_URL,
 		};
 	}
 
@@ -25,10 +24,14 @@ export class ConfigService implements Config {
 	}
 
 	getSiteUrl(): string {
-		return this.get("BASE_URL") || "http://localhost:4321";
+		return this.get("PUBLIC_SITE_URL") || "http://localhost:4321";
 	}
 
 	isProduction(): boolean {
-		return this.get("NODE_ENV") === "production";
+		return import.meta.env.PROD;
+	}
+
+	isDevelopment(): boolean {
+		return import.meta.env.DEV;
 	}
 }

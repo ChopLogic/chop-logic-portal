@@ -19,7 +19,7 @@
 			"@constants": ["./src/constants/index"],
 			"@layouts/*": ["./src/layouts/*"],
 			"@models": ["./src/models/index"],
-			"@mappers/*": ["./src/mappers/*"],
+			"@mappers": ["./src/mappers/index"],
 			"@pages/*": ["./src/pages/*"],
 			"@services": ["./src/services/index"],
 			"@styles/*": ["./src/styles/*"]

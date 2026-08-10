@@ -4,6 +4,7 @@ export interface Config {
 	getApiToken(): string | null;
 	getSiteUrl(): string;
 	isProduction(): boolean;
+	isDevelopment(): boolean;
 }
 
 export interface Client {

@@ -5,6 +5,7 @@ import type {
 	Config,
 	Home,
 } from "@api/types/generated";
+import type { DynamicContentPageData } from "@models";
 
 export type HomePageResponse = { home: Home; config: Config };
 
@@ -19,8 +20,8 @@ export type BlogPageResponse = {
 export type ArticlePageResponse = { articles: Article[]; config: Config };
 
 export interface PageRepository {
-	getHomePage(): Promise<HomePageResponse>;
-	getAboutMePage(): Promise<AboutMePageResponse>;
+	getHomePage(): Promise<DynamicContentPageData>;
+	getAboutMePage(): Promise<DynamicContentPageData>;
 	getBlogPage(): Promise<BlogPageResponse>;
 	getArticlePageBySlug(slug: string): Promise<ArticlePageResponse>;
 }

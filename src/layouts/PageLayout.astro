@@ -4,7 +4,7 @@ import Header from "@components/header/Header.astro";
 import MetaDataComponent from "@components/meta-data/MetaData.astro";
 import type { CorePageData } from "@models";
 
-type Props = CorePageData;
+type Props = Omit<CorePageData, "logo">;
 
 const { siteTitle, footer, links, metaData } = Astro.props;
 ---

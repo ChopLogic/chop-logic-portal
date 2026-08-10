@@ -10,8 +10,7 @@ declare module "*.astro" {
 interface ImportMetaEnv {
 	readonly STRAPI_URL: string;
 	readonly STRAPI_API_TOKEN: string;
-	readonly BASE_URL: string;
-	readonly NODE_ENV: string;
+	readonly PUBLIC_SITE_URL: string;
 }
 
 interface ImportMeta {

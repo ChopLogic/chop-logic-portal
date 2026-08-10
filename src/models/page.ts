@@ -1,13 +1,16 @@
+import type { CmsImage } from "@models";
 import type { DynamicZoneContent } from "./dynamic-zone";
 import type { Link } from "./link";
 import type { MetaData } from "./meta-data";
 import type { RichTextContent } from "./rich-text-block";
 
 export interface CorePageData {
-	siteTitle: string;
-	footer: RichTextContent;
-	links: Link[];
-	metaData: MetaData;
+	readonly siteTitle: string;
+	readonly description?: string;
+	readonly footer: RichTextContent;
+	readonly links: Link[];
+	readonly logo: CmsImage | null;
+	readonly metaData: MetaData;
 }
 
 export interface DynamicContentPageData extends CorePageData {
