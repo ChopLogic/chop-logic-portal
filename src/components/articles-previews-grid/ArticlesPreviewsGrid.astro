@@ -1,0 +1,51 @@
+---
+import type { ArticlePreview } from "@models";
+import { PreviewCard } from "chop-logic-components";
+
+type Props = {
+	previews: ArticlePreview[];
+};
+
+const { previews } = Astro.props;
+---
+
+<div class="articles-preview-grid">
+	{
+		previews.map(({ slug, ...rest }) => {
+			return (
+				<PreviewCard
+					link={`/blog/${slug}`}
+					{...rest}
+					className="articles-preview-grid__summary"
+				/>
+			);
+		})
+	}
+</div>
+<style>
+	.articles-preview-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		grid-template-rows: auto;
+		gap: var(--cl-l-gap);
+		padding-top: var(--cl-xl-gap);
+	}
+
+	.articles-preview-grid__summary {
+		width: auto;
+		min-width: 0;
+		min-height: 0;
+	}
+
+	@media (min-width: 640px) {
+		.articles-preview-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.articles-preview-grid {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+</style>

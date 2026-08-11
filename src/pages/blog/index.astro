@@ -1,18 +1,34 @@
 ---
-import HeroBlock from "../../components/hero-block/HeroBlock.astro";
-import SummariesGrid from "../../components/summaries-grid/SummariesGrid.astro";
-import ZoneContent from "../../components/zone-content/ZoneContent.astro";
-import Layout from "../../layouts/PageLayout.astro";
-import { createContentProvider } from "../../lib/content/provider";
+import { StrapiGraphQLClient } from "@api/client";
+import ArticlesPreviewsGrid from "@components/articles-previews-grid/ArticlesPreviewsGrid.astro";
+import HeroBlock from "@components/hero-block/HeroBlock.astro";
+import ZoneContent from "@components/zone-content/ZoneContent.astro";
+import Layout from "@layouts/PageLayout.astro";
+import { ConfigService, PageService } from "@services";
 
-const provider = createContentProvider();
-const { page, siteConfig, articles } = await provider.getBlogPageContent();
-const { siteTitle, footer, links } = siteConfig;
-const { title, subTitle, content, metaData } = page;
+const config = new ConfigService();
+const client = new StrapiGraphQLClient({
+	apiEndpoint: config.getApiUrl(),
+	token: config.getApiToken(),
+});
+const service = new PageService(client, {
+	siteUrl: config.getSiteUrl(),
+	apiUrl: config.getApiUrl(),
+});
+const {
+	siteTitle,
+	footer,
+	links,
+	metaData,
+	title,
+	subTitle,
+	content,
+	previews,
+} = await service.getBlogPage();
 ---
 
 <Layout siteTitle={siteTitle} footer={footer} links={links} metaData={metaData}>
 	<HeroBlock title={title} subTitle={subTitle} />
 	<ZoneContent content={content} />
-	<SummariesGrid summaries={articles} />
+	<ArticlesPreviewsGrid previews={previews} />
 </Layout>

@@ -1,3 +1,4 @@
+export * from "./article";
 export * from "./author";
 export * from "./checkers";
 export * from "./dynamic-zone";

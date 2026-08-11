@@ -6,6 +6,7 @@ import {
 } from "@api/queries";
 import { DEFAULT_SITE_DESCRIPTION, DEFAULT_SITE_TITLE } from "@constants";
 import {
+	mapArticleToArticlePreview,
 	mapCmsImage,
 	mapDynamicZoneContent,
 	mapLinks,
@@ -25,13 +26,15 @@ import type {
 } from "@models";
 
 export class PageService implements PageRepository {
-	private readonly baseUrl: string;
+	private readonly siteUrl: string;
+	private readonly apiUrl: string;
 
 	constructor(
 		private client: Client,
-		baseUrl: string,
+		{ siteUrl, apiUrl }: { siteUrl: string; apiUrl: string },
 	) {
-		this.baseUrl = baseUrl;
+		this.siteUrl = siteUrl;
+		this.apiUrl = apiUrl;
 	}
 
 	async getHomePage() {
@@ -45,7 +48,7 @@ export class PageService implements PageRepository {
 			slug: normalizeRequiredString(home.slug),
 			updatedAt: normalizeRequiredDate(home.updatedAt),
 			content: mapDynamicZoneContent(home.content),
-			metaData: mapMetaData(home.metaData, this.baseUrl),
+			metaData: mapMetaData(home.metaData, this.siteUrl),
 			siteTitle: normalizeRequiredString(config.title, DEFAULT_SITE_TITLE),
 			description: normalizeRequiredString(
 				config.description,
@@ -53,7 +56,7 @@ export class PageService implements PageRepository {
 			),
 			footer: mapRichTextBlock(config.footer),
 			links: mapLinks(config.links),
-			logo: mapCmsImage(config.logo, this.baseUrl),
+			logo: mapCmsImage(config.logo, this.apiUrl),
 		};
 	}
 
@@ -68,7 +71,7 @@ export class PageService implements PageRepository {
 			slug: normalizeRequiredString(aboutMe.slug),
 			updatedAt: normalizeRequiredDate(aboutMe.updatedAt),
 			content: mapDynamicZoneContent(aboutMe.content),
-			metaData: mapMetaData(aboutMe.metaData, this.baseUrl),
+			metaData: mapMetaData(aboutMe.metaData, this.siteUrl),
 			siteTitle: normalizeRequiredString(config.title, DEFAULT_SITE_TITLE),
 			description: normalizeRequiredString(
 				config.description,
@@ -76,14 +79,34 @@ export class PageService implements PageRepository {
 			),
 			footer: mapRichTextBlock(config.footer),
 			links: mapLinks(config.links),
-			logo: mapCmsImage(config.logo, this.baseUrl),
+			logo: mapCmsImage(config.logo, this.apiUrl),
 		};
 	}
 
-	async getBlogPage(): Promise<BlogPageResponse> {
-		const response =
+	async getBlogPage() {
+		const { blog, config, articles } =
 			await this.client.executeQuery<BlogPageResponse>(BLOG_PAGE_QUERY);
-		return response;
+
+		return {
+			id: blog.documentId,
+			title: normalizeRequiredString(blog.title),
+			subTitle: normalizeOptionalString(blog.subTitle),
+			slug: normalizeRequiredString(blog.slug),
+			updatedAt: normalizeRequiredDate(blog.updatedAt),
+			content: mapDynamicZoneContent(blog.content),
+			metaData: mapMetaData(blog.metaData, this.siteUrl),
+			siteTitle: normalizeRequiredString(config.title, DEFAULT_SITE_TITLE),
+			description: normalizeRequiredString(
+				config.description,
+				DEFAULT_SITE_DESCRIPTION,
+			),
+			footer: mapRichTextBlock(config.footer),
+			links: mapLinks(config.links),
+			logo: mapCmsImage(config.logo, this.apiUrl),
+			previews: articles.map((item) =>
+				mapArticleToArticlePreview(item, this.apiUrl),
+			),
+		};
 	}
 
 	async getArticlePageBySlug(slug: string): Promise<ArticlePageResponse> {

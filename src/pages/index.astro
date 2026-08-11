@@ -10,7 +10,10 @@ const client = new StrapiGraphQLClient({
 	apiEndpoint: config.getApiUrl(),
 	token: config.getApiToken(),
 });
-const service = new PageService(client, config.getSiteUrl());
+const service = new PageService(client, {
+	siteUrl: config.getSiteUrl(),
+	apiUrl: config.getApiUrl(),
+});
 const { siteTitle, footer, links, metaData, title, subTitle, content } =
 	await service.getHomePage();
 ---

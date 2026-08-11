@@ -1,8 +1,9 @@
-import type { Tag } from "@api/types/generated";
+import type { Author, ImageProps, TagData } from "chop-logic-components";
 import type { DynamicZoneContent } from "./dynamic-zone";
 import type { CmsImage } from "./image";
 import type { MetaData } from "./meta-data";
 import type { RichTextContent } from "./rich-text-block";
+import type { Tag } from "./tag";
 
 export interface ArticleAuthorConnection {
 	readonly id: string;
@@ -30,3 +31,13 @@ export type ArticlePage = ArticleSummary & {
 	readonly content: DynamicZoneContent;
 	readonly metaData: MetaData;
 };
+
+export interface ArticlePreview {
+	id: string;
+	slug: string;
+	title: string;
+	image: ImageProps;
+	authors: Author[];
+	tags: TagData[];
+	summary?: string;
+}

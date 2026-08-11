@@ -1,4 +1,4 @@
-import type { CmsImage } from "@models";
+import type { ArticlePreview, CmsImage } from "@models";
 import type { DynamicZoneContent } from "./dynamic-zone";
 import type { Link } from "./link";
 import type { MetaData } from "./meta-data";
@@ -20,4 +20,8 @@ export interface DynamicContentPageData extends CorePageData {
 	readonly slug: string;
 	readonly updatedAt: Date;
 	readonly content: DynamicZoneContent;
+}
+
+export interface BlogPageData extends DynamicContentPageData {
+	previews: ArticlePreview[];
 }
