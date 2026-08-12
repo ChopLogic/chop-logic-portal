@@ -25,3 +25,7 @@ export interface DynamicContentPageData extends CorePageData {
 export interface BlogPageData extends DynamicContentPageData {
 	previews: ArticlePreview[];
 }
+
+export interface ArticlePageData extends DynamicContentPageData {
+	readonly summary: RichTextContent;
+}

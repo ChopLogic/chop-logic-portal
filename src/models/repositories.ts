@@ -5,7 +5,11 @@ import type {
 	Config,
 	Home,
 } from "@api/types/generated";
-import type { BlogPageData, DynamicContentPageData } from "@models";
+import type {
+	ArticlePageData,
+	BlogPageData,
+	DynamicContentPageData,
+} from "@models";
 
 export type HomePageResponse = { home: Home; config: Config };
 
@@ -19,9 +23,14 @@ export type BlogPageResponse = {
 
 export type ArticlePageResponse = { articles: Article[]; config: Config };
 
+export type ArticleSlugsResponse = {
+	articles: Array<{ slug: string; documentId: string }>;
+};
+
 export interface PageRepository {
 	getHomePage(): Promise<DynamicContentPageData>;
 	getAboutMePage(): Promise<DynamicContentPageData>;
 	getBlogPage(): Promise<BlogPageData>;
-	getArticlePageBySlug(slug: string): Promise<ArticlePageResponse>;
+	getArticlePageBySlug(slug: string): Promise<ArticlePageData>;
+	getArticleSlugs(): Promise<string[]>;
 }

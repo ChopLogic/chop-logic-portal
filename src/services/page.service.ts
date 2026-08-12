@@ -1,6 +1,7 @@
 import {
 	ABOUT_ME_PAGE_QUERY,
 	ARTICLE_PAGE_BY_SLUG_QUERY,
+	ARTICLE_SLUGS_QUERY,
 	BLOG_PAGE_QUERY,
 	HOME_PAGE_QUERY,
 } from "@api/queries";
@@ -19,11 +20,13 @@ import {
 import type {
 	AboutMePageResponse,
 	ArticlePageResponse,
+	ArticleSlugsResponse,
 	BlogPageResponse,
 	Client,
 	HomePageResponse,
 	PageRepository,
 } from "@models";
+import { NotFoundError } from "./errors";
 
 export class PageService implements PageRepository {
 	private readonly siteUrl: string;
@@ -109,11 +112,43 @@ export class PageService implements PageRepository {
 		};
 	}
 
-	async getArticlePageBySlug(slug: string): Promise<ArticlePageResponse> {
-		const response = await this.client.executeQuery<ArticlePageResponse>(
-			ARTICLE_PAGE_BY_SLUG_QUERY,
-			{ slug },
-		);
-		return response;
+	async getArticlePageBySlug(slug: string) {
+		const { articles, config } =
+			await this.client.executeQuery<ArticlePageResponse>(
+				ARTICLE_PAGE_BY_SLUG_QUERY,
+				{ slug },
+			);
+
+		const article = articles[0];
+
+		if (!article) {
+			throw new NotFoundError("Article", slug);
+		}
+
+		return {
+			id: article.documentId,
+			title: normalizeRequiredString(article.title),
+			subTitle: normalizeOptionalString(article.subTitle),
+			slug: normalizeRequiredString(article.slug),
+			updatedAt: normalizeRequiredDate(article.updatedAt),
+			content: mapDynamicZoneContent(article.content),
+			metaData: mapMetaData(article.metaData, this.siteUrl),
+			siteTitle: normalizeRequiredString(config.title, DEFAULT_SITE_TITLE),
+			description: normalizeRequiredString(
+				config.description,
+				DEFAULT_SITE_DESCRIPTION,
+			),
+			footer: mapRichTextBlock(config.footer),
+			links: mapLinks(config.links),
+			logo: mapCmsImage(config.logo, this.apiUrl),
+			summary: mapRichTextBlock(article.summary),
+		};
+	}
+
+	async getArticleSlugs() {
+		const { articles } =
+			await this.client.executeQuery<ArticleSlugsResponse>(ARTICLE_SLUGS_QUERY);
+
+		return articles.map((entry) => entry.slug);
 	}
 }
