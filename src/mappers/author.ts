@@ -5,6 +5,21 @@ import { isRecord } from "./checkers";
 import { mapCmsImage } from "./image";
 import { normalizeRequiredString } from "./normalizers";
 
+export function mapArticleAuthorConnections(
+	rawConnections: unknown[] | null | undefined,
+	baseUrl: string,
+): ArticleAuthorConnection[] {
+	if (!rawConnections) {
+		throw new Error(
+			`Invalid article to authors array provided: ${JSON.stringify(rawConnections)}`,
+		);
+	}
+
+	return rawConnections.map((connection) =>
+		normalizeArticleAuthorConnection(connection, baseUrl),
+	);
+}
+
 function normalizeArticleAuthorConnection(
 	raw: unknown,
 	baseUrl: string,
@@ -19,19 +34,4 @@ function normalizeArticleAuthorConnection(
 		email: normalizeRequiredString(raw["email"]),
 		avatar: mapCmsImage(raw["avatar"], baseUrl),
 	};
-}
-
-export function mapArticleAuthorConnections(
-	rawConnections: unknown[] | null | undefined,
-	baseUrl: string,
-): ArticleAuthorConnection[] {
-	if (!rawConnections) {
-		throw new Error(
-			`Invalid article to authors array provided: ${JSON.stringify(rawConnections)}`,
-		);
-	}
-
-	return rawConnections.map((connection) =>
-		normalizeArticleAuthorConnection(connection, baseUrl),
-	);
 }
