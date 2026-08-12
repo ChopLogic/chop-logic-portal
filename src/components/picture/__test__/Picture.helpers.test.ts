@@ -1,5 +1,5 @@
+import type { CmsImage } from "@models";
 import { describe, expect, it } from "vitest";
-import type { CmsImage } from "../../../lib/content/models/image";
 import {
 	buildCmsPictureAttributes,
 	buildCmsPictureSrcset,

@@ -1,13 +1,11 @@
-import { experimental_AstroContainer as AstroContainer } from "astro/container";
-import { beforeAll, describe, expect, it } from "vitest";
 import {
 	DynamicZoneComponentType,
 	type DynamicZoneParagraph,
-} from "../../../lib/content/models/dynamic-zone";
-import {
 	type RichTextContent,
 	RichTextContentType,
-} from "../../../lib/content/models/rich-text-block";
+} from "@models";
+import { experimental_AstroContainer as AstroContainer } from "astro/container";
+import { beforeAll, describe, expect, it } from "vitest";
 import ZoneParagraph from "../ZoneParagraph.astro";
 
 function sampleRichText(): RichTextContent {

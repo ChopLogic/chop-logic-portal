@@ -1,19 +1,17 @@
 import { loadRenderers } from "astro:container";
 import { getContainerRenderer as reactContainerRenderer } from "@astrojs/react";
-import { experimental_AstroContainer as AstroContainer } from "astro/container";
-import { beforeAll, describe, expect, it } from "vitest";
 import {
+	type CmsImage,
 	type DynamicZoneCallToAction,
 	DynamicZoneComponentType,
-} from "../../../lib/content/models/dynamic-zone";
-import type { CmsImage } from "../../../lib/content/models/image";
-import {
 	type Link,
 	LinkTarget,
 	LinkType,
 	ReferrerPolicy,
 	SocialPlatform,
-} from "../../../lib/content/models/link";
+} from "@models";
+import { experimental_AstroContainer as AstroContainer } from "astro/container";
+import { beforeAll, describe, expect, it } from "vitest";
 import { CMS_PICTURE_SIZES } from "../../picture/Picture.helpers";
 import ZoneCallToAction from "../ZoneCallToAction.astro";
 

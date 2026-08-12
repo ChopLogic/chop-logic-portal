@@ -1,6 +1,6 @@
+import type { CmsImage } from "@models";
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { beforeAll, describe, expect, it } from "vitest";
-import type { CmsImage } from "../../../lib/content/models/image";
 import Picture from "../Picture.astro";
 import { CMS_PICTURE_SIZES } from "../Picture.helpers";
 

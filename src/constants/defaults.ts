@@ -1,11 +1,11 @@
-import type { ImageProps } from "chop-logic-components";
-import fallbackOgAsset from "../assets/Chop-Logic-Logo-Horizontal-612x306-white-bg.png";
+import fallbackOgAsset from "@assets/Chop-Logic-Logo-Horizontal-612x306-white-bg.png";
 import {
 	type MetaData,
 	OgType,
 	type OpenGraph,
 	type OpenGraphImageMeta,
-} from "../lib/content/models";
+} from "@models";
+import type { ImageProps } from "chop-logic-components";
 
 export const DEFAULT_SITE_TITLE = "Chop Logic";
 export const DEFAULT_SITE_DESCRIPTION = "A place where logic works";

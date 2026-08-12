@@ -1,10 +1,5 @@
+import { type Link, LinkTarget, LinkType, ReferrerPolicy } from "@models";
 import { describe, expect, it } from "vitest";
-import {
-	type Link,
-	LinkTarget,
-	LinkType,
-	ReferrerPolicy,
-} from "../../../lib/content/models/link";
 import { buildCmsLinkRel, isExternalLink } from "../Link.helpers";
 
 function testLink(overrides: Partial<Link> = {}): Link {

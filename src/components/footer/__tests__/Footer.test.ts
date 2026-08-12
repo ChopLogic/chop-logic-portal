@@ -1,16 +1,14 @@
-import { experimental_AstroContainer as AstroContainer } from "astro/container";
-import { beforeAll, describe, expect, it } from "vitest";
 import {
 	type Link,
 	LinkTarget,
 	LinkType,
 	ReferrerPolicy,
-	SocialPlatform,
-} from "../../../lib/content/models/link";
-import {
 	type RichTextContent,
 	RichTextContentType,
-} from "../../../lib/content/models/rich-text-block";
+	SocialPlatform,
+} from "@models";
+import { experimental_AstroContainer as AstroContainer } from "astro/container";
+import { beforeAll, describe, expect, it } from "vitest";
 import Footer from "../Footer.astro";
 
 function emptyRichText(): RichTextContent {

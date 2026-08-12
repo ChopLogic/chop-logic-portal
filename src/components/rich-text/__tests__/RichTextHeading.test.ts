@@ -1,10 +1,10 @@
-import { experimental_AstroContainer as AstroContainer } from "astro/container";
-import { beforeAll, describe, expect, it } from "vitest";
 import {
 	RichTextContentType,
 	type RichTextHeading as RichTextHeadingModel,
 	type RichTextNode,
-} from "../../../lib/content/models/rich-text-block";
+} from "@models";
+import { experimental_AstroContainer as AstroContainer } from "astro/container";
+import { beforeAll, describe, expect, it } from "vitest";
 import { renderRichTextNodeHtml } from "../helpers";
 import RichTextHeading from "../RichTextHeading.astro";
 

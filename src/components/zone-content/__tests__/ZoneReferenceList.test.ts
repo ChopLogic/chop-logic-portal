@@ -1,15 +1,13 @@
-import { experimental_AstroContainer as AstroContainer } from "astro/container";
-import { beforeAll, describe, expect, it } from "vitest";
 import {
 	DynamicZoneComponentType,
 	type DynamicZoneReferenceList,
-} from "../../../lib/content/models/dynamic-zone";
-import {
 	type Link,
 	LinkTarget,
 	LinkType,
 	ReferrerPolicy,
-} from "../../../lib/content/models/link";
+} from "@models";
+import { experimental_AstroContainer as AstroContainer } from "astro/container";
+import { beforeAll, describe, expect, it } from "vitest";
 import ZoneReferenceList from "../ZoneReferenceList.astro";
 
 function testLink(id: string, overrides: Partial<Link> = {}): Link {

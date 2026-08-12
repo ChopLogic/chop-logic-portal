@@ -1,4 +1,4 @@
-import { type Link, LinkTarget, LinkType } from "../../lib/content/models/link";
+import { type Link, LinkTarget, LinkType } from "@models";
 
 /** `rel` for CMS links that open in a new browsing context. */
 export function buildCmsLinkRel(link: Link): string | undefined {

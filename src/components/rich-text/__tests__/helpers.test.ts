@@ -1,4 +1,3 @@
-import { describe, expect, it } from "vitest";
 import {
 	RichTextContentType,
 	type RichTextInlineNode,
@@ -7,7 +6,8 @@ import {
 	RichTextListFormat,
 	type RichTextListItem,
 	type RichTextNode,
-} from "../../../lib/content/models/rich-text-block";
+} from "@models";
+import { describe, expect, it } from "vitest";
 import {
 	escapeHtml,
 	renderListItemInnerHtml,

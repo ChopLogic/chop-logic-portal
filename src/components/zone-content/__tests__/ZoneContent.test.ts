@@ -1,23 +1,19 @@
 import { loadRenderers } from "astro:container";
 import { getContainerRenderer as reactContainerRenderer } from "@astrojs/react";
-import { experimental_AstroContainer as AstroContainer } from "astro/container";
-import { beforeAll, describe, expect, it } from "vitest";
 import {
 	type DynamicZoneComponent,
 	DynamicZoneComponentType,
 	type DynamicZoneContent,
 	type DynamicZoneParagraph,
-} from "../../../lib/content/models/dynamic-zone";
-import {
 	type Link,
 	LinkTarget,
 	LinkType,
 	ReferrerPolicy,
-} from "../../../lib/content/models/link";
-import {
 	type RichTextContent,
 	RichTextContentType,
-} from "../../../lib/content/models/rich-text-block";
+} from "@models";
+import { experimental_AstroContainer as AstroContainer } from "astro/container";
+import { beforeAll, describe, expect, it } from "vitest";
 import ZoneContent from "../ZoneContent.astro";
 
 function sampleRichText(): RichTextContent {

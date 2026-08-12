@@ -1,5 +1,3 @@
-import { experimental_AstroContainer as AstroContainer } from "astro/container";
-import { beforeAll, describe, expect, it } from "vitest";
 import {
 	RichTextContentType,
 	type RichTextLink,
@@ -7,7 +5,9 @@ import {
 	type RichTextListItem,
 	type RichTextList as RichTextListModel,
 	type RichTextNode,
-} from "../../../lib/content/models/rich-text-block";
+} from "@models";
+import { experimental_AstroContainer as AstroContainer } from "astro/container";
+import { beforeAll, describe, expect, it } from "vitest";
 import { renderRichTextListBodyHtml, renderRichTextListHtml } from "../helpers";
 import RichTextList from "../RichTextList.astro";
 

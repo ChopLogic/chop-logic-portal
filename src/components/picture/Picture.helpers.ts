@@ -1,8 +1,5 @@
-import {
-	type CmsImage,
-	type CmsImageFormatName,
-	IMAGE_FORMAT_NAMES,
-} from "../../lib/content/models/image";
+import { IMAGE_FORMAT_NAMES } from "@constants";
+import type { CmsImage, CmsImageFormatName } from "@models";
 
 export interface CmsPictureWidthVariant {
 	readonly url: string;

@@ -1,10 +1,6 @@
+import { DEFAULT_ALT_TEXT } from "@constants";
+import type { CmsImage, CmsImageFormatName, CmsImageFormats } from "@models";
 import type { GalleryItem, ImageSource } from "chop-logic-components";
-import { DEFAULT_ALT_TEXT } from "../../constants/defaults";
-import type {
-	CmsImage,
-	CmsImageFormatName,
-	CmsImageFormats,
-} from "../../lib/content/models";
 
 const sourceDescriptorByFormatVariantName: Record<CmsImageFormatName, string> =
 	{

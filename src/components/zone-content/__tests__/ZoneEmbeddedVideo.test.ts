@@ -1,15 +1,13 @@
-import { experimental_AstroContainer as AstroContainer } from "astro/container";
-import { beforeAll, describe, expect, it } from "vitest";
 import {
 	DynamicZoneComponentType,
 	type DynamicZoneEmbeddedVideo,
-} from "../../../lib/content/models/dynamic-zone";
-import {
 	type Link,
 	LinkTarget,
 	LinkType,
 	ReferrerPolicy,
-} from "../../../lib/content/models/link";
+} from "@models";
+import { experimental_AstroContainer as AstroContainer } from "astro/container";
+import { beforeAll, describe, expect, it } from "vitest";
 import ZoneEmbeddedVideo from "../ZoneEmbeddedVideo.astro";
 
 function testLink(overrides: Partial<Link> = {}): Link {

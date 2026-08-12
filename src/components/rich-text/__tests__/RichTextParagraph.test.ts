@@ -1,12 +1,12 @@
-import { experimental_AstroContainer as AstroContainer } from "astro/container";
-import { beforeAll, describe, expect, it } from "vitest";
 import {
 	RichTextContentType,
 	type RichTextInlineNode,
 	type RichTextLink,
 	type RichTextNode,
 	type RichTextParagraph as RichTextParagraphModel,
-} from "../../../lib/content/models/rich-text-block";
+} from "@models";
+import { experimental_AstroContainer as AstroContainer } from "astro/container";
+import { beforeAll, describe, expect, it } from "vitest";
 import { renderRichTextInlineHtml } from "../helpers";
 import RichTextParagraph from "../RichTextParagraph.astro";
 

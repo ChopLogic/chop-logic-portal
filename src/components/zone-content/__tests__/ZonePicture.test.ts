@@ -1,11 +1,11 @@
+import {
+	type CmsImage,
+	DynamicZoneComponentType,
+	type DynamicZonePicture,
+} from "@models";
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { beforeAll, describe, expect, it } from "vitest";
 import { DEFAULT_ALT_TEXT } from "../../../constants/defaults";
-import {
-	DynamicZoneComponentType,
-	type DynamicZonePicture,
-} from "../../../lib/content/models/dynamic-zone";
-import type { CmsImage } from "../../../lib/content/models/image";
 import ZonePicture from "../ZonePicture.astro";
 
 function testCmsImage(overrides: Partial<CmsImage> = {}): CmsImage {

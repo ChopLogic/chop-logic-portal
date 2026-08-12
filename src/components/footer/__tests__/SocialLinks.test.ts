@@ -1,12 +1,12 @@
-import { experimental_AstroContainer as AstroContainer } from "astro/container";
-import { beforeAll, describe, expect, it } from "vitest";
 import {
 	type Link,
 	LinkTarget,
 	LinkType,
 	ReferrerPolicy,
 	SocialPlatform,
-} from "../../../lib/content/models/link";
+} from "@models";
+import { experimental_AstroContainer as AstroContainer } from "astro/container";
+import { beforeAll, describe, expect, it } from "vitest";
 import SocialLinks from "../SocialLinks.astro";
 
 function testLink(overrides: Partial<Link>): Link {
