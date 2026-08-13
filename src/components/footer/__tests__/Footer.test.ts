@@ -36,8 +36,8 @@ function testLink(overrides: Partial<Link>): Link {
 		text: overrides.text as string,
 		target: overrides.target ?? LinkTarget.Blank,
 		type: overrides.type ?? LinkType.External,
-		referrerpolicy:
-			overrides.referrerpolicy ?? ReferrerPolicy.StrictOriginWhenCrossOrigin,
+		referrerPolicy:
+			overrides.referrerPolicy ?? ReferrerPolicy.StrictOriginWhenCrossOrigin,
 		...overrides,
 	};
 }

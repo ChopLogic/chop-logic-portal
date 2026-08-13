@@ -17,7 +17,7 @@ function testLink(id: string, overrides: Partial<Link> = {}): Link {
 		text: `Reference ${id}`,
 		target: LinkTarget.Blank,
 		type: LinkType.External,
-		referrerpolicy: ReferrerPolicy.StrictOriginWhenCrossOrigin,
+		referrerPolicy: ReferrerPolicy.StrictOriginWhenCrossOrigin,
 		...overrides,
 	};
 }

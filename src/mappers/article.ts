@@ -13,7 +13,7 @@ import { mapTags } from "./tag";
 
 export function mapArticleToArticlePreview(
 	entity: Article,
-	baseUrl: string,
+	apiUrl: string,
 ): ArticlePreview {
 	return {
 		id: entity.documentId,
@@ -21,10 +21,10 @@ export function mapArticleToArticlePreview(
 		slug: normalizeRequiredString(entity.slug),
 		summary: normalizeRequiredString(entity.excerpt),
 		authors: getPreviewAuthors(
-			mapArticleAuthorConnections(entity.authors_connection?.nodes, baseUrl),
+			mapArticleAuthorConnections(entity.authors_connection?.nodes, apiUrl),
 		),
 		tags: mapTags(entity.tags),
-		image: getPreviewImage(mapCmsImage(entity.preview, baseUrl)),
+		image: getPreviewImage(mapCmsImage(entity.preview, apiUrl)),
 	};
 }
 

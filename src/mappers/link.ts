@@ -95,7 +95,7 @@ export function mapLink(raw: unknown): Link | null {
 		url: normalizeRequiredString(raw["url"]),
 		text: normalizeRequiredString(raw["text"]),
 		type: normalizeLinkType(raw["type"]),
-		referrerpolicy: normalizeReferrerPolicy(raw["referrerpolicy"]),
+		referrerPolicy: normalizeReferrerPolicy(raw["referrerPolicy"]),
 		platform: normalizeSocialPlatform(raw["platform"]),
 	};
 }

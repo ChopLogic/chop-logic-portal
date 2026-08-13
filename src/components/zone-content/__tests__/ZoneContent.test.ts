@@ -32,7 +32,7 @@ function testLink(overrides: Partial<Link> = {}): Link {
 		text: "Watch video",
 		target: LinkTarget.Blank,
 		type: LinkType.External,
-		referrerpolicy: ReferrerPolicy.StrictOriginWhenCrossOrigin,
+		referrerPolicy: ReferrerPolicy.StrictOriginWhenCrossOrigin,
 		...overrides,
 	};
 }

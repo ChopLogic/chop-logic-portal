@@ -22,7 +22,7 @@ function testLink(overrides: Partial<Link> = {}): Link {
 		text: "View on GitHub",
 		target: LinkTarget.Blank,
 		type: LinkType.External,
-		referrerpolicy: ReferrerPolicy.StrictOriginWhenCrossOrigin,
+		referrerPolicy: ReferrerPolicy.StrictOriginWhenCrossOrigin,
 		platform: SocialPlatform.GitHub,
 		...overrides,
 	};

@@ -17,7 +17,7 @@ function testLink(overrides: Partial<Link> = {}): Link {
 		text: "YouTube Video Title",
 		target: LinkTarget.Blank,
 		type: LinkType.External,
-		referrerpolicy: ReferrerPolicy.StrictOriginWhenCrossOrigin,
+		referrerPolicy: ReferrerPolicy.StrictOriginWhenCrossOrigin,
 		...overrides,
 	};
 }

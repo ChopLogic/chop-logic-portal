@@ -50,7 +50,7 @@ export class PageService implements PageRepository {
 			subTitle: normalizeOptionalString(home.subTitle),
 			slug: normalizeRequiredString(home.slug),
 			updatedAt: normalizeRequiredDate(home.updatedAt),
-			content: mapDynamicZoneContent(home.content),
+			content: mapDynamicZoneContent(home.content, this.apiUrl),
 			metaData: mapMetaData(home.metaData, this.siteUrl),
 			siteTitle: normalizeRequiredString(config.title, DEFAULT_SITE_TITLE),
 			description: normalizeRequiredString(
@@ -73,7 +73,7 @@ export class PageService implements PageRepository {
 			subTitle: normalizeOptionalString(aboutMe.subTitle),
 			slug: normalizeRequiredString(aboutMe.slug),
 			updatedAt: normalizeRequiredDate(aboutMe.updatedAt),
-			content: mapDynamicZoneContent(aboutMe.content),
+			content: mapDynamicZoneContent(aboutMe.content, this.apiUrl),
 			metaData: mapMetaData(aboutMe.metaData, this.siteUrl),
 			siteTitle: normalizeRequiredString(config.title, DEFAULT_SITE_TITLE),
 			description: normalizeRequiredString(
@@ -96,7 +96,7 @@ export class PageService implements PageRepository {
 			subTitle: normalizeOptionalString(blog.subTitle),
 			slug: normalizeRequiredString(blog.slug),
 			updatedAt: normalizeRequiredDate(blog.updatedAt),
-			content: mapDynamicZoneContent(blog.content),
+			content: mapDynamicZoneContent(blog.content, this.apiUrl),
 			metaData: mapMetaData(blog.metaData, this.siteUrl),
 			siteTitle: normalizeRequiredString(config.title, DEFAULT_SITE_TITLE),
 			description: normalizeRequiredString(
@@ -131,7 +131,7 @@ export class PageService implements PageRepository {
 			subTitle: normalizeOptionalString(article.subTitle),
 			slug: normalizeRequiredString(article.slug),
 			updatedAt: normalizeRequiredDate(article.updatedAt),
-			content: mapDynamicZoneContent(article.content),
+			content: mapDynamicZoneContent(article.content, this.apiUrl),
 			metaData: mapMetaData(article.metaData, this.siteUrl),
 			siteTitle: normalizeRequiredString(config.title, DEFAULT_SITE_TITLE),
 			description: normalizeRequiredString(

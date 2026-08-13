@@ -9,7 +9,7 @@ function testLink(overrides: Partial<Link> = {}): Link {
 		text: "Example",
 		target: LinkTarget.Blank,
 		type: LinkType.External,
-		referrerpolicy: ReferrerPolicy.StrictOriginWhenCrossOrigin,
+		referrerPolicy: ReferrerPolicy.StrictOriginWhenCrossOrigin,
 		...overrides,
 	};
 }

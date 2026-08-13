@@ -25,7 +25,7 @@ const items = links.filter(isSocialLink);
 				href={link.url}
 				target={link.target}
 				rel={rel}
-				referrerpolicy={link.referrerpolicy}
+				referrerpolicy={link.referrerPolicy}
 			>
 				<span class="sr-only">{link.text}</span>
 				<SocialPlatformIcon platform={link.platform} />

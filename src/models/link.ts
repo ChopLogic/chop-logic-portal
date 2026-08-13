@@ -4,7 +4,7 @@ export interface Link {
 	text: string;
 	target: LinkTarget;
 	type: LinkType;
-	referrerpolicy: ReferrerPolicy;
+	referrerPolicy: ReferrerPolicy;
 	platform?: SocialPlatform;
 }
 

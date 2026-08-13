@@ -27,16 +27,6 @@ import {
 } from "./normalizers";
 import { mapRichTextBlock } from "./rich-text-block";
 
-function getCmsBaseUrl(): string {
-	const baseUrl = import.meta.env.STRAPI_URL?.replace(/\/$/, "");
-	if (!baseUrl) {
-		throw new Error(
-			"STRAPI_URL is not set. Copy .env.example to .env and point it at your Strapi instance.",
-		);
-	}
-	return baseUrl;
-}
-
 function requireRecord(value: unknown): Record<string, unknown> {
 	if (!isRecord(value)) {
 		throw new Error(`Expected a record, got ${JSON.stringify(value)}`);
@@ -60,13 +50,13 @@ function normalizeGalleryLayout(
 	return "grid";
 }
 
-function normalizeGalleryItems(value: unknown): CmsImage[] {
+function normalizeGalleryItems(value: unknown, apiUrl: string): CmsImage[] {
 	if (!Array.isArray(value)) {
 		return [];
 	}
 
 	return value
-		.map((item) => mapCmsImage(item, getCmsBaseUrl()))
+		.map((item) => mapCmsImage(item, apiUrl))
 		.filter((item): item is NonNullable<typeof item> => item != null);
 }
 
@@ -101,7 +91,10 @@ export function mapZoneParagraph(value: unknown): DynamicZoneParagraph {
 	};
 }
 
-export function mapZoneCallToAction(value: unknown): DynamicZoneCallToAction {
+export function mapZoneCallToAction(
+	value: unknown,
+	apiUrl: string,
+): DynamicZoneCallToAction {
 	const raw = requireRecord(value);
 	const link = mapRequiredLink(raw["link"], "Call to action");
 
@@ -114,7 +107,7 @@ export function mapZoneCallToAction(value: unknown): DynamicZoneCallToAction {
 	};
 
 	if ("picture" in raw && raw["picture"] != null) {
-		const picture = mapCmsImage(raw["picture"], getCmsBaseUrl());
+		const picture = mapCmsImage(raw["picture"], apiUrl);
 		if (!picture) {
 			throw new Error("Call to action picture could not be mapped");
 		}
@@ -149,9 +142,9 @@ export function mapReferenceList(value: unknown): DynamicZoneReferenceList {
 	};
 }
 
-export function mapPicture(value: unknown): DynamicZonePicture {
+export function mapPicture(value: unknown, apiUrl: string): DynamicZonePicture {
 	const raw = requireRecord(value);
-	const item = mapCmsImage(raw["item"], getCmsBaseUrl());
+	const item = mapCmsImage(raw["item"], apiUrl);
 	if (!item) {
 		throw new Error("Picture requires a valid item image");
 	}
@@ -165,7 +158,7 @@ export function mapPicture(value: unknown): DynamicZonePicture {
 	};
 }
 
-export function mapGallery(value: unknown): DynamicZoneGallery {
+export function mapGallery(value: unknown, apiUrl: string): DynamicZoneGallery {
 	const raw = requireRecord(value);
 
 	return {
@@ -174,7 +167,7 @@ export function mapGallery(value: unknown): DynamicZoneGallery {
 		heading: normalizeRequiredString(raw["heading"]),
 		subHeading: normalizeOptionalString(raw["subHeading"]),
 		layout: normalizeGalleryLayout(raw["layout"]),
-		items: normalizeGalleryItems(raw["items"]),
+		items: normalizeGalleryItems(raw["items"], apiUrl),
 		aspectRatio: normalizeOptionalString(raw["aspectRatio"]),
 	};
 }
@@ -223,7 +216,10 @@ function detectZoneBlockType(
 	return null;
 }
 
-function mapDynamicZoneBlock(block: unknown): DynamicZoneComponent | null {
+function mapDynamicZoneBlock(
+	block: unknown,
+	apiUrl: string,
+): DynamicZoneComponent | null {
 	if (!isRecord(block)) {
 		return null;
 	}
@@ -237,28 +233,31 @@ function mapDynamicZoneBlock(block: unknown): DynamicZoneComponent | null {
 		case DynamicZoneComponentType.Paragraph:
 			return mapZoneParagraph(block);
 		case DynamicZoneComponentType.CallToAction:
-			return mapZoneCallToAction(block);
+			return mapZoneCallToAction(block, apiUrl);
 		case DynamicZoneComponentType.EmbeddedVideo:
 			return mapEmbeddedVideo(block);
 		case DynamicZoneComponentType.ReferenceList:
 			return mapReferenceList(block);
 		case DynamicZoneComponentType.Picture:
-			return mapPicture(block);
+			return mapPicture(block, apiUrl);
 		case DynamicZoneComponentType.Gallery:
-			return mapGallery(block);
+			return mapGallery(block, apiUrl);
 		default:
 			return null;
 	}
 }
 
-export function mapDynamicZoneContent(value: unknown): DynamicZoneContent {
+export function mapDynamicZoneContent(
+	value: unknown,
+	apiUrl: string,
+): DynamicZoneContent {
 	if (!Array.isArray(value)) {
 		return [];
 	}
 
 	const components: DynamicZoneComponent[] = [];
 	for (const block of value) {
-		const mapped = mapDynamicZoneBlock(block);
+		const mapped = mapDynamicZoneBlock(block, apiUrl);
 		if (mapped) {
 			components.push(mapped);
 		}
