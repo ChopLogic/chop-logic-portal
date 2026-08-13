@@ -9,12 +9,13 @@ import { PageLayout } from "@layouts";
 import { ConfigService, PageService } from "@services";
 
 const config = new ConfigService();
+const siteUrl = config.getSiteUrl();
+const apiUrl = config.getApiUrl();
 const client = new StrapiGraphQLClient({
-	apiEndpoint: config.getApiUrl(),
+	apiUrl,
 	token: config.getApiToken(),
 });
 const service = new PageService(client, {
-	siteUrl: config.getSiteUrl(),
 	apiUrl: config.getApiUrl(),
 });
 const {
@@ -29,7 +30,7 @@ const {
 } = await service.getBlogPage();
 ---
 
-<PageLayout siteTitle={siteTitle} footer={footer} links={links} metaData={metaData}>
+<PageLayout siteTitle={siteTitle} footer={footer} links={links} metaData={metaData} siteUrl={siteUrl}>
 	<HeroBlockComponent title={title} subTitle={subTitle} />
 	<ZoneContentComponent content={content} />
 	<ArticlesGallery previews={previews} />

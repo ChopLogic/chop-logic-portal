@@ -6,15 +6,17 @@ import {
 } from "@components";
 import type { CorePageData } from "@models";
 
-type Props = Omit<CorePageData, "logo">;
+type Props = Omit<CorePageData, "logo"> & {
+	siteUrl: string;
+};
 
-const { siteTitle, footer, links, metaData } = Astro.props;
+const { siteTitle, footer, links, metaData, siteUrl } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<MetaDataComponent siteTitle={siteTitle} metaData={metaData} />
+		<MetaDataComponent siteTitle={siteTitle} metaData={metaData} siteRoot={siteUrl} />
 		<style>
 			main {
 				padding: var(--cl-xl-gap);

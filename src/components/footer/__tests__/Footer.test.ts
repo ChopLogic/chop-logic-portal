@@ -60,17 +60,17 @@ describe("Footer.astro", () => {
 		expect(html).toContain("Footer copy");
 	});
 
-	it("does not render the social-links block when no link has a platform", async () => {
+	it("does not render the footer__social-links block when no link has a platform", async () => {
 		const html = await container.renderToString(Footer, {
 			props: {
 				content: emptyRichText(),
 				links: [testLink({ url: "https://x.com", text: "No platform" })],
 			},
 		});
-		expect(html).not.toContain('class="social-links"');
+		expect(html).not.toContain('class="footer__social-links"');
 	});
 
-	it("renders the social-links block when at least one link has a platform", async () => {
+	it("renders the footer__social-links block when at least one link has a platform", async () => {
 		const html = await container.renderToString(Footer, {
 			props: {
 				content: emptyRichText(),
@@ -83,7 +83,7 @@ describe("Footer.astro", () => {
 				],
 			},
 		});
-		expect(html).toContain('class="social-links"');
+		expect(html).toContain('class="footer__social-links"');
 		expect(html).toContain("M12 .297");
 	});
 });

@@ -29,14 +29,12 @@ import type {
 import { NotFoundError } from "./errors";
 
 export class PageService implements PageRepository {
-	private readonly siteUrl: string;
 	private readonly apiUrl: string;
 
 	constructor(
 		private client: Client,
-		{ siteUrl, apiUrl }: { siteUrl: string; apiUrl: string },
+		{ apiUrl }: { apiUrl: string },
 	) {
-		this.siteUrl = siteUrl;
 		this.apiUrl = apiUrl;
 	}
 
@@ -51,7 +49,7 @@ export class PageService implements PageRepository {
 			slug: normalizeRequiredString(home.slug),
 			updatedAt: normalizeRequiredDate(home.updatedAt),
 			content: mapDynamicZoneContent(home.content, this.apiUrl),
-			metaData: mapMetaData(home.metaData, this.siteUrl),
+			metaData: mapMetaData(home.metaData, this.apiUrl),
 			siteTitle: normalizeRequiredString(config.title, DEFAULT_SITE_TITLE),
 			description: normalizeRequiredString(
 				config.description,
@@ -74,7 +72,7 @@ export class PageService implements PageRepository {
 			slug: normalizeRequiredString(aboutMe.slug),
 			updatedAt: normalizeRequiredDate(aboutMe.updatedAt),
 			content: mapDynamicZoneContent(aboutMe.content, this.apiUrl),
-			metaData: mapMetaData(aboutMe.metaData, this.siteUrl),
+			metaData: mapMetaData(aboutMe.metaData, this.apiUrl),
 			siteTitle: normalizeRequiredString(config.title, DEFAULT_SITE_TITLE),
 			description: normalizeRequiredString(
 				config.description,
@@ -97,7 +95,7 @@ export class PageService implements PageRepository {
 			slug: normalizeRequiredString(blog.slug),
 			updatedAt: normalizeRequiredDate(blog.updatedAt),
 			content: mapDynamicZoneContent(blog.content, this.apiUrl),
-			metaData: mapMetaData(blog.metaData, this.siteUrl),
+			metaData: mapMetaData(blog.metaData, this.apiUrl),
 			siteTitle: normalizeRequiredString(config.title, DEFAULT_SITE_TITLE),
 			description: normalizeRequiredString(
 				config.description,
@@ -132,7 +130,7 @@ export class PageService implements PageRepository {
 			slug: normalizeRequiredString(article.slug),
 			updatedAt: normalizeRequiredDate(article.updatedAt),
 			content: mapDynamicZoneContent(article.content, this.apiUrl),
-			metaData: mapMetaData(article.metaData, this.siteUrl),
+			metaData: mapMetaData(article.metaData, this.apiUrl),
 			siteTitle: normalizeRequiredString(config.title, DEFAULT_SITE_TITLE),
 			description: normalizeRequiredString(
 				config.description,

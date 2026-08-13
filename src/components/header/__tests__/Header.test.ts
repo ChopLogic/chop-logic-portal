@@ -15,7 +15,6 @@ describe("Header.astro", () => {
 		});
 		expect(html).toContain("<header");
 		expect(html).toContain("<nav");
-		expect(html).toContain('class="internal-links"');
 		expect(html).toContain('href="/"');
 		expect(html).toContain("Home");
 		expect(html).toContain('href="/blog"');

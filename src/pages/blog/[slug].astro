@@ -6,12 +6,13 @@ import { ConfigService, PageService } from "@services";
 
 export async function getStaticPaths() {
 	const config = new ConfigService();
+	const siteUrl = config.getSiteUrl();
+	const apiUrl = config.getApiUrl();
 	const client = new StrapiGraphQLClient({
-		apiEndpoint: config.getApiUrl(),
+		apiUrl,
 		token: config.getApiToken(),
 	});
 	const service = new PageService(client, {
-		siteUrl: config.getSiteUrl(),
 		apiUrl: config.getApiUrl(),
 	});
 
@@ -22,14 +23,14 @@ export async function getStaticPaths() {
 			const page = await service.getArticlePageBySlug(slug);
 			return {
 				params: { slug },
-				props: { page },
+				props: { page, siteUrl },
 			};
 		}),
 	);
 	return paths.filter((p): p is NonNullable<typeof p> => p !== null);
 }
 
-const { page } = Astro.props;
+const { page, siteUrl } = Astro.props;
 const { siteTitle, footer, links, metaData, title, subTitle, content } = page;
 ---
 
@@ -38,6 +39,7 @@ const { siteTitle, footer, links, metaData, title, subTitle, content } = page;
 	footer={footer}
 	links={links}
 	metaData={metaData}
+	siteUrl={siteUrl}
 >
 	<HeroBlockComponent title={title} subTitle={subTitle} />
 	<ZoneContentComponent content={content} />

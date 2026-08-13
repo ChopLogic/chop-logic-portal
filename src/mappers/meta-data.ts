@@ -33,15 +33,15 @@ function normalizeOgType(raw: unknown): OgType {
 
 function normalizeOgImage(
 	ogImageRaw: unknown,
-	baseUrl: string,
+	apiUrl: string,
 ): OpenGraphImageMeta {
 	if (!isRecord(ogImageRaw)) {
 		return OPEN_GRAPH_FALLBACK_IMAGE;
 	}
 
-	const img = mapCmsImage(ogImageRaw, baseUrl);
+	const img = mapCmsImage(ogImageRaw, apiUrl);
 	if (img) {
-		const picked = pickOpenGraphCmsImage(img, baseUrl);
+		const picked = pickOpenGraphCmsImage(img, apiUrl);
 		return {
 			src: picked.src,
 			width: picked.width,
@@ -52,7 +52,7 @@ function normalizeOgImage(
 	return OPEN_GRAPH_FALLBACK_IMAGE;
 }
 
-function mapOpenGraph(raw: unknown, baseUrl: string): OpenGraph {
+function mapOpenGraph(raw: unknown, apiUrl: string): OpenGraph {
 	if (!isRecord(raw)) {
 		return DEFAULT_OPEN_GRAPH;
 	}
@@ -64,11 +64,11 @@ function mapOpenGraph(raw: unknown, baseUrl: string): OpenGraph {
 		),
 		ogTitle: normalizeRequiredString(raw["ogTitle"], DEFAULT_SITE_TITLE),
 		ogType: normalizeOgType(raw["ogType"]),
-		ogImage: normalizeOgImage(raw["ogImage"], baseUrl),
+		ogImage: normalizeOgImage(raw["ogImage"], apiUrl),
 	};
 }
 
-export function mapMetaData(raw: unknown, baseUrl: string): MetaData {
+export function mapMetaData(raw: unknown, apiUrl: string): MetaData {
 	if (!isRecord(raw)) {
 		return {
 			metaTitle: DEFAULT_SITE_TITLE,
@@ -89,6 +89,6 @@ export function mapMetaData(raw: unknown, baseUrl: string): MetaData {
 		authorName: normalizeOptionalString(raw["authorName"]),
 		robots: normalizeOptionalString(raw["robots"], DEFAULT_ROBOTS),
 		structuredData: raw["structuredData"] as MetaData["structuredData"],
-		openGraph: mapOpenGraph(raw["openGraph"], baseUrl),
+		openGraph: mapOpenGraph(raw["openGraph"], apiUrl),
 	};
 }

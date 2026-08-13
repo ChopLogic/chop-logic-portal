@@ -6,14 +6,13 @@ import { PageLayout } from "@layouts";
 import { ConfigService, PageService } from "@services";
 
 const config = new ConfigService();
+const siteUrl = config.getSiteUrl();
+const apiUrl = config.getApiUrl();
 const client = new StrapiGraphQLClient({
-	apiEndpoint: config.getApiUrl(),
+	apiUrl,
 	token: config.getApiToken(),
 });
-const service = new PageService(client, {
-	siteUrl: config.getSiteUrl(),
-	apiUrl: config.getApiUrl(),
-});
+const service = new PageService(client, { apiUrl });
 const { siteTitle, footer, links, metaData, title, subTitle, content } =
 	await service.getHomePage();
 ---
@@ -23,6 +22,7 @@ const { siteTitle, footer, links, metaData, title, subTitle, content } =
 	footer={footer}
 	links={links}
 	metaData={metaData}
+	siteUrl={siteUrl}
 >
 	<HeroBlockComponent title={title} subTitle={subTitle} />
 	<ZoneContentComponent content={content} />

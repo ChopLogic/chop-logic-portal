@@ -2,17 +2,15 @@
 import HeaderLink from "./HeaderLink.astro";
 ---
 
-<header>
-	<nav>
-		<div class="internal-links">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/blog">Blog</HeaderLink>
-			<HeaderLink href="/about">About</HeaderLink>
-		</div>
+<header class="header">
+	<nav class="header__navigation">
+		<HeaderLink href="/" class="header__link">Home</HeaderLink>
+		<HeaderLink href="/blog" class="header__link">Blog</HeaderLink>
+		<HeaderLink href="/about" class="header__link">About</HeaderLink>
 	</nav>
 </header>
 <style>
-	header {
+	.header {
 		margin: 0;
 		padding: 0;
 		background: var(--cl-base-background-color);
@@ -21,21 +19,21 @@ import HeaderLink from "./HeaderLink.astro";
 		align-items: center;
 		justify-content: center;
 	}
-	nav {
+	.header__navigation {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 	}
-	nav a {
+	.header__link {
 		padding: 1em 0.5em;
 		color: var(--cl-base-font-color);
 		text-decoration: none;
 	}
-	nav a:hover {
+	.header__link:hover {
 		text-shadow: var(--cl-text-shadow);
 		text-decoration: underline;
 	}
-	nav a.active {
+	.header__link.active {
 		text-decoration: none;
 		text-shadow: none;
 		cursor: default;

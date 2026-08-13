@@ -15,11 +15,8 @@ export class StrapiGraphQLClient implements Client {
 		raw: GraphQLClient;
 	};
 
-	constructor({
-		apiEndpoint,
-		token,
-	}: { apiEndpoint: string; token: string | null }) {
-		const graphqlEndpoint = `${apiEndpoint}/graphql`;
+	constructor({ apiUrl, token }: { apiUrl: string; token: string | null }) {
+		const graphqlEndpoint = `${apiUrl}/graphql`;
 
 		const rawClient = new GraphQLClient(graphqlEndpoint, {
 			headers: {
