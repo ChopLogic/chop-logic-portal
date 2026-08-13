@@ -1,9 +1,11 @@
 ---
 import { StrapiGraphQLClient } from "@api/client";
-import ArticlesPreviewsGrid from "@components/articles-previews-grid/ArticlesPreviewsGrid.astro";
-import HeroBlock from "@components/hero-block/HeroBlock.astro";
-import ZoneContent from "@components/zone-content/ZoneContent.astro";
-import Layout from "@layouts/PageLayout.astro";
+import {
+	ArticlesGallery,
+	HeroBlockComponent,
+	ZoneContentComponent,
+} from "@components";
+import { PageLayout } from "@layouts";
 import { ConfigService, PageService } from "@services";
 
 const config = new ConfigService();
@@ -27,8 +29,8 @@ const {
 } = await service.getBlogPage();
 ---
 
-<Layout siteTitle={siteTitle} footer={footer} links={links} metaData={metaData}>
-	<HeroBlock title={title} subTitle={subTitle} />
-	<ZoneContent content={content} />
-	<ArticlesPreviewsGrid previews={previews} />
-</Layout>
+<PageLayout siteTitle={siteTitle} footer={footer} links={links} metaData={metaData}>
+	<HeroBlockComponent title={title} subTitle={subTitle} />
+	<ZoneContentComponent content={content} />
+	<ArticlesGallery previews={previews} />
+</PageLayout>

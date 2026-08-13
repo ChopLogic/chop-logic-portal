@@ -9,21 +9,21 @@ type Props = {
 const { previews } = Astro.props;
 ---
 
-<div class="articles-preview-grid">
+<div class="articles-gallery">
 	{
 		previews.map(({ slug, ...rest }) => {
 			return (
 				<PreviewCard
 					link={`/blog/${slug}`}
 					{...rest}
-					className="articles-preview-grid__summary"
+					className="articles-gallery__summary"
 				/>
 			);
 		})
 	}
 </div>
 <style>
-	.articles-preview-grid {
+	.articles-gallery {
 		display: grid;
 		grid-template-columns: 1fr;
 		grid-template-rows: auto;
@@ -31,20 +31,20 @@ const { previews } = Astro.props;
 		padding-top: var(--cl-xl-gap);
 	}
 
-	.articles-preview-grid__summary {
+	.articles-gallery__summary {
 		width: auto;
 		min-width: 0;
 		min-height: 0;
 	}
 
 	@media (min-width: 640px) {
-		.articles-preview-grid {
+		.articles-gallery {
 			grid-template-columns: repeat(2, 1fr);
 		}
 	}
 
 	@media (min-width: 1024px) {
-		.articles-preview-grid {
+		.articles-gallery {
 			grid-template-columns: repeat(3, 1fr);
 		}
 	}

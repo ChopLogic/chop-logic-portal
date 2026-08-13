@@ -15,9 +15,9 @@
 		"paths": {
 			"@api/*": ["./src/api/*"],
 			"@assets/*": ["./src/assets/*"],
-			"@components/*": ["./src/components/*"],
+			"@components": ["./src/components/index"],
 			"@constants": ["./src/constants/index"],
-			"@layouts/*": ["./src/layouts/*"],
+			"@layouts": ["./src/layouts/index"],
 			"@models": ["./src/models/index"],
 			"@mappers": ["./src/mappers/index"],
 			"@pages/*": ["./src/pages/*"],

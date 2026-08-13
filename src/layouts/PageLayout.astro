@@ -1,7 +1,9 @@
 ---
-import Footer from "@components/footer/Footer.astro";
-import Header from "@components/header/Header.astro";
-import MetaDataComponent from "@components/meta-data/MetaData.astro";
+import {
+	FooterComponent,
+	HeaderComponent,
+	MetaDataComponent,
+} from "@components";
 import type { CorePageData } from "@models";
 
 type Props = Omit<CorePageData, "logo">;
@@ -22,10 +24,10 @@ const { siteTitle, footer, links, metaData } = Astro.props;
 		</style>
 	</head>
 	<body>
-		<Header />
+		<HeaderComponent />
 		<main>
 			<slot />
 		</main>
-		<Footer content={footer} links={links} />
+		<FooterComponent content={footer} links={links} />
 	</body>
 </html>

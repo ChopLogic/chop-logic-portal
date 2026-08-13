@@ -1,8 +1,7 @@
 ---
 import { StrapiGraphQLClient } from "@api/client";
-import HeroBlock from "@components/hero-block/HeroBlock.astro";
-import ZoneContent from "@components/zone-content/ZoneContent.astro";
-import Layout from "@layouts/PageLayout.astro";
+import { HeroBlockComponent, ZoneContentComponent } from "@components";
+import { PageLayout } from "@layouts";
 import { ConfigService, PageService } from "@services";
 
 const config = new ConfigService();
@@ -18,7 +17,12 @@ const { siteTitle, footer, links, metaData, title, subTitle, content } =
 	await service.getAboutMePage();
 ---
 
-<Layout siteTitle={siteTitle} footer={footer} links={links} metaData={metaData}>
-	<HeroBlock title={title} subTitle={subTitle} />
-	<ZoneContent content={content} />
-</Layout>
+<PageLayout
+	siteTitle={siteTitle}
+	footer={footer}
+	links={links}
+	metaData={metaData}
+>
+	<HeroBlockComponent title={title} subTitle={subTitle} />
+	<ZoneContentComponent content={content} />
+</PageLayout>
