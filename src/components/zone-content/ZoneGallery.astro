@@ -1,18 +1,13 @@
 ---
 import type { DynamicZoneGallery } from "@models";
 import { Gallery } from "chop-logic-components";
-import { mapCMSImageToGalleryItem } from "./gallery";
 
 interface Props {
 	gallery: DynamicZoneGallery;
 }
 
 const { gallery } = Astro.props;
-const { heading, subHeading, layout, items, aspectRatio } = gallery;
-
-const galleryItems = items.map((image) =>
-	mapCMSImageToGalleryItem(image, aspectRatio),
-);
+const { heading, subHeading, layout, items } = gallery;
 ---
 
 <section class:list={["zone-gallery", `zone-gallery--${layout}`]}>
@@ -20,7 +15,7 @@ const galleryItems = items.map((image) =>
 	{subHeading && <h3>{subHeading}</h3>}
 	<Gallery
 		client:load
-		images={galleryItems}
+		images={items}
 		layout={layout}
 		enableFullscreen
 	/>

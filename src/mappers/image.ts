@@ -1,18 +1,22 @@
 /** biome-ignore-all lint/complexity/useLiteralKeys: dynamic Strapi media keys */
 
 import {
+	DEFAULT_ALT_TEXT,
 	IMAGE_FORMAT_NAMES,
 	OG_IMAGE_IDEAL_WIDTH,
 	OG_IMAGE_MIN_HEIGHT,
 	OG_IMAGE_MIN_WIDTH,
 	OG_IMAGE_SOFT_MAX_WIDTH,
+	SOURCE_DESCRIPTOR_BY_FORMAT_NAME,
 } from "@constants";
 import type {
 	CmsImage,
+	CmsImageFormatName,
 	CmsImageFormats,
 	CmsImageFormatVariant,
 	OpenGraphCmsImagePick,
 } from "@models";
+import type { GalleryItem, ImageSource } from "chop-logic-components";
 import { isImageFormatName, isRecord } from "./checkers";
 import {
 	normalizeOptionalString,
@@ -141,5 +145,48 @@ export function pickOpenGraphCmsImage(
 		src: resolveMediaAbsoluteUrl(image.url, baseUrl),
 		width: image.width,
 		height: image.height,
+	};
+}
+
+export function mapCMSImageFormatsToSources(
+	formats: CmsImageFormats,
+): ImageSource[] {
+	const sources: ImageSource[] = [];
+
+	// Sort formats by width (smallest first)
+	const formatOrder: CmsImageFormatName[] = ["small", "medium", "large"];
+
+	for (const formatName of formatOrder) {
+		const variant = formats[formatName];
+		if (!variant) continue;
+
+		sources.push({
+			src: variant.url,
+			type: variant.mime ?? "image/jpeg",
+			descriptor: SOURCE_DESCRIPTOR_BY_FORMAT_NAME[formatName],
+		});
+	}
+
+	return sources;
+}
+
+export function mapCMSImageToGalleryItem(
+	image: CmsImage,
+	aspectRatio?: string,
+): GalleryItem {
+	const fallbackImage =
+		image.formats.small ?? image.formats.medium ?? image.formats.large ?? image;
+
+	const sources = mapCMSImageFormatsToSources(image.formats);
+	const alt = image?.alternativeText ?? DEFAULT_ALT_TEXT;
+	const sizes = `(max-width: 500px) 500px, (max-width: 750px) 750px, 1000px`;
+
+	return {
+		src: fallbackImage.url,
+		alt,
+		sources,
+		sizes,
+		aspectRatio,
+		loading: "lazy",
 	};
 }

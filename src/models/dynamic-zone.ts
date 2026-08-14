@@ -1,3 +1,4 @@
+import type { GalleryItem } from "chop-logic-components";
 import type { CmsImage } from "./image";
 import type { Link } from "./link";
 import type { RichTextContent } from "./rich-text-block";
@@ -35,7 +36,7 @@ export interface DynamicZoneGallery {
 	readonly heading: string;
 	readonly subHeading?: string;
 	readonly layout: "grid" | "masonry" | "carousel";
-	readonly items: CmsImage[];
+	readonly items: GalleryItem[];
 	readonly aspectRatio?: string;
 }
 

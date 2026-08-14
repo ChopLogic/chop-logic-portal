@@ -18,7 +18,7 @@ import {
 	type Link,
 } from "@models";
 import { isRecord } from "./checkers";
-import { mapCmsImage } from "./image";
+import { mapCMSImageToGalleryItem, mapCmsImage } from "./image";
 import { mapLink } from "./link";
 import {
 	normalizeOptionalString,
@@ -160,6 +160,11 @@ export function mapPicture(value: unknown, apiUrl: string): DynamicZonePicture {
 
 export function mapGallery(value: unknown, apiUrl: string): DynamicZoneGallery {
 	const raw = requireRecord(value);
+	const aspectRatio = normalizeOptionalString(raw["aspectRatio"]);
+	const cmsImages = normalizeGalleryItems(raw["items"], apiUrl);
+	const items = cmsImages.map((image) =>
+		mapCMSImageToGalleryItem(image, aspectRatio),
+	);
 
 	return {
 		type: DynamicZoneComponentType.Gallery,
@@ -167,8 +172,8 @@ export function mapGallery(value: unknown, apiUrl: string): DynamicZoneGallery {
 		heading: normalizeRequiredString(raw["heading"]),
 		subHeading: normalizeOptionalString(raw["subHeading"]),
 		layout: normalizeGalleryLayout(raw["layout"]),
-		items: normalizeGalleryItems(raw["items"], apiUrl),
-		aspectRatio: normalizeOptionalString(raw["aspectRatio"]),
+		items,
+		aspectRatio,
 	};
 }
 
