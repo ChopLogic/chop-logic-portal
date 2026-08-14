@@ -2,6 +2,7 @@
 import type { DynamicZoneEmbeddedVideo } from "@models";
 import Link from "../link/Link.astro";
 import { resolveEmbedVideoSource } from "./embed-video";
+import ZoneHeadingBlock from "./ZoneHeadingBlock.astro";
 
 interface Props {
 	embeddedVideo: DynamicZoneEmbeddedVideo;
@@ -19,8 +20,7 @@ const iframeTitle = link.text || heading;
 		embed && `zone-embedded-video--${embed.provider}`,
 	]}
 >
-	<h2>{heading}</h2>
-	{subHeading && <h3>{subHeading}</h3>}
+	<ZoneHeadingBlock heading={heading} subHeading={subHeading} />
 	{
 		embed ? (
 			<div class="zone-embedded-video__player" style={{aspectRatio}}>

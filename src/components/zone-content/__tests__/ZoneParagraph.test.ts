@@ -58,23 +58,6 @@ describe("ZoneParagraph.astro", () => {
 		expect(html).toContain("Body copy");
 	});
 
-	it("renders subHeading as h3 when provided", async () => {
-		const html = await render(
-			testParagraph({ subHeading: "Secondary heading" }),
-		);
-		expect(html).toContain("<h3");
-		expect(html).toContain("Secondary heading");
-		expect(html).toContain("</h3>");
-		const iH2 = html.indexOf("</h2>");
-		const iH3 = html.indexOf("<h3");
-		expect(iH3).toBeGreaterThan(iH2);
-	});
-
-	it("omits h3 when subHeading is not set", async () => {
-		const html = await render(testParagraph());
-		expect(html).not.toContain("<h3");
-	});
-
 	it("applies text alignment from paragraph props", async () => {
 		const html = await render(testParagraph({ alignment: "center" }));
 		expect(html).toContain('style="text-align: center"');

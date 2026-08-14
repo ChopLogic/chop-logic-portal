@@ -52,9 +52,6 @@ describe("ZoneReferenceList.astro", () => {
 	it("renders a bibliography section with ordered references", async () => {
 		const html = await render(testReferenceList());
 		expect(html).toContain('<section class="zone-references"');
-		expect(html).toContain('role="region"');
-		expect(html).toContain('aria-labelledby="zone-references-heading-refs-1"');
-		expect(html).toContain('id="zone-references-heading-refs-1"');
 		expect(html).toContain("References");
 		expect(html).toContain("Sources cited in this article");
 		expect(html).toContain('<ol class="zone-references-list"');

@@ -1,6 +1,7 @@
 ---
 import type { DynamicZoneGallery } from "@models";
 import { Gallery } from "chop-logic-components";
+import ZoneHeadingBlock from "./ZoneHeadingBlock.astro";
 
 interface Props {
 	gallery: DynamicZoneGallery;
@@ -11,8 +12,7 @@ const { heading, subHeading, layout, items } = gallery;
 ---
 
 <section class:list={["zone-gallery", `zone-gallery--${layout}`]}>
-	<h2>{heading}</h2>
-	{subHeading && <h3>{subHeading}</h3>}
+	<ZoneHeadingBlock heading={heading} subHeading={subHeading} />
 	<Gallery
 		client:load
 		images={items}
