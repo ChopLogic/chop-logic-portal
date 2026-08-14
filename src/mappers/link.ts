@@ -84,14 +84,26 @@ function normalizeSocialPlatform(raw: unknown): SocialPlatform | undefined {
 	}
 }
 
+/** `rel` for CMS links that open in a new browsing context. */
+function buildCmsLinkRel(target: LinkTarget): string | undefined {
+	if (target === LinkTarget.Blank) {
+		return "noopener noreferrer";
+	}
+	return undefined;
+}
+
 export function mapLink(raw: unknown): Link | null {
 	if (!isRecord(raw)) {
 		return null;
 	}
 
+	const target = normalizeLinkTarget(raw["target"]);
+	const rel = buildCmsLinkRel(target);
+
 	return {
+		target,
+		rel,
 		id: normalizeRequiredString(raw["id"]),
-		target: normalizeLinkTarget(raw["target"]),
 		url: normalizeRequiredString(raw["url"]),
 		text: normalizeRequiredString(raw["text"]),
 		type: normalizeLinkType(raw["type"]),

@@ -1,6 +1,5 @@
 ---
 import type { Link } from "@models";
-import { buildCmsLinkRel } from "./Link.helpers";
 
 interface Props {
 	link: Link;
@@ -8,13 +7,12 @@ interface Props {
 }
 
 const { link, className } = Astro.props;
-const rel = buildCmsLinkRel(link);
 ---
 
 <a
 	href={link.url}
 	target={link.target}
-	rel={rel}
+	rel={link.rel}
 	referrerpolicy={link.referrerPolicy}
 	class={className}
 >

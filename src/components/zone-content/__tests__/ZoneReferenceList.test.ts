@@ -18,6 +18,7 @@ function testLink(id: string, overrides: Partial<Link> = {}): Link {
 		target: LinkTarget.Blank,
 		type: LinkType.External,
 		referrerPolicy: ReferrerPolicy.StrictOriginWhenCrossOrigin,
+		rel: "noopener noreferrer",
 		...overrides,
 	};
 }

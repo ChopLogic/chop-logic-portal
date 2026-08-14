@@ -24,6 +24,7 @@ function testLink(overrides: Partial<Link> = {}): Link {
 		type: LinkType.External,
 		referrerPolicy: ReferrerPolicy.StrictOriginWhenCrossOrigin,
 		platform: SocialPlatform.GitHub,
+		rel: "noopener noreferrer",
 		...overrides,
 	};
 }

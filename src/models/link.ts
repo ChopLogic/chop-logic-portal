@@ -6,6 +6,7 @@ export interface Link {
 	type: LinkType;
 	referrerPolicy: ReferrerPolicy;
 	platform?: SocialPlatform;
+	rel?: string;
 }
 
 export enum SocialPlatform {
