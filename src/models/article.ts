@@ -1,9 +1,5 @@
 import type { Author, ImageProps, TagData } from "chop-logic-components";
-import type { DynamicZoneContent } from "./dynamic-zone";
 import type { CmsImage } from "./image";
-import type { MetaData } from "./meta-data";
-import type { RichTextContent } from "./rich-text-block";
-import type { Tag } from "./tag";
 
 export interface ArticleAuthorConnection {
 	readonly id: string;
@@ -13,31 +9,12 @@ export interface ArticleAuthorConnection {
 	readonly role?: string;
 }
 
-export interface ArticleSummary {
-	readonly id: string;
-	readonly title: string;
-	readonly subTitle?: string;
-	readonly slug: string;
-	readonly publicationDate: Date;
-	readonly excerpt: string;
-	readonly updatedAt?: Date;
-	readonly preview?: CmsImage;
-	readonly tags: Tag[];
-	readonly authors: ArticleAuthorConnection[];
-}
-
-export type ArticlePage = ArticleSummary & {
-	readonly summary: RichTextContent;
-	readonly content: DynamicZoneContent;
-	readonly metaData: MetaData;
-};
-
 export interface ArticlePreview {
-	id: string;
-	slug: string;
-	title: string;
-	image: ImageProps;
-	authors: Author[];
-	tags: TagData[];
-	summary?: string;
+	readonly id: string;
+	readonly slug: string;
+	readonly title: string;
+	readonly image: ImageProps;
+	readonly authors: Author[];
+	readonly tags: TagData[];
+	readonly summary?: string;
 }

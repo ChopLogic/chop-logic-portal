@@ -8,6 +8,5 @@ export * from "./meta-data";
 export * from "./page";
 export * from "./repositories";
 export * from "./rich-text-block";
-export * from "./site-config";
 export * from "./tag";
 export * from "./video";
