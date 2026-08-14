@@ -5,6 +5,7 @@ import {
 	BLOG_PAGE_QUERY,
 	HOME_PAGE_QUERY,
 } from "@api/queries";
+import type { Config } from "@api/types/generated";
 import { DEFAULT_SITE_DESCRIPTION, DEFAULT_SITE_TITLE } from "@constants";
 import {
 	mapArticleToArticlePreview,
@@ -23,6 +24,9 @@ import type {
 	ArticleSlugsResponse,
 	BlogPageResponse,
 	Client,
+	CorePageData,
+	DynamicContentPageData,
+	DynamicPageContentResponse,
 	HomePageResponse,
 	PageRepository,
 } from "@models";
@@ -38,18 +42,8 @@ export class PageService implements PageRepository {
 		this.apiUrl = apiUrl;
 	}
 
-	async getHomePage() {
-		const { home, config } =
-			await this.client.executeQuery<HomePageResponse>(HOME_PAGE_QUERY);
-
+	private mapConfigToCorePageData(config: Config): CorePageData {
 		return {
-			id: home.documentId,
-			title: normalizeRequiredString(home.title),
-			subTitle: normalizeOptionalString(home.subTitle),
-			slug: normalizeRequiredString(home.slug),
-			updatedAt: normalizeRequiredDate(home.updatedAt),
-			content: mapDynamicZoneContent(home.content, this.apiUrl),
-			metaData: mapMetaData(home.metaData, this.apiUrl),
 			siteTitle: normalizeRequiredString(config.title, DEFAULT_SITE_TITLE),
 			description: normalizeRequiredString(
 				config.description,
@@ -58,6 +52,31 @@ export class PageService implements PageRepository {
 			footer: mapRichTextBlock(config.footer),
 			links: mapLinks(config.links),
 			logo: mapCmsImage(config.logo, this.apiUrl),
+		};
+	}
+
+	private mapResponseToDynamicPageData(
+		content: DynamicPageContentResponse,
+		config: Config,
+	): DynamicContentPageData {
+		return {
+			id: content.documentId,
+			title: normalizeRequiredString(content.title),
+			subTitle: normalizeOptionalString(content.subTitle),
+			slug: normalizeRequiredString(content.slug),
+			updatedAt: normalizeRequiredDate(content.updatedAt),
+			content: mapDynamicZoneContent(content.content, this.apiUrl),
+			metaData: mapMetaData(content.metaData, this.apiUrl),
+			...this.mapConfigToCorePageData(config),
+		};
+	}
+
+	async getHomePage() {
+		const { home, config } =
+			await this.client.executeQuery<HomePageResponse>(HOME_PAGE_QUERY);
+
+		return {
+			...this.mapResponseToDynamicPageData(home, config),
 		};
 	}
 
@@ -66,21 +85,7 @@ export class PageService implements PageRepository {
 			await this.client.executeQuery<AboutMePageResponse>(ABOUT_ME_PAGE_QUERY);
 
 		return {
-			id: aboutMe.documentId,
-			title: normalizeRequiredString(aboutMe.title),
-			subTitle: normalizeOptionalString(aboutMe.subTitle),
-			slug: normalizeRequiredString(aboutMe.slug),
-			updatedAt: normalizeRequiredDate(aboutMe.updatedAt),
-			content: mapDynamicZoneContent(aboutMe.content, this.apiUrl),
-			metaData: mapMetaData(aboutMe.metaData, this.apiUrl),
-			siteTitle: normalizeRequiredString(config.title, DEFAULT_SITE_TITLE),
-			description: normalizeRequiredString(
-				config.description,
-				DEFAULT_SITE_DESCRIPTION,
-			),
-			footer: mapRichTextBlock(config.footer),
-			links: mapLinks(config.links),
-			logo: mapCmsImage(config.logo, this.apiUrl),
+			...this.mapResponseToDynamicPageData(aboutMe, config),
 		};
 	}
 
@@ -89,21 +94,7 @@ export class PageService implements PageRepository {
 			await this.client.executeQuery<BlogPageResponse>(BLOG_PAGE_QUERY);
 
 		return {
-			id: blog.documentId,
-			title: normalizeRequiredString(blog.title),
-			subTitle: normalizeOptionalString(blog.subTitle),
-			slug: normalizeRequiredString(blog.slug),
-			updatedAt: normalizeRequiredDate(blog.updatedAt),
-			content: mapDynamicZoneContent(blog.content, this.apiUrl),
-			metaData: mapMetaData(blog.metaData, this.apiUrl),
-			siteTitle: normalizeRequiredString(config.title, DEFAULT_SITE_TITLE),
-			description: normalizeRequiredString(
-				config.description,
-				DEFAULT_SITE_DESCRIPTION,
-			),
-			footer: mapRichTextBlock(config.footer),
-			links: mapLinks(config.links),
-			logo: mapCmsImage(config.logo, this.apiUrl),
+			...this.mapResponseToDynamicPageData(blog, config),
 			previews: articles.map((item) =>
 				mapArticleToArticlePreview(item, this.apiUrl),
 			),
@@ -124,21 +115,7 @@ export class PageService implements PageRepository {
 		}
 
 		return {
-			id: article.documentId,
-			title: normalizeRequiredString(article.title),
-			subTitle: normalizeOptionalString(article.subTitle),
-			slug: normalizeRequiredString(article.slug),
-			updatedAt: normalizeRequiredDate(article.updatedAt),
-			content: mapDynamicZoneContent(article.content, this.apiUrl),
-			metaData: mapMetaData(article.metaData, this.apiUrl),
-			siteTitle: normalizeRequiredString(config.title, DEFAULT_SITE_TITLE),
-			description: normalizeRequiredString(
-				config.description,
-				DEFAULT_SITE_DESCRIPTION,
-			),
-			footer: mapRichTextBlock(config.footer),
-			links: mapLinks(config.links),
-			logo: mapCmsImage(config.logo, this.apiUrl),
+			...this.mapResponseToDynamicPageData(article, config),
 			summary: mapRichTextBlock(article.summary),
 		};
 	}

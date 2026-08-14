@@ -4,10 +4,11 @@ import {
 	HeaderComponent,
 	MetaDataComponent,
 } from "@components";
-import type { CorePageData } from "@models";
+import type { CorePageData, MetaData } from "@models";
 
 type Props = Omit<CorePageData, "logo"> & {
-	siteUrl: string;
+	readonly siteUrl: string;
+	readonly metaData: MetaData;
 };
 
 const { siteTitle, footer, links, metaData, siteUrl } = Astro.props;

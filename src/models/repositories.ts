@@ -27,6 +27,8 @@ export type ArticleSlugsResponse = {
 	articles: Array<{ slug: string; documentId: string }>;
 };
 
+export type DynamicPageContentResponse = Home | AboutMe | Blog | Article;
+
 export interface PageRepository {
 	getHomePage(): Promise<DynamicContentPageData>;
 	getAboutMePage(): Promise<DynamicContentPageData>;

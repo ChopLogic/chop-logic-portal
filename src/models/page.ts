@@ -10,7 +10,6 @@ export interface CorePageData {
 	readonly footer: RichTextContent;
 	readonly links: Link[];
 	readonly logo: CmsImage | null;
-	readonly metaData: MetaData;
 }
 
 export interface DynamicContentPageData extends CorePageData {
@@ -20,6 +19,7 @@ export interface DynamicContentPageData extends CorePageData {
 	readonly slug: string;
 	readonly updatedAt: Date;
 	readonly content: DynamicZoneContent;
+	readonly metaData: MetaData;
 }
 
 export interface BlogPageData extends DynamicContentPageData {
