@@ -1,19 +1,5 @@
-export type EmbedVideoProvider = "youtube" | "vimeo";
-
-export interface EmbedVideoSource {
-	readonly embedUrl: string;
-	readonly provider: EmbedVideoProvider;
-}
-
-const YOUTUBE_HOSTS = new Set([
-	"youtube.com",
-	"www.youtube.com",
-	"m.youtube.com",
-	"youtu.be",
-	"www.youtube-nocookie.com",
-]);
-
-const VIMEO_HOSTS = new Set(["vimeo.com", "www.vimeo.com", "player.vimeo.com"]);
+import { VIMEO_HOSTS, YOUTUBE_HOSTS } from "@constants";
+import type { EmbedVideoSource } from "@models";
 
 function parseHttpUrl(raw: string): URL | null {
 	try {

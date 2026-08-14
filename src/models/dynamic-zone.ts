@@ -2,6 +2,7 @@ import type { GalleryItem } from "chop-logic-components";
 import type { CmsImage } from "./image";
 import type { Link } from "./link";
 import type { RichTextContent } from "./rich-text-block";
+import type { EmbedVideoSource } from "./video";
 
 export enum DynamicZoneComponentType {
 	Paragraph = "paragraph",
@@ -47,6 +48,7 @@ export interface DynamicZoneEmbeddedVideo {
 	readonly subHeading?: string;
 	readonly aspectRatio?: string;
 	readonly link: Link;
+	readonly embed: EmbedVideoSource | null;
 }
 
 export interface DynamicZoneReferenceList {

@@ -26,6 +26,7 @@ import {
 	normalizeRequiredString,
 } from "./normalizers";
 import { mapRichTextBlock } from "./rich-text-block";
+import { resolveEmbedVideoSource } from "./video";
 
 function requireRecord(value: unknown): Record<string, unknown> {
 	if (!isRecord(value)) {
@@ -119,14 +120,17 @@ export function mapZoneCallToAction(
 
 export function mapEmbeddedVideo(value: unknown): DynamicZoneEmbeddedVideo {
 	const raw = requireRecord(value);
+	const link = mapRequiredLink(raw["link"], "Embedded video");
+	const embed = resolveEmbedVideoSource(link.url);
 
 	return {
 		type: DynamicZoneComponentType.EmbeddedVideo,
 		id: normalizeRequiredString(raw["id"]),
 		heading: normalizeRequiredString(raw["heading"]),
 		subHeading: normalizeOptionalString(raw["subHeading"]),
-		link: mapRequiredLink(raw["link"], "Embedded video"),
-		aspectRatio: normalizeOptionalString(raw["aspectRatio"]),
+		aspectRatio: normalizeOptionalString(raw["aspectRatio"], "16/9"),
+		link,
+		embed,
 	};
 }
 

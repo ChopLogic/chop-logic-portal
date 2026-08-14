@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { resolveEmbedVideoSource } from "../embed-video";
+import { resolveEmbedVideoSource } from "../video";
 
 describe("resolveEmbedVideoSource", () => {
 	it("resolves YouTube watch URLs to privacy-enhanced embed URLs", () => {

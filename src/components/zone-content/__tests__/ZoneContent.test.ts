@@ -98,6 +98,11 @@ describe("ZoneContent.astro", () => {
 				id: "vid-1",
 				heading: "Video",
 				link: testLink(),
+				embed: {
+					embedUrl:
+						"https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1",
+					provider: "youtube",
+				},
 			},
 			{
 				type: DynamicZoneComponentType.ReferenceList,
