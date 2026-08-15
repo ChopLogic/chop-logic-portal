@@ -1,9 +1,7 @@
 ---
 import type { DynamicZoneCallToAction } from "@models";
-import { Button } from "chop-logic-components";
+import { Button, Image } from "chop-logic-components";
 import Link from "../link/Link.astro";
-import Picture from "../picture/Picture.astro";
-import { CMS_PICTURE_SIZES } from "../picture/Picture.helpers";
 import ZoneHeadingBlock from "./ZoneHeadingBlock.astro";
 
 interface Props {
@@ -17,13 +15,7 @@ const { heading, subHeading, link, picture } = callToAction;
 <section
 	class:list={["zone-cta", { "zone-cta--with-media": Boolean(picture) }]}
 >
-	{
-		picture && (
-			<div class="zone-cta__media">
-				<Picture item={picture} sizes={CMS_PICTURE_SIZES.cta} />
-			</div>
-		)
-	}
+	{picture && <Image {...picture} className="zone-cta__media" />}
 	<ZoneHeadingBlock
 		heading={heading}
 		subHeading={subHeading}
@@ -60,7 +52,7 @@ const { heading, subHeading, link, picture } = callToAction;
 		text-align: center;
 	}
 
-	.zone-cta__media {
+	:global(.zone-cta__media) {
 		grid-area: media;
 	}
 

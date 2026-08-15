@@ -2,6 +2,7 @@
 
 import {
 	DEFAULT_ALT_TEXT,
+	DEFAULT_IMAGE,
 	IMAGE_FORMAT_NAMES,
 	OG_IMAGE_IDEAL_WIDTH,
 	OG_IMAGE_MIN_HEIGHT,
@@ -16,7 +17,7 @@ import type {
 	CmsImageFormatVariant,
 	OpenGraphCmsImagePick,
 } from "@models";
-import type { GalleryItem, ImageSource } from "chop-logic-components";
+import type { ImageProps, ImageSource } from "chop-logic-components";
 import { isImageFormatName, isRecord } from "./checkers";
 import {
 	normalizeOptionalString,
@@ -170,10 +171,12 @@ export function mapCMSImageFormatsToSources(
 	return sources;
 }
 
-export function mapCMSImageToGalleryItem(
-	image: CmsImage,
+export function mapCMSImageToCLImage(
+	image: CmsImage | null,
 	aspectRatio?: string,
-): GalleryItem {
+): ImageProps {
+	if (!image) return DEFAULT_IMAGE;
+
 	const fallbackImage =
 		image.formats.small ?? image.formats.medium ?? image.formats.large ?? image;
 
@@ -188,5 +191,6 @@ export function mapCMSImageToGalleryItem(
 		sizes,
 		aspectRatio,
 		loading: "lazy",
+		caption: image.caption,
 	};
 }

@@ -18,7 +18,7 @@ import {
 	type Link,
 } from "@models";
 import { isRecord } from "./checkers";
-import { mapCMSImageToGalleryItem, mapCmsImage } from "./image";
+import { mapCMSImageToCLImage, mapCmsImage } from "./image";
 import { mapLink } from "./link";
 import {
 	normalizeOptionalString,
@@ -98,24 +98,17 @@ export function mapZoneCallToAction(
 ): DynamicZoneCallToAction {
 	const raw = requireRecord(value);
 	const link = mapRequiredLink(raw["link"], "Call to action");
+	const cmsImage = mapCmsImage(raw["picture"], apiUrl);
+	const picture = mapCMSImageToCLImage(cmsImage);
 
-	const result: DynamicZoneCallToAction = {
+	return {
 		type: DynamicZoneComponentType.CallToAction,
 		id: normalizeRequiredString(raw["id"]),
 		heading: normalizeRequiredString(raw["heading"]),
 		subHeading: normalizeOptionalString(raw["subHeading"]),
 		link,
+		picture,
 	};
-
-	if ("picture" in raw && raw["picture"] != null) {
-		const picture = mapCmsImage(raw["picture"], apiUrl);
-		if (!picture) {
-			throw new Error("Call to action picture could not be mapped");
-		}
-		return { ...result, picture };
-	}
-
-	return result;
 }
 
 export function mapEmbeddedVideo(value: unknown): DynamicZoneEmbeddedVideo {
@@ -148,16 +141,13 @@ export function mapReferenceList(value: unknown): DynamicZoneReferenceList {
 
 export function mapPicture(value: unknown, apiUrl: string): DynamicZonePicture {
 	const raw = requireRecord(value);
-	const item = mapCmsImage(raw["item"], apiUrl);
-	if (!item) {
-		throw new Error("Picture requires a valid item image");
-	}
+	const cmsImage = mapCmsImage(raw["item"], apiUrl);
 
 	return {
 		type: DynamicZoneComponentType.Picture,
 		id: normalizeRequiredString(raw["id"]),
 		publicationDate: normalizeRequiredDate(raw["publicationDate"]),
-		item,
+		item: mapCMSImageToCLImage(cmsImage),
 		aspectRatio: normalizeOptionalString(raw["aspectRatio"]),
 	};
 }
@@ -167,7 +157,7 @@ export function mapGallery(value: unknown, apiUrl: string): DynamicZoneGallery {
 	const aspectRatio = normalizeOptionalString(raw["aspectRatio"]);
 	const cmsImages = normalizeGalleryItems(raw["items"], apiUrl);
 	const items = cmsImages.map((image) =>
-		mapCMSImageToGalleryItem(image, aspectRatio),
+		mapCMSImageToCLImage(image, aspectRatio),
 	);
 
 	return {

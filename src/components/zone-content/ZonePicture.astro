@@ -1,13 +1,26 @@
 ---
 import type { DynamicZonePicture } from "@models";
-import Picture from "../picture/Picture.astro";
+import { Image } from "chop-logic-components";
 
 interface Props {
 	picture: DynamicZonePicture;
+	className?: string;
 }
 
-const { picture } = Astro.props;
-const { item, publicationDate, aspectRatio } = picture;
+const { picture, className } = Astro.props;
+const { item, aspectRatio } = picture;
 ---
 
-<Picture item={item} date={publicationDate} aspectRatio={aspectRatio} />
+<section class="zone-picture">
+	<Image {...item} className={className} aspectRatio={aspectRatio} />
+</section>
+
+<style>
+	.zone-picture {
+		width: 100%;
+	}
+
+	.zone-picture img {
+		width: 100%;
+	}
+</style>

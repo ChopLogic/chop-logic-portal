@@ -1,5 +1,4 @@
-import type { GalleryItem } from "chop-logic-components";
-import type { CmsImage } from "./image";
+import type { GalleryItem, ImageProps } from "chop-logic-components";
 import type { Link } from "./link";
 import type { RichTextContent } from "./rich-text-block";
 import type { EmbedVideoSource } from "./video";
@@ -28,7 +27,7 @@ export interface DynamicZoneCallToAction {
 	readonly heading: string;
 	readonly subHeading?: string;
 	readonly link: Link;
-	readonly picture?: CmsImage;
+	readonly picture?: ImageProps;
 }
 
 export interface DynamicZoneGallery {
@@ -62,7 +61,7 @@ export interface DynamicZoneReferenceList {
 export interface DynamicZonePicture {
 	readonly type: DynamicZoneComponentType.Picture;
 	readonly id: string;
-	readonly item: CmsImage;
+	readonly item: ImageProps;
 	readonly publicationDate: Date;
 	readonly aspectRatio?: string;
 }

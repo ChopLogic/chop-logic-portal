@@ -115,12 +115,8 @@ describe("ZoneContent.astro", () => {
 				id: "pic-1",
 				publicationDate: new Date("2026-03-04"),
 				item: {
-					documentId: "img-1",
-					name: "photo.jpg",
-					url: "https://cms.example.com/photo.jpg",
-					width: 800,
-					height: 600,
-					formats: {},
+					src: "https://cms.example.com/photo.jpg",
+					alt: "Test Zone Image",
 				},
 			},
 		];
