@@ -1,6 +1,10 @@
 ---
 import { StrapiGraphQLClient } from "@api/client";
-import { HeroBlockComponent, ZoneContentComponent } from "@components";
+import {
+	ArticleSummary,
+	HeroBlockComponent,
+	ZoneContentComponent,
+} from "@components";
 import { PageLayout } from "@layouts";
 import { ConfigService, PageService } from "@services";
 
@@ -31,7 +35,17 @@ export async function getStaticPaths() {
 }
 
 const { page, siteUrl } = Astro.props;
-const { siteTitle, footer, links, metaData, title, subTitle, content } = page;
+const {
+	siteTitle,
+	footer,
+	links,
+	metaData,
+	title,
+	subTitle,
+	content,
+	summary,
+	tags,
+} = page;
 ---
 
 <PageLayout
@@ -42,5 +56,6 @@ const { siteTitle, footer, links, metaData, title, subTitle, content } = page;
 	siteUrl={siteUrl}
 >
 	<HeroBlockComponent title={title} subTitle={subTitle} />
+	<ArticleSummary content={summary} tags={tags} />
 	<ZoneContentComponent content={content} />
 </PageLayout>

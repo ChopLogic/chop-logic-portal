@@ -1,4 +1,4 @@
-import type { ArticlePreview, CmsImage } from "@models";
+import type { ArticlePreview, CmsImage, Tag } from "@models";
 import type { DynamicZoneContent } from "./dynamic-zone";
 import type { Link } from "./link";
 import type { MetaData } from "./meta-data";
@@ -28,4 +28,5 @@ export interface BlogPageData extends DynamicContentPageData {
 
 export interface ArticlePageData extends DynamicContentPageData {
 	readonly summary: RichTextContent;
+	readonly tags: Tag[];
 }

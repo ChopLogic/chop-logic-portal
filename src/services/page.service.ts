@@ -14,6 +14,7 @@ import {
 	mapLinks,
 	mapMetaData,
 	mapRichTextBlock,
+	mapTags,
 	normalizeOptionalString,
 	normalizeRequiredDate,
 	normalizeRequiredString,
@@ -117,6 +118,7 @@ export class PageService implements PageRepository {
 		return {
 			...this.mapResponseToDynamicPageData(article, config),
 			summary: mapRichTextBlock(article.summary),
+			tags: mapTags(article.tags),
 		};
 	}
 

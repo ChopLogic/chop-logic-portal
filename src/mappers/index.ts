@@ -8,3 +8,4 @@ export * from "./meta-data";
 export * from "./normalizers";
 export * from "./rich-text-block";
 export * from "./structured-data";
+export * from "./tag";

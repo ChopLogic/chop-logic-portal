@@ -1,3 +1,4 @@
+export { default as ArticleSummary } from "./article-summary/ArticleSummary.astro";
 export { default as ArticlesGallery } from "./articles-gallery/ArticlesGallery.astro";
 export { default as FooterComponent } from "./footer/Footer.astro";
 export { default as HeaderComponent } from "./header/Header.astro";
