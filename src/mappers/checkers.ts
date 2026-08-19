@@ -1,0 +1,10 @@
+import { IMAGE_FORMAT_NAMES } from "@constants";
+import type { CmsImageFormatName } from "@models";
+
+export function isRecord(v: unknown): v is Record<string, unknown> {
+	return typeof v === "object" && v !== null && !Array.isArray(v);
+}
+
+export function isImageFormatName(k: string): k is CmsImageFormatName {
+	return (IMAGE_FORMAT_NAMES as readonly string[]).includes(k);
+}

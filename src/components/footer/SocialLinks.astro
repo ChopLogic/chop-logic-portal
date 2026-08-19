@@ -1,6 +1,6 @@
 ---
-import type { Link, SocialPlatform } from "../../lib/content/models/link";
-import { LinkTarget } from "../../lib/content/models/link";
+
+import { type Link, LinkTarget, type SocialPlatform } from "@models";
 import SocialPlatformIcon from "./SocialPlatformIcon.astro";
 
 interface Props {
@@ -25,7 +25,7 @@ const items = links.filter(isSocialLink);
 				href={link.url}
 				target={link.target}
 				rel={rel}
-				referrerpolicy={link.referrerpolicy}
+				referrerpolicy={link.referrerPolicy}
 			>
 				<span class="sr-only">{link.text}</span>
 				<SocialPlatformIcon platform={link.platform} />

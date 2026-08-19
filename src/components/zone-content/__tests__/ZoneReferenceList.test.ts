@@ -1,15 +1,13 @@
-import { experimental_AstroContainer as AstroContainer } from "astro/container";
-import { beforeAll, describe, expect, it } from "vitest";
 import {
 	DynamicZoneComponentType,
 	type DynamicZoneReferenceList,
-} from "../../../lib/content/models/dynamic-zone";
-import {
 	type Link,
 	LinkTarget,
 	LinkType,
 	ReferrerPolicy,
-} from "../../../lib/content/models/link";
+} from "@models";
+import { experimental_AstroContainer as AstroContainer } from "astro/container";
+import { beforeAll, describe, expect, it } from "vitest";
 import ZoneReferenceList from "../ZoneReferenceList.astro";
 
 function testLink(id: string, overrides: Partial<Link> = {}): Link {
@@ -19,7 +17,8 @@ function testLink(id: string, overrides: Partial<Link> = {}): Link {
 		text: `Reference ${id}`,
 		target: LinkTarget.Blank,
 		type: LinkType.External,
-		referrerpolicy: ReferrerPolicy.StrictOriginWhenCrossOrigin,
+		referrerPolicy: ReferrerPolicy.StrictOriginWhenCrossOrigin,
+		rel: "noopener noreferrer",
 		...overrides,
 	};
 }
@@ -53,9 +52,6 @@ describe("ZoneReferenceList.astro", () => {
 	it("renders a bibliography section with ordered references", async () => {
 		const html = await render(testReferenceList());
 		expect(html).toContain('<section class="zone-references"');
-		expect(html).toContain('role="region"');
-		expect(html).toContain('aria-labelledby="zone-references-heading-refs-1"');
-		expect(html).toContain('id="zone-references-heading-refs-1"');
 		expect(html).toContain("References");
 		expect(html).toContain("Sources cited in this article");
 		expect(html).toContain('<ol class="zone-references-list"');

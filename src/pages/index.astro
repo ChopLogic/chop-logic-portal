@@ -1,23 +1,29 @@
 ---
-import Layout from "../layouts/DynamicContentPage.astro";
-import { createContentProvider } from "../lib/content/provider";
+import { StrapiGraphQLClient } from "@api/client";
+import { HeroBlockComponent, ZoneContentComponent } from "@components";
+import { PageLayout } from "@layouts";
 
-const provider = createContentProvider();
-const { home, siteConfig } = await provider.getHomePageContent();
-const { siteTitle, footer, links } = siteConfig;
-const { title, subTitle, content, metaData, documentId, slug, updatedAt } =
-	home;
+import { ConfigService, PageService } from "@services";
+
+const config = new ConfigService();
+const siteUrl = config.getSiteUrl();
+const apiUrl = config.getApiUrl();
+const client = new StrapiGraphQLClient({
+	apiUrl,
+	token: config.getApiToken(),
+});
+const service = new PageService(client, { apiUrl });
+const { siteTitle, footer, links, metaData, title, subTitle, content } =
+	await service.getHomePage();
 ---
 
-<Layout
+<PageLayout
 	siteTitle={siteTitle}
 	footer={footer}
 	links={links}
-	title={title}
-	subTitle={subTitle}
-	content={content}
 	metaData={metaData}
-	documentId={documentId}
-	slug={slug}
-	updatedAt={updatedAt}
-/>
+	siteUrl={siteUrl}
+>
+	<HeroBlockComponent title={title} subTitle={subTitle} />
+	<ZoneContentComponent content={content} />
+</PageLayout>

@@ -1,12 +1,12 @@
-import { experimental_AstroContainer as AstroContainer } from "astro/container";
-import { beforeAll, describe, expect, it } from "vitest";
 import {
 	type Link,
 	LinkTarget,
 	LinkType,
 	ReferrerPolicy,
 	SocialPlatform,
-} from "../../../lib/content/models/link";
+} from "@models";
+import { experimental_AstroContainer as AstroContainer } from "astro/container";
+import { beforeAll, describe, expect, it } from "vitest";
 import SocialLinks from "../SocialLinks.astro";
 
 function testLink(overrides: Partial<Link>): Link {
@@ -16,8 +16,8 @@ function testLink(overrides: Partial<Link>): Link {
 		text: overrides.text as string,
 		target: overrides.target ?? LinkTarget.Blank,
 		type: overrides.type ?? LinkType.External,
-		referrerpolicy:
-			overrides.referrerpolicy ?? ReferrerPolicy.StrictOriginWhenCrossOrigin,
+		referrerPolicy:
+			overrides.referrerPolicy ?? ReferrerPolicy.StrictOriginWhenCrossOrigin,
 		...overrides,
 	};
 }
@@ -97,14 +97,14 @@ describe("SocialLinks.astro", () => {
 		expect(html).not.toMatch(/rel="noopener/);
 	});
 
-	it("passes referrerpolicy to the anchor", async () => {
+	it("passes referrerPolicy to the anchor", async () => {
 		const html = await container.renderToString(SocialLinks, {
 			props: {
 				links: [
 					testLink({
 						url: "https://example.com",
 						text: "Test",
-						referrerpolicy: ReferrerPolicy.NoReferrer,
+						referrerPolicy: ReferrerPolicy.NoReferrer,
 						platform: SocialPlatform.Discord,
 					}),
 				],

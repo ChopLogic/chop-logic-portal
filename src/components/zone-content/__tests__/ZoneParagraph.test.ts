@@ -1,13 +1,11 @@
-import { experimental_AstroContainer as AstroContainer } from "astro/container";
-import { beforeAll, describe, expect, it } from "vitest";
 import {
 	DynamicZoneComponentType,
 	type DynamicZoneParagraph,
-} from "../../../lib/content/models/dynamic-zone";
-import {
 	type RichTextContent,
 	RichTextContentType,
-} from "../../../lib/content/models/rich-text-block";
+} from "@models";
+import { experimental_AstroContainer as AstroContainer } from "astro/container";
+import { beforeAll, describe, expect, it } from "vitest";
 import ZoneParagraph from "../ZoneParagraph.astro";
 
 function sampleRichText(): RichTextContent {
@@ -58,23 +56,6 @@ describe("ZoneParagraph.astro", () => {
 		expect(html).toContain("Main heading");
 		expect(html).toContain("</h2>");
 		expect(html).toContain("Body copy");
-	});
-
-	it("renders subHeading as h3 when provided", async () => {
-		const html = await render(
-			testParagraph({ subHeading: "Secondary heading" }),
-		);
-		expect(html).toContain("<h3");
-		expect(html).toContain("Secondary heading");
-		expect(html).toContain("</h3>");
-		const iH2 = html.indexOf("</h2>");
-		const iH3 = html.indexOf("<h3");
-		expect(iH3).toBeGreaterThan(iH2);
-	});
-
-	it("omits h3 when subHeading is not set", async () => {
-		const html = await render(testParagraph());
-		expect(html).not.toContain("<h3");
 	});
 
 	it("applies text alignment from paragraph props", async () => {

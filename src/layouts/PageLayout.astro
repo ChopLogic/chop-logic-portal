@@ -1,0 +1,36 @@
+---
+import {
+	FooterComponent,
+	HeaderComponent,
+	MetaDataComponent,
+} from "@components";
+import type { CorePageData, MetaData } from "@models";
+
+type Props = Omit<CorePageData, "logo"> & {
+	readonly siteUrl: string;
+	readonly metaData: MetaData;
+};
+
+const { siteTitle, footer, links, metaData, siteUrl } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<MetaDataComponent siteTitle={siteTitle} metaData={metaData} siteRoot={siteUrl} />
+		<style>
+			main {
+				padding: var(--cl-xl-gap);
+				max-width: 1200px;
+				margin: 0 auto;
+			}
+		</style>
+	</head>
+	<body>
+		<HeaderComponent />
+		<main>
+			<slot />
+		</main>
+		<FooterComponent content={footer} links={links} />
+	</body>
+</html>

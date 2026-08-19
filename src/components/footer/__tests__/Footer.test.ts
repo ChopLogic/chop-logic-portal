@@ -1,16 +1,14 @@
-import { experimental_AstroContainer as AstroContainer } from "astro/container";
-import { beforeAll, describe, expect, it } from "vitest";
 import {
 	type Link,
 	LinkTarget,
 	LinkType,
 	ReferrerPolicy,
-	SocialPlatform,
-} from "../../../lib/content/models/link";
-import {
 	type RichTextContent,
 	RichTextContentType,
-} from "../../../lib/content/models/rich-text-block";
+	SocialPlatform,
+} from "@models";
+import { experimental_AstroContainer as AstroContainer } from "astro/container";
+import { beforeAll, describe, expect, it } from "vitest";
 import Footer from "../Footer.astro";
 
 function emptyRichText(): RichTextContent {
@@ -38,8 +36,8 @@ function testLink(overrides: Partial<Link>): Link {
 		text: overrides.text as string,
 		target: overrides.target ?? LinkTarget.Blank,
 		type: overrides.type ?? LinkType.External,
-		referrerpolicy:
-			overrides.referrerpolicy ?? ReferrerPolicy.StrictOriginWhenCrossOrigin,
+		referrerPolicy:
+			overrides.referrerPolicy ?? ReferrerPolicy.StrictOriginWhenCrossOrigin,
 		...overrides,
 	};
 }
@@ -62,17 +60,17 @@ describe("Footer.astro", () => {
 		expect(html).toContain("Footer copy");
 	});
 
-	it("does not render the social-links block when no link has a platform", async () => {
+	it("does not render the footer__social-links block when no link has a platform", async () => {
 		const html = await container.renderToString(Footer, {
 			props: {
 				content: emptyRichText(),
 				links: [testLink({ url: "https://x.com", text: "No platform" })],
 			},
 		});
-		expect(html).not.toContain('class="social-links"');
+		expect(html).not.toContain('class="footer__social-links"');
 	});
 
-	it("renders the social-links block when at least one link has a platform", async () => {
+	it("renders the footer__social-links block when at least one link has a platform", async () => {
 		const html = await container.renderToString(Footer, {
 			props: {
 				content: emptyRichText(),
@@ -85,7 +83,7 @@ describe("Footer.astro", () => {
 				],
 			},
 		});
-		expect(html).toContain('class="social-links"');
+		expect(html).toContain('class="footer__social-links"');
 		expect(html).toContain("M12 .297");
 	});
 });

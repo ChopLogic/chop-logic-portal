@@ -1,6 +1,7 @@
 ---
-import type { DynamicZoneReferenceList } from "../../lib/content/models/dynamic-zone";
+import type { DynamicZoneReferenceList } from "@models";
 import Link from "../link/Link.astro";
+import ZoneHeadingBlock from "./ZoneHeadingBlock.astro";
 
 interface Props {
 	referenceList: DynamicZoneReferenceList;
@@ -8,16 +9,12 @@ interface Props {
 
 const { referenceList } = Astro.props;
 const { id, heading, subHeading, links } = referenceList;
-const headingId = `zone-references-heading-${id}`;
 ---
 
 <section
 	class="zone-references"
-	role="region"
-	aria-labelledby={headingId}
 >
-	<h2 id={headingId}>{heading}</h2>
-	{subHeading && <h3>{subHeading}</h3>}
+	<ZoneHeadingBlock heading={heading} subHeading={subHeading} />
 	{
 		links.length > 0 ? (
 			<ol class="zone-references-list">

@@ -1,18 +1,19 @@
 ---
 // Import the global.css file here
-import "../../styles/reset.css";
-import "../../styles/global.css";
-import "../../styles/typography.css";
+import "@styles/reset.css";
+import "@styles/global.css";
+import "@styles/typography.css";
 import "chop-logic-components/styles/main";
-import { mapStructuredDataToJsonLdHtml } from "../../lib/content/mappers";
-import type { MetaData } from "../../lib/content/models";
+import { mapStructuredDataToJsonLdHtml } from "@mappers";
+import type { MetaData } from "@models";
 
 interface Props {
 	siteTitle: string;
 	metaData: MetaData;
+	siteRoot: string;
 }
 
-const { siteTitle, metaData } = Astro.props;
+const { siteTitle, metaData, siteRoot } = Astro.props;
 
 const {
 	metaTitle,
@@ -26,7 +27,6 @@ const {
 } = metaData;
 const { ogDescription, ogTitle, ogType, ogImage } = openGraph;
 
-const siteRoot = new URL(Astro.url.origin); // TODO: Astro.site when available for production canonicals
 const canonical = canonicalURL ?? new URL(Astro.url.pathname, siteRoot);
 const ogImageUrl = new URL(ogImage.src, Astro.url);
 const rssUrl = new URL("rss.xml", siteRoot);

@@ -11,6 +11,18 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"noFallthroughCasesInSwitch": true,
-		"noPropertyAccessFromIndexSignature": true
+		"noPropertyAccessFromIndexSignature": true,
+		"paths": {
+			"@api/*": ["./src/api/*"],
+			"@assets/*": ["./src/assets/*"],
+			"@components": ["./src/components/index"],
+			"@constants": ["./src/constants/index"],
+			"@layouts": ["./src/layouts/index"],
+			"@models": ["./src/models/index"],
+			"@mappers": ["./src/mappers/index"],
+			"@pages/*": ["./src/pages/*"],
+			"@services": ["./src/services/index"],
+			"@styles/*": ["./src/styles/*"]
+		}
 	}
 }

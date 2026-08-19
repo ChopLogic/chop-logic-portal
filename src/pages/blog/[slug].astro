@@ -1,57 +1,61 @@
 ---
-import { DEFAULT_SITE_TITLE } from "../../constants/defaults";
-import Layout from "../../layouts/BlogPost.astro";
-import { ArticleNotFoundError } from "../../lib/content/errors";
-import { createContentProvider } from "../../lib/content/provider";
+import { StrapiGraphQLClient } from "@api/client";
+import {
+	ArticleSummary,
+	HeroBlockComponent,
+	ZoneContentComponent,
+} from "@components";
+import { PageLayout } from "@layouts";
+import { ConfigService, PageService } from "@services";
 
 export async function getStaticPaths() {
-	const content = createContentProvider();
-	const { articles, siteConfig } = await content.getBlogPageContent();
-	const siteTitle =
-		siteConfig.siteTitle.trim() !== ""
-			? siteConfig.siteTitle.trim()
-			: DEFAULT_SITE_TITLE;
+	const config = new ConfigService();
+	const siteUrl = config.getSiteUrl();
+	const apiUrl = config.getApiUrl();
+	const client = new StrapiGraphQLClient({
+		apiUrl,
+		token: config.getApiToken(),
+	});
+	const service = new PageService(client, {
+		apiUrl: config.getApiUrl(),
+	});
+
+	const slugs = await service.getArticleSlugs();
+
 	const paths = await Promise.all(
-		articles.map(async (summary) => {
-			try {
-				const detail = await content.getArticleBySlug(summary.slug, siteTitle);
-				return {
-					params: { slug: summary.slug },
-					props: { detail, siteConfig },
-				};
-			} catch (e) {
-				if (e instanceof ArticleNotFoundError) {
-					return null;
-				}
-				throw e;
-			}
+		slugs.map(async (slug) => {
+			const page = await service.getArticlePageBySlug(slug);
+			return {
+				params: { slug },
+				props: { page, siteUrl },
+			};
 		}),
 	);
 	return paths.filter((p): p is NonNullable<typeof p> => p !== null);
 }
 
-const { detail, siteConfig } = Astro.props;
-const { siteTitle, logo, footer, links } = siteConfig;
+const { page, siteUrl } = Astro.props;
+const {
+	siteTitle,
+	footer,
+	links,
+	metaData,
+	title,
+	subTitle,
+	content,
+	summary,
+	tags,
+} = page;
 ---
 
-<Layout
+<PageLayout
 	siteTitle={siteTitle}
-	logo={logo}
 	footer={footer}
 	links={links}
-	metaData={detail.metaData}
-	title={detail.title}
-	pubDate={detail.pubDate}
-	updatedDate={detail.updatedDate}
-	heroImageUrl={detail.heroImageUrl}
-	heroImageAlt={detail.heroImageAlt}
+	metaData={metaData}
+	siteUrl={siteUrl}
 >
-	<div class="article-body cms-body" set:html={detail.bodyHtml} />
-</Layout>
-
-<style>
-
-	.article-body :global(section) {
-		margin-bottom: 1.5rem;
-	}
-</style>
+	<HeroBlockComponent title={title} subTitle={subTitle} />
+	<ArticleSummary content={summary} tags={tags} />
+	<ZoneContentComponent content={content} />
+</PageLayout>

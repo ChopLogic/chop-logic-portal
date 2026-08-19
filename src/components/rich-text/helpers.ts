@@ -6,7 +6,7 @@ import {
 	RichTextListFormat,
 	type RichTextListItem,
 	type RichTextNode,
-} from "../../lib/content/models/rich-text-block";
+} from "@models";
 
 export function escapeHtml(text: string): string {
 	return text

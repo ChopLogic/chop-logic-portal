@@ -1,6 +1,6 @@
 ---
-import type { Link } from "../../lib/content/models/link";
-import type { RichTextContent } from "../../lib/content/models/rich-text-block";
+
+import type { Link, RichTextContent } from "@models";
 import RichTextBlockContent from "../rich-text/RichTextBlock.astro";
 import SocialLinks from "./SocialLinks.astro";
 
@@ -13,18 +13,18 @@ const { content, links } = Astro.props;
 const hasSocialLinks = links.some((l) => l.platform);
 ---
 
-<footer>
+<footer class="footer">
 	<RichTextBlockContent content={content} />
 	{
 		hasSocialLinks && (
-			<div class="social-links">
+			<div class="footer__social-links">
 				<SocialLinks links={links} />
 			</div>
 		)
 	}
 </footer>
 <style>
-	footer {
+	.footer {
 		padding: 2rem 2rem 6rem 2rem;
 		background: linear-gradient(var(--cl-surface-a10), var(--cl-surface-a0)) no-repeat;
 		text-align: center;
@@ -36,7 +36,7 @@ const hasSocialLinks = links.some((l) => l.platform);
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
 	}
-	.social-links {
+	.footer__social-links {
 		display: flex;
 		justify-content: center;
 		gap: 1rem;
@@ -44,13 +44,13 @@ const hasSocialLinks = links.some((l) => l.platform);
 	}
 
 	@media (min-width: 640px) {
-		footer {
+		.footer {
 			font-size: var(--cl-typography-small-tablet);
 		}
 	}
 
 	@media (min-width: 1024px) {
-		footer {
+		.footer {
 			font-size: var(--cl-typography-small-desktop);
 		}
 	}

@@ -1,4 +1,4 @@
-import { DynamicZoneComponentType } from "../lib/content/models/dynamic-zone";
+import { DynamicZoneComponentType } from "@models";
 
 export const GRAPHQL_TYPENAME_TO_COMPONENT_TYPE: Record<
 	string,

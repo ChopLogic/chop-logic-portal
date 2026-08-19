@@ -1,9 +1,8 @@
 ---
-import { Button } from "chop-logic-components";
-import type { DynamicZoneCallToAction } from "../../lib/content/models/dynamic-zone";
+import type { DynamicZoneCallToAction } from "@models";
+import { Button, Image } from "chop-logic-components";
 import Link from "../link/Link.astro";
-import Picture from "../picture/Picture.astro";
-import { CMS_PICTURE_SIZES } from "../picture/Picture.helpers";
+import ZoneHeadingBlock from "./ZoneHeadingBlock.astro";
 
 interface Props {
 	callToAction: DynamicZoneCallToAction;
@@ -16,17 +15,14 @@ const { heading, subHeading, link, picture } = callToAction;
 <section
 	class:list={["zone-cta", { "zone-cta--with-media": Boolean(picture) }]}
 >
-	{
-		picture && (
-			<div class="zone-cta__media">
-				<Picture item={picture} sizes={CMS_PICTURE_SIZES.cta} />
-			</div>
-		)
-	}
-	<h4 class="zone-cta__heading">{heading}</h4>
-	{subHeading && <h5 class="zone-cta__subheading">{subHeading}</h5>}
+	{picture && <Image {...picture} className="zone-cta__media" />}
+	<ZoneHeadingBlock
+		heading={heading}
+		subHeading={subHeading}
+		className="zone-cta__heading"
+	/>
 	<Link link={link} className="zone-cta__link">
-		<Button text={link.text} />
+		<Button text={link.text} extended />
 	</Link>
 </section>
 
@@ -37,7 +33,6 @@ const { heading, subHeading, link, picture } = callToAction;
 		grid-template-columns: auto;
 		grid-template-areas:
 			"heading"
-			"subheading"
 			"button";
 	}
 
@@ -48,24 +43,22 @@ const { heading, subHeading, link, picture } = callToAction;
 		grid-template-areas:
 			"media"
 			"heading"
-			"subheading"
 			"button";
 	}
 
-	.zone-cta__heading {
+	:global(.zone-cta__heading) {
 		grid-area: heading;
+		width: 100%;
+		text-align: center;
 	}
 
-	.zone-cta__subheading {
-		grid-area: subheading;
-	}
-
-	.zone-cta__media {
+	:global(.zone-cta__media) {
 		grid-area: media;
 	}
 
 	:global(.zone-cta__link) {
 		grid-area: button;
+		width: 100%;
 		display: inline-block;
 		text-decoration: none;
 	}
@@ -79,9 +72,16 @@ const { heading, subHeading, link, picture } = callToAction;
 			grid-template-rows: auto;
 			grid-template-areas:
 				"media heading"
-				"media subheading"
 				"media button"
 				"media .";
+		}
+
+		:global(.zone-cta__heading) {
+			text-align: left;
+		}
+
+		:global(.zone-cta__link) {
+			width: fit-content;
 		}
 	}
 </style>

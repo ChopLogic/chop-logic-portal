@@ -1,0 +1,30 @@
+---
+type Props = {
+	title: string;
+	subTitle?: string;
+};
+
+const { title, subTitle } = Astro.props;
+---
+
+<div class="hero-block">
+    <h1 class="hero-block__title">{title}</h1>
+    {subTitle && <p class="hero-block__sub-title">{subTitle}</p>}
+</div>
+
+<style>
+    .hero-block {
+        padding-bottom: var(--cl-xl-gap);
+        text-align: center;
+        border-bottom: var(--cl-light-border);
+    }
+
+    .hero-block__title {
+        font-family: var(--cl-monospace-font);
+        font-weight: normal;
+    }
+
+    .hero-block__sub-title {
+        font-style: italic;
+    }
+</style>

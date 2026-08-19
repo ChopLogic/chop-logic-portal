@@ -1,0 +1,26 @@
+---
+interface Props {
+	heading: string;
+	subHeading?: string;
+	className?: string;
+}
+
+const { heading, subHeading, className } = Astro.props;
+---
+
+<div class={className}>
+	<h2>{heading}</h2>
+	{
+		subHeading && (
+			<p class="zone-sub-heading">
+				{subHeading}
+			</p>
+		)
+	}
+</div>
+
+<style>
+	.zone-sub-heading {
+		font-style: italic;
+	}
+</style>

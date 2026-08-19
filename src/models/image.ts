@@ -1,0 +1,29 @@
+export type CmsImageFormatName = "thumbnail" | "small" | "medium" | "large";
+
+export interface CmsImageFormatVariant {
+	readonly url: string;
+	readonly width: number;
+	readonly height: number;
+	readonly mime?: string;
+}
+
+export type CmsImageFormats = Partial<
+	Record<CmsImageFormatName, CmsImageFormatVariant>
+>;
+
+export interface CmsImage {
+	readonly documentId: string;
+	readonly name: string;
+	readonly url: string;
+	readonly width: number;
+	readonly height: number;
+	readonly alternativeText?: string;
+	readonly caption?: string;
+	readonly formats: CmsImageFormats;
+}
+
+export type OpenGraphCmsImagePick = {
+	readonly src: string;
+	readonly width: number;
+	readonly height: number;
+};

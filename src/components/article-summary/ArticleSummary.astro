@@ -1,0 +1,40 @@
+---
+import type { RichTextContent, Tag } from "@models";
+import RichTextBlockContent from "../rich-text/RichTextBlock.astro";
+
+interface Props {
+	content: RichTextContent;
+	tags: Tag[];
+}
+
+const { content, tags } = Astro.props;
+const keywords = tags.map((tag) => tag.name).join(", ");
+---
+
+<div class="article-summary">
+    <RichTextBlockContent content={content} />
+    <p class="article-summary__keywords"><strong>Keywords: </strong>{keywords}</p>
+</div>
+
+<style>
+    .article-summary {
+        padding: var(--cl-l-gap);
+        letter-spacing: var(--cl-xs-gap);
+    }
+
+    .article-summary__keywords {
+        padding-top: var(--cl-l-gap);
+    }
+
+    @media (min-width: 640px) {
+        .article-summary {
+            padding: var(--cl-l-gap) var(--cl-xl-gap);
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .article-summary {
+            padding: var(--cl-xl-gap) var(--cl-xxl-gap);
+        }
+    }
+</style>

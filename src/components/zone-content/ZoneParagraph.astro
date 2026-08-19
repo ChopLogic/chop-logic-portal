@@ -1,6 +1,7 @@
 ---
-import type { DynamicZoneParagraph } from "../../lib/content/models/dynamic-zone";
+import type { DynamicZoneParagraph } from "@models";
 import RichTextBlock from "../rich-text/RichTextBlock.astro";
+import ZoneHeadingBlock from "./ZoneHeadingBlock.astro";
 
 interface Props {
 	paragraph: DynamicZoneParagraph;
@@ -11,8 +12,7 @@ const { heading, subHeading, content, alignment } = paragraph;
 ---
 
 <section class="zone-paragraph" style={`text-align: ${alignment}`}>
-	<h2>{heading}</h2>
-	{subHeading && <h3>{subHeading}</h3>}
+	<ZoneHeadingBlock heading={heading} subHeading={subHeading} />
 	<RichTextBlock content={content} />
 </section>
 

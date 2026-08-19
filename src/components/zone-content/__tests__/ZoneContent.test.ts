@@ -1,23 +1,19 @@
 import { loadRenderers } from "astro:container";
 import { getContainerRenderer as reactContainerRenderer } from "@astrojs/react";
-import { experimental_AstroContainer as AstroContainer } from "astro/container";
-import { beforeAll, describe, expect, it } from "vitest";
 import {
 	type DynamicZoneComponent,
 	DynamicZoneComponentType,
 	type DynamicZoneContent,
 	type DynamicZoneParagraph,
-} from "../../../lib/content/models/dynamic-zone";
-import {
 	type Link,
 	LinkTarget,
 	LinkType,
 	ReferrerPolicy,
-} from "../../../lib/content/models/link";
-import {
 	type RichTextContent,
 	RichTextContentType,
-} from "../../../lib/content/models/rich-text-block";
+} from "@models";
+import { experimental_AstroContainer as AstroContainer } from "astro/container";
+import { beforeAll, describe, expect, it } from "vitest";
 import ZoneContent from "../ZoneContent.astro";
 
 function sampleRichText(): RichTextContent {
@@ -36,7 +32,7 @@ function testLink(overrides: Partial<Link> = {}): Link {
 		text: "Watch video",
 		target: LinkTarget.Blank,
 		type: LinkType.External,
-		referrerpolicy: ReferrerPolicy.StrictOriginWhenCrossOrigin,
+		referrerPolicy: ReferrerPolicy.StrictOriginWhenCrossOrigin,
 		...overrides,
 	};
 }
@@ -102,6 +98,11 @@ describe("ZoneContent.astro", () => {
 				id: "vid-1",
 				heading: "Video",
 				link: testLink(),
+				embed: {
+					embedUrl:
+						"https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1",
+					provider: "youtube",
+				},
 			},
 			{
 				type: DynamicZoneComponentType.ReferenceList,
@@ -114,12 +115,8 @@ describe("ZoneContent.astro", () => {
 				id: "pic-1",
 				publicationDate: new Date("2026-03-04"),
 				item: {
-					documentId: "img-1",
-					name: "photo.jpg",
-					url: "https://cms.example.com/photo.jpg",
-					width: 800,
-					height: 600,
-					formats: {},
+					src: "https://cms.example.com/photo.jpg",
+					alt: "Test Zone Image",
 				},
 			},
 		];

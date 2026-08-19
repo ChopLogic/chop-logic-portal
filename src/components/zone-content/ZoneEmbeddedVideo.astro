@@ -1,15 +1,14 @@
 ---
-import type { DynamicZoneEmbeddedVideo } from "../../lib/content/models/dynamic-zone";
+import type { DynamicZoneEmbeddedVideo } from "@models";
 import Link from "../link/Link.astro";
-import { resolveEmbedVideoSource } from "./embed-video";
+import ZoneHeadingBlock from "./ZoneHeadingBlock.astro";
 
 interface Props {
 	embeddedVideo: DynamicZoneEmbeddedVideo;
 }
 
 const { embeddedVideo } = Astro.props;
-const { heading, subHeading, link } = embeddedVideo;
-const embed = resolveEmbedVideoSource(link.url);
+const { heading, subHeading, link, aspectRatio, embed } = embeddedVideo;
 const iframeTitle = link.text || heading;
 ---
 
@@ -19,16 +18,15 @@ const iframeTitle = link.text || heading;
 		embed && `zone-embedded-video--${embed.provider}`,
 	]}
 >
-	<h2>{heading}</h2>
-	{subHeading && <h3>{subHeading}</h3>}
+	<ZoneHeadingBlock heading={heading} subHeading={subHeading} />
 	{
 		embed ? (
-			<div class="zone-embedded-video__player">
+			<div class="zone-embedded-video__player" style={{aspectRatio}}>
 				<iframe
 					src={embed.embedUrl}
 					title={iframeTitle}
 					loading="lazy"
-					referrerpolicy={link.referrerpolicy}
+					referrerpolicy={link.referrerPolicy}
 					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 					allowfullscreen
 				/>
@@ -45,13 +43,15 @@ const iframeTitle = link.text || heading;
 <style>
 	.zone-embedded-video {
 		width: 100%;
+		display: flex;
+        flex-direction: column;
+        gap: var(--cl-l-gap);
 	}
 
 	.zone-embedded-video__player {
 		position: relative;
 		width: 100%;
 		margin-inline: auto;
-		aspect-ratio: 16 / 9;
 		overflow: hidden;
 		border-radius: var(--cl-border-radius);
 		box-shadow: var(--cl-box-shadow);
