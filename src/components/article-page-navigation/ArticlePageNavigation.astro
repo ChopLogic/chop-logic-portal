@@ -15,9 +15,16 @@ const nextSlug = `/blog/${slugs[nextIndex]}`;
 ---
 
 <div class="article-page-navigation">
-    <Link icon={IconName.ChevronLeft} href={prevSlug}>Previous Article</Link>
-    <Link icon={IconName.ChevronRight} href={nextSlug} iconPosition="right"
-        >Next article</Link
+    <Link
+        icon={IconName.ChevronLeft}
+        href={prevSlug}
+        className="article-page-navigation__link">Previous Article</Link
+    >
+    <Link
+        icon={IconName.ChevronRight}
+        href={nextSlug}
+        iconPosition="right"
+        className="article-page-navigation__link">Next article</Link
     >
 </div>
 
@@ -26,5 +33,21 @@ const nextSlug = `/blog/${slugs[nextIndex]}`;
         display: flex;
         justify-content: space-between;
         align-items: center;
+    }
+
+    .article-page-navigation__link {
+        color: var(--cl-base-font-color);
+    }
+
+    .article-page-navigation :global(.cl-link__text) {
+        text-decoration: none;
+    }
+
+    .article-page-navigation :global(.cl-link__text):hover {
+        text-decoration: underline;
+    }
+
+    .article-page-navigation__link :global(.cl-link__icon:before) {
+        color: var(--cl-base-font-color);
     }
 </style>
