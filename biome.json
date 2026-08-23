@@ -14,7 +14,7 @@
 			"!**/reports",
 			"!**/node_modules",
 			"!**/*.graphql",
-			"!**/src/types/generated.ts"
+			"!**/src/api/types/generated.ts"
 		]
 	},
 	"formatter": {

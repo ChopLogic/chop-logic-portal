@@ -3,6 +3,7 @@ import {
 	FooterComponent,
 	HeaderComponent,
 	MetaDataComponent,
+	ScrollToTopButton,
 } from "@components";
 import type { CorePageData, MetaData } from "@models";
 
@@ -17,20 +18,42 @@ const { siteTitle, footer, links, metaData, siteUrl } = Astro.props;
 <!doctype html>
 <html lang="en">
 	<head>
-		<MetaDataComponent siteTitle={siteTitle} metaData={metaData} siteRoot={siteUrl} />
-		<style>
-			main {
-				padding: var(--cl-xl-gap);
-				max-width: 1200px;
-				margin: 0 auto;
-			}
-		</style>
+		<MetaDataComponent
+			siteTitle={siteTitle}
+			metaData={metaData}
+			siteRoot={siteUrl}
+		/>
 	</head>
 	<body>
 		<HeaderComponent />
-		<main>
+		<ScrollToTopButton client:load className="main-layout__scroll-to-top" />
+		<main class="main-layout">
 			<slot />
 		</main>
 		<FooterComponent content={footer} links={links} />
 	</body>
 </html>
+<style>
+	.main-layout {
+		padding: var(--cl-xl-gap);
+		max-width: 1200px;
+		margin: 0 auto;
+	}
+
+	:global(.main-layout__scroll-to-top) {
+		position: fixed;
+		bottom: var(--cl-l-gap);
+		right: var(--cl-l-gap);
+		z-index: var(--cl-z-index-modal);
+		width: 46px;
+		height: 46px;
+	}
+
+	:global(.main-layout__scroll-to-top .cl-icon) {
+		font-size: 46px;
+	}
+
+	:global(.main-layout__scroll-to-top .cl-icon::before) {
+		color: var(--cl-surface-a30);
+	}
+</style>
