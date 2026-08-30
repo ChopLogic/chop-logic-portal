@@ -13,8 +13,7 @@
 			"!**/coverage",
 			"!**/reports",
 			"!**/node_modules",
-			"!**/*.graphql",
-			"!**/src/api/types/generated.ts"
+			"!src/api/types/generated.ts"
 		]
 	},
 	"formatter": {

@@ -17,6 +17,7 @@ export type Scalars = {
   DateTime: { input: unknown; output: unknown; }
   HomeContentDynamicZoneInput: { input: unknown; output: unknown; }
   JSON: { input: unknown; output: unknown; }
+  PrivacyPolicyContentDynamicZoneInput: { input: unknown; output: unknown; }
 };
 
 export type AboutMe = {
@@ -32,7 +33,7 @@ export type AboutMe = {
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
-export type AboutMeContentDynamicZone = ComponentSectionsCallToAction | ComponentSectionsEmbeddedVideo | ComponentSectionsGallery | ComponentSectionsMedia | ComponentSectionsParagraph | Error;
+export type AboutMeContentDynamicZone = ComponentSectionsCallToAction | ComponentSectionsEmbeddedVideo | ComponentSectionsGallery | ComponentSectionsLink | ComponentSectionsMedia | ComponentSectionsParagraph | ComponentSectionsReferenceList | Error;
 
 export type AboutMeInput = {
   content?: InputMaybe<Array<Scalars['AboutMeContentDynamicZoneInput']['input']>>;
@@ -251,7 +252,7 @@ export type Blog = {
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
-export type BlogContentDynamicZone = ComponentSectionsCallToAction | ComponentSectionsMedia | ComponentSectionsParagraph | Error;
+export type BlogContentDynamicZone = ComponentSectionsCallToAction | ComponentSectionsEmbeddedVideo | ComponentSectionsGallery | ComponentSectionsLink | ComponentSectionsMedia | ComponentSectionsParagraph | ComponentSectionsReferenceList | Error;
 
 export type BlogInput = {
   content?: InputMaybe<Array<Scalars['BlogContentDynamicZoneInput']['input']>>;
@@ -830,7 +831,7 @@ export type Home = {
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
-export type HomeContentDynamicZone = ComponentSectionsCallToAction | ComponentSectionsEmbeddedVideo | ComponentSectionsGallery | ComponentSectionsMedia | ComponentSectionsParagraph | Error;
+export type HomeContentDynamicZone = ComponentSectionsCallToAction | ComponentSectionsEmbeddedVideo | ComponentSectionsGallery | ComponentSectionsLink | ComponentSectionsMedia | ComponentSectionsParagraph | ComponentSectionsReferenceList | Error;
 
 export type HomeInput = {
   content?: InputMaybe<Array<Scalars['HomeContentDynamicZoneInput']['input']>>;
@@ -1255,7 +1256,7 @@ export type PaginationArg = {
 
 export type PrivacyPolicy = {
   __typename?: 'PrivacyPolicy';
-  content: Scalars['JSON']['output'];
+  content: Array<Maybe<PrivacyPolicyContentDynamicZone>>;
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   documentId: Scalars['ID']['output'];
   metaData: ComponentSharedSeo;
@@ -1266,8 +1267,10 @@ export type PrivacyPolicy = {
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
+export type PrivacyPolicyContentDynamicZone = ComponentSectionsCallToAction | ComponentSectionsEmbeddedVideo | ComponentSectionsGallery | ComponentSectionsLink | ComponentSectionsMedia | ComponentSectionsParagraph | ComponentSectionsReferenceList | Error;
+
 export type PrivacyPolicyInput = {
-  content?: InputMaybe<Scalars['JSON']['input']>;
+  content?: InputMaybe<Array<Scalars['PrivacyPolicyContentDynamicZoneInput']['input']>>;
   locale?: InputMaybe<Scalars['String']['input']>;
   metaData?: InputMaybe<ComponentSharedSeoInput>;
   publishedAt?: InputMaybe<Scalars['DateTime']['input']>;
