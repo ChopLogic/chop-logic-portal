@@ -4,6 +4,7 @@ import {
 	ARTICLE_SLUGS_QUERY,
 	BLOG_PAGE_QUERY,
 	HOME_PAGE_QUERY,
+	PRIVACY_POLICY_PAGE_QUERY,
 } from "@api/queries";
 import type { Config } from "@api/types/generated";
 import { DEFAULT_SITE_DESCRIPTION, DEFAULT_SITE_TITLE } from "@constants";
@@ -30,6 +31,7 @@ import type {
 	DynamicPageContentResponse,
 	HomePageResponse,
 	PageRepository,
+	PrivacyPolicyPageResponse,
 } from "@models";
 import { NotFoundError } from "./errors";
 
@@ -87,6 +89,17 @@ export class PageService implements PageRepository {
 
 		return {
 			...this.mapResponseToDynamicPageData(aboutMe, config),
+		};
+	}
+
+	async getPrivacyPolicyPage() {
+		const { privacyPolicy, config } =
+			await this.client.executeQuery<PrivacyPolicyPageResponse>(
+				PRIVACY_POLICY_PAGE_QUERY,
+			);
+
+		return {
+			...this.mapResponseToDynamicPageData(privacyPolicy, config),
 		};
 	}
 
