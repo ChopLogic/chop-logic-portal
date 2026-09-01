@@ -1,7 +1,7 @@
 import { gql } from "graphql-request";
 import {
-	ARTICLE_CONTENT_FRAGMENT,
 	CONFIG_FRAGMENT,
+	DYNAMIC_CONTENT_FRAGMENT,
 	IMAGE_FRAGMENT,
 	METADATA_FRAGMENT,
 	TAG_FRAGMENT,
@@ -35,7 +35,7 @@ export const ARTICLE_PAGE_BY_SLUG_QUERY = gql`
         }
       }
       content {
-        ${ARTICLE_CONTENT_FRAGMENT}
+        ${DYNAMIC_CONTENT_FRAGMENT}
       }
       metaData {
           ${METADATA_FRAGMENT}

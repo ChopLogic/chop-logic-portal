@@ -163,7 +163,7 @@ export const CONFIG_FRAGMENT = `
   updatedAt
 `;
 
-export const ARTICLE_CONTENT_FRAGMENT = `
+export const DYNAMIC_CONTENT_FRAGMENT = `
   ... on ComponentSectionsParagraph {
     ${PARAGRAPH_FRAGMENT}
   }

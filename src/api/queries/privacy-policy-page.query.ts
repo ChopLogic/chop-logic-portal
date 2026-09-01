@@ -5,14 +5,14 @@ import {
 	METADATA_FRAGMENT,
 } from "./fragments";
 
-export const HOME_PAGE_QUERY = gql`
-  query HomePage {
-    home {
+export const PRIVACY_POLICY_PAGE_QUERY = gql`
+  query PrivacyPolicyPage {
+    privacyPolicy {
       documentId
+      updatedAt
       title
       subTitle
       slug
-      updatedAt
       content {
         ${DYNAMIC_CONTENT_FRAGMENT}
       }
