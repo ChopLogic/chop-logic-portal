@@ -1,0 +1,30 @@
+---
+import { StrapiGraphQLClient } from "@api/client";
+import { HeroBlockComponent, ZoneContentComponent } from "@components";
+import { PageLayout } from "@layouts";
+import { ConfigService, PageService } from "@services";
+
+const config = new ConfigService();
+const siteUrl = config.getSiteUrl();
+const apiUrl = config.getApiUrl();
+const client = new StrapiGraphQLClient({
+	apiUrl,
+	token: config.getApiToken(),
+});
+const service = new PageService(client, {
+	apiUrl,
+});
+const { siteTitle, footer, links, metaData, title, subTitle, content } =
+	await service.getPrivacyPolicyPage();
+---
+
+<PageLayout
+	siteTitle={siteTitle}
+	footer={footer}
+	links={links}
+	metaData={metaData}
+	siteUrl={siteUrl}
+>
+	<HeroBlockComponent title={title} subTitle={subTitle} />
+	<ZoneContentComponent content={content} />
+</PageLayout>
