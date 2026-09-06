@@ -15,6 +15,7 @@ const hasSocialLinks = links.some((l) => l.platform);
 
 <footer class="footer">
 	<RichTextBlockContent content={content} />
+	<a href="/privacy-policy" class="footer__privacy-link">Privacy Policy</a>
 	{
 		hasSocialLinks && (
 			<div class="footer__social-links">
@@ -41,6 +42,22 @@ const hasSocialLinks = links.some((l) => l.platform);
 		justify-content: center;
 		gap: 1rem;
 		margin-top: 1rem;
+	}
+	.footer__privacy-link {
+		padding: 1em 0.5em;
+		color: var(--cl-base-font-color);
+		text-decoration: none;
+		text-decoration: none;
+	}
+	.footer__privacy-link:hover {
+		text-shadow: var(--cl-text-shadow);
+		text-decoration: underline;
+	}
+	.footer__privacy-link.active {
+		text-decoration: none;
+		text-shadow: none;
+		cursor: default;
+		color: var(--cl-accent-a0);
 	}
 
 	@media (min-width: 640px) {
