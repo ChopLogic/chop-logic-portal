@@ -1,0 +1,54 @@
+---
+import { IconName, Link } from "chop-logic-components";
+
+interface Props {
+	slugs: string[];
+	currentSlug: string;
+}
+
+const { slugs, currentSlug } = Astro.props;
+const currentIndex = slugs.indexOf(currentSlug);
+const prevIndex = (currentIndex - 1 + slugs.length) % slugs.length;
+const nextIndex = (currentIndex + 1) % slugs.length;
+const prevSlug = `/blog/${slugs[prevIndex]}`;
+const nextSlug = `/blog/${slugs[nextIndex]}`;
+---
+
+<div class="article-page-navigation">
+    <Link
+        icon={IconName.ChevronLeft}
+        href={prevSlug}
+        className="article-page-navigation__link">Previous Article</Link
+    >
+    <Link
+        icon={IconName.ChevronRight}
+        href={nextSlug}
+        iconPosition="right"
+        className="article-page-navigation__link">Next article</Link
+    >
+</div>
+
+<style>
+    .article-page-navigation {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: var(--cl-l-gap);
+    }
+
+    .article-page-navigation__link {
+        color: var(--cl-base-font-color);
+    }
+
+    .article-page-navigation :global(.cl-link__text) {
+        text-decoration: none;
+    }
+
+    .article-page-navigation :global(.cl-link__text):hover {
+        text-decoration: underline;
+    }
+
+    .article-page-navigation__link :global(.cl-link__icon:before) {
+        color: var(--cl-base-font-color);
+    }
+</style>

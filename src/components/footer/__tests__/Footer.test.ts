@@ -60,6 +60,17 @@ describe("Footer.astro", () => {
 		expect(html).toContain("Footer copy");
 	});
 
+	it("renders the privacy policy link", async () => {
+		const html = await container.renderToString(Footer, {
+			props: {
+				content: singleParagraphRichText(),
+				links: [],
+			},
+		});
+		expect(html).toContain('class="footer__privacy-link"');
+		expect(html).toContain("Privacy Policy");
+	});
+
 	it("does not render the footer__social-links block when no link has a platform", async () => {
 		const html = await container.renderToString(Footer, {
 			props: {
