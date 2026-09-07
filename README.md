@@ -1,6 +1,8 @@
 # Chop Logic Portal
 
-Front-end application for Chop Logic Portal. Built with Astro.js.
+Front-end web application for the Chop Logic blog. Built with [Astro.js](https://astro.build),
+with [React](https://react.dev) used for isolated interactive islands. Content and page data are
+fetched from a headless CMS via GraphQL, mapped into view models, and rendered by Astro components.
 
 ## 🧞 npm scripts
 
@@ -9,11 +11,12 @@ All commands are run from the root of the project in a terminal.
 | Script | Description |
 | :----- | :---------- |
 | `npm install` | Install dependencies. |
-| `npm run dev` | Start the Astro dev server (default: `localhost:4321`). |
-| `npm run build` | Build the production site to `./dist/`. |
+| `npm run dev` | Regenerate GraphQL types, then start the Astro dev server (default: `localhost:4321`). |
+| `npm run build` | Regenerate GraphQL types, then build the production site to `./dist/`. |
 | `npm run preview` | Serve the production build locally. |
 | `npm run astro` | Run the Astro CLI (e.g. `npm run astro -- add`, `npm run astro -- check`). |
 | `npm run prepare` | Husky install hook (runs after `npm install`). |
+| `npm run typegen` | Generate typed GraphQL query/result types via GraphQL Codegen. |
 | `npm run lint` | Run Biome lint + format check on the repo. |
 | `npm run lint:fix` | Run Biome and apply safe fixes (lint + format + organize imports). |
 | `npm run format` | Format files with Biome. |
