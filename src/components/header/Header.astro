@@ -9,7 +9,7 @@ import HeaderLink from "./HeaderLink.astro";
 		<HeaderLink href="/blog" class="header__link">Blog</HeaderLink>
 		<HeaderLink href="/about" class="header__link">About</HeaderLink>
 	</nav>
-	<ThemeSwitcher client:load className="header__theme-switcher" />
+	<ThemeSwitcher client:only="react" className="header__theme-switcher" />
 </header>
 <style>
 	.header {

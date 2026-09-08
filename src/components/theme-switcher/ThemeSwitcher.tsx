@@ -6,15 +6,13 @@ import {
 	CL_LIGHT_THEME_CLASS,
 	IconName,
 } from "chop-logic-components";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
+// Rendered client:only, so the theme applied by the FOUC-prevention script is already on the page.
 const ThemeSwitcher = ({ className }: { className?: string }) => {
-	const [isDark, setIsDark] = useState(false);
-
-	// Read the theme applied by the FOUC-prevention script once mounted on the client.
-	useEffect(() => {
-		setIsDark(document.documentElement.classList.contains(CL_DARK_THEME_CLASS));
-	}, []);
+	const [isDark, setIsDark] = useState(() =>
+		document.documentElement.classList.contains(CL_DARK_THEME_CLASS),
+	);
 
 	const toggleTheme = () => {
 		const nextIsDark = !isDark;
