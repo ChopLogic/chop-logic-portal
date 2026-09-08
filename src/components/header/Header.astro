@@ -1,4 +1,5 @@
 ---
+import { ThemeSwitcher } from "@components";
 import HeaderLink from "./HeaderLink.astro";
 ---
 
@@ -8,6 +9,7 @@ import HeaderLink from "./HeaderLink.astro";
 		<HeaderLink href="/blog" class="header__link">Blog</HeaderLink>
 		<HeaderLink href="/about" class="header__link">About</HeaderLink>
 	</nav>
+	<ThemeSwitcher client:load className="header__theme-switcher" />
 </header>
 <style>
 	.header {
@@ -17,7 +19,7 @@ import HeaderLink from "./HeaderLink.astro";
 		box-shadow: var(--cl-box-shadow);
 		display: flex;
 		align-items: center;
-		justify-content: center;
+		justify-content: space-between;
 	}
 	.header__navigation {
 		display: flex;
@@ -38,5 +40,8 @@ import HeaderLink from "./HeaderLink.astro";
 		text-shadow: none;
 		cursor: default;
 		color: var(--cl-accent-a0);
+	}
+	:global(.header__theme-switcher) {
+		margin-right: var(--cl-l-gap);
 	}
 </style>

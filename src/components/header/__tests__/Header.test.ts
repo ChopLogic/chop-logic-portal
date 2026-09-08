@@ -1,3 +1,5 @@
+import { loadRenderers } from "astro:container";
+import { getContainerRenderer as reactContainerRenderer } from "@astrojs/react";
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { beforeAll, describe, expect, it } from "vitest";
 import Header from "../Header.astro";
@@ -6,7 +8,8 @@ describe("Header.astro", () => {
 	let container: Awaited<ReturnType<typeof AstroContainer.create>>;
 
 	beforeAll(async () => {
-		container = await AstroContainer.create();
+		const renderers = await loadRenderers([reactContainerRenderer()]);
+		container = await AstroContainer.create({ renderers });
 	});
 
 	it("renders a header with navigation and the main site links", async () => {
@@ -21,6 +24,13 @@ describe("Header.astro", () => {
 		expect(html).toContain("Blog");
 		expect(html).toContain('href="/about"');
 		expect(html).toContain("About");
+	});
+
+	it("renders the theme switcher", async () => {
+		const html = await container.renderToString(Header, {
+			request: new Request("https://example.com/"),
+		});
+		expect(html).toContain("header__theme-switcher");
 	});
 
 	it("marks the Blog link active on nested blog routes", async () => {

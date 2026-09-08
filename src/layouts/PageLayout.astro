@@ -5,7 +5,12 @@ import {
 	MetaDataComponent,
 	ScrollToTopButton,
 } from "@components";
+import { THEME_STORAGE_KEY } from "@constants";
 import type { CorePageData, MetaData } from "@models";
+import {
+	CL_DARK_THEME_CLASS,
+	CL_LIGHT_THEME_CLASS,
+} from "chop-logic-components";
 
 type Props = Omit<CorePageData, "logo"> & {
 	readonly siteUrl: string;
@@ -18,6 +23,22 @@ const { siteTitle, footer, links, metaData, siteUrl } = Astro.props;
 <!doctype html>
 <html lang="en">
 	<head>
+		<script
+			is:inline
+			define:vars={{
+				storageKey: THEME_STORAGE_KEY,
+				lightClass: CL_LIGHT_THEME_CLASS,
+				darkClass: CL_DARK_THEME_CLASS,
+			}}
+		>
+			// Applied before first paint to avoid a light/dark flash on load.
+			const storedTheme = localStorage.getItem(storageKey);
+			const prefersDark = window.matchMedia(
+				"(prefers-color-scheme: dark)",
+			).matches;
+			const isDark = storedTheme ? storedTheme === darkClass : prefersDark;
+			document.documentElement.classList.add(isDark ? darkClass : lightClass);
+		</script>
 		<MetaDataComponent
 			siteTitle={siteTitle}
 			metaData={metaData}
@@ -34,6 +55,10 @@ const { siteTitle, footer, links, metaData, siteUrl } = Astro.props;
 	</body>
 </html>
 <style>
+	body {
+		background: var(--cl-base-background-color);
+	}
+
 	.main-layout {
 		padding: var(--cl-xl-gap);
 		max-width: 1200px;
