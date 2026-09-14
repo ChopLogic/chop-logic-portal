@@ -1,15 +1,12 @@
 import { THEME_STORAGE_KEY } from "@constants";
 import {
-	Button,
-	ButtonView,
 	CL_DARK_THEME_CLASS,
 	CL_LIGHT_THEME_CLASS,
-	IconName,
+	Switch,
 } from "chop-logic-components";
 import { useState } from "react";
 
-// Rendered client:only, so the theme applied by the FOUC-prevention script is already on the page.
-const ThemeSwitcher = ({ className }: { className?: string }) => {
+const ThemeSwitcher = () => {
 	const [isDark, setIsDark] = useState(() =>
 		document.documentElement.classList.contains(CL_DARK_THEME_CLASS),
 	);
@@ -28,12 +25,11 @@ const ThemeSwitcher = ({ className }: { className?: string }) => {
 	};
 
 	return (
-		<Button
-			icon={isDark ? IconName.Sun : IconName.Moon}
-			label="Toggle color theme"
-			onClick={toggleTheme}
-			className={className}
-			view={ButtonView.Icon}
+		<Switch
+			checked={isDark}
+			onChange={toggleTheme}
+			label={isDark ? "Dark Theme" : "Light Theme"}
+			name="theme-switcher"
 		/>
 	);
 };

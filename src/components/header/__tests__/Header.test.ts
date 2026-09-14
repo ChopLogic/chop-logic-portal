@@ -26,11 +26,11 @@ describe("Header.astro", () => {
 		expect(html).toContain("About");
 	});
 
-	it("renders the theme switcher", async () => {
+	it("renders the settings component", async () => {
 		const html = await container.renderToString(Header, {
 			request: new Request("https://example.com/"),
 		});
-		expect(html).toContain("header__theme-switcher");
+		expect(html).toContain("header__settings");
 	});
 
 	it("marks the Blog link active on nested blog routes", async () => {

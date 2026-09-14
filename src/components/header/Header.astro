@@ -1,15 +1,18 @@
 ---
-import { ThemeSwitcher } from "@components";
+import { Settings } from "@components";
 import HeaderLink from "./HeaderLink.astro";
 ---
 
 <header class="header">
-	<nav class="header__navigation">
-		<HeaderLink href="/" class="header__link">Home</HeaderLink>
-		<HeaderLink href="/blog" class="header__link">Blog</HeaderLink>
-		<HeaderLink href="/about" class="header__link">About</HeaderLink>
-	</nav>
-	<ThemeSwitcher client:only="react" className="header__theme-switcher" />
+	<div class="header__container">
+		<div class="header__logo"></div>
+		<nav class="header__navigation">
+			<HeaderLink href="/" class="header__link">Home</HeaderLink>
+			<HeaderLink href="/blog" class="header__link">Blog</HeaderLink>
+			<HeaderLink href="/about" class="header__link">About</HeaderLink>
+		</nav>
+		<Settings client:load className="header__settings" />
+	</div>
 </header>
 <style>
 	.header {
@@ -17,9 +20,14 @@ import HeaderLink from "./HeaderLink.astro";
 		padding: 0;
 		background: var(--cl-base-background-color);
 		box-shadow: var(--cl-box-shadow);
+	}
+	.header__container {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		padding: 0 var(--cl-xl-gap);
+		max-width: 1200px;
+		margin: 0 auto;
 	}
 	.header__navigation {
 		display: flex;
@@ -41,7 +49,9 @@ import HeaderLink from "./HeaderLink.astro";
 		cursor: default;
 		color: var(--cl-accent-a0);
 	}
-	:global(.header__theme-switcher) {
-		margin-right: var(--cl-l-gap);
+	.header__logo {
+		min-width: 70px;
+		min-height: 70px;
+		background: var(--cl-accent-a0);
 	}
 </style>
