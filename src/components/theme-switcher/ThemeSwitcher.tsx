@@ -6,7 +6,7 @@ import {
 } from "chop-logic-components";
 import { useState } from "react";
 
-const ThemeSwitcher = () => {
+const ThemeSwitcher = ({ className }: { className?: string }) => {
 	const [isDark, setIsDark] = useState(() =>
 		document.documentElement.classList.contains(CL_DARK_THEME_CLASS),
 	);
@@ -26,9 +26,10 @@ const ThemeSwitcher = () => {
 
 	return (
 		<Switch
+			className={className}
 			checked={isDark}
 			onChange={toggleTheme}
-			label={isDark ? "Dark Theme" : "Light Theme"}
+			label="Dark Theme"
 			name="theme-switcher"
 		/>
 	);

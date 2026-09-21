@@ -1,0 +1,8 @@
+.settings__content {
+	padding: var(--cl-l-gap) 0;
+}
+
+.settings__item {
+	width: 100%;
+	justify-content: space-between;
+}

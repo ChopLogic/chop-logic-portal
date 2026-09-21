@@ -1,6 +1,7 @@
 import { ThemeSwitcher } from "@components";
 import { Button, ButtonView, Dialog, IconName } from "chop-logic-components";
 import { useState } from "react";
+import "./Settings.styles.css";
 
 const Settings = ({ className }: { className?: string }) => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -27,9 +28,10 @@ const Settings = ({ className }: { className?: string }) => {
 				onClose={handleClose}
 				icon={IconName.Settings}
 				title="Settings"
-				className="settings__dialog"
 			>
-				<ThemeSwitcher />
+				<div className="settings__content">
+					<ThemeSwitcher className="settings__item" />
+				</div>
 			</Dialog>
 		</>
 	);
