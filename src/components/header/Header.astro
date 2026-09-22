@@ -1,11 +1,19 @@
 ---
+import rawLogoSvg from "@assets/Chop-Logic-Logo-Head.svg?raw";
 import { Settings } from "@components";
 import HeaderLink from "./HeaderLink.astro";
+
+// Each <path> ships with its own hardcoded fill;
+// swap them for currentColor so the logo can be recolored per theme.
+const logoSvg = rawLogoSvg.replaceAll(
+	/fill="#[0-9a-fA-F]{3,6}"/g,
+	'fill="currentColor"',
+);
 ---
 
 <header class="header">
 	<div class="header__container">
-		<div class="header__logo"></div>
+		<div class="header__logo" set:html={logoSvg} />
 		<nav class="header__navigation">
 			<HeaderLink href="/" class="header__link">Home</HeaderLink>
 			<HeaderLink href="/blog" class="header__link">Blog</HeaderLink>
@@ -50,13 +58,31 @@ import HeaderLink from "./HeaderLink.astro";
 		color: var(--cl-accent-a0);
 	}
 	.header__logo {
-		min-width: 56px;
-		min-height: 56px;
-		background: var(--cl-accent-a0);
+		display: flex;
+		align-items: center;
+		flex-shrink: 0;
+		color: var(--cl-base-font-color);
+	}
+	.header__logo :global(svg) {
+		display: block;
+		width: 48px;
+		height: 48px;
 	}
 	:global(.header__settings) {
 		padding: 0;
-		    display: flex;
-    align-items: center;
+		display: flex;
+		align-items: center;
+	}
+	@media (min-width: 640px) {
+		.header__logo :global(svg) {
+			width: 56px;
+			height: 56px;
+		}
+	}
+	@media (min-width: 1024px) {
+		.header__logo :global(svg) {
+			width: 64px;
+			height: 64px;
+		}
 	}
 </style>
