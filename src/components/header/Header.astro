@@ -1,11 +1,16 @@
 ---
-import rawLogoSvg from "@assets/Chop-Logic-Logo-Head.svg?raw";
+import rawHeadLogoSVG from "@assets/Chop-Logic-Logo-Head.svg?raw";
+import rawHorizontalLogoSVG from "@assets/Chop-Logic-Logo-Horizontal.svg?raw";
 import { Settings } from "@components";
 import HeaderLink from "./HeaderLink.astro";
 
 // Each <path> ships with its own hardcoded fill;
 // swap them for currentColor so the logo can be recolored per theme.
-const logoSvg = rawLogoSvg.replaceAll(
+const headLogo = rawHeadLogoSVG.replaceAll(
+	/fill="#[0-9a-fA-F]{3,6}"/g,
+	'fill="currentColor"',
+);
+const horizontalLogo = rawHorizontalLogoSVG.replaceAll(
 	/fill="#[0-9a-fA-F]{3,6}"/g,
 	'fill="currentColor"',
 );
@@ -13,19 +18,26 @@ const logoSvg = rawLogoSvg.replaceAll(
 
 <header class="header">
 	<div class="header__container">
-		<div class="header__logo" set:html={logoSvg} />
-		<nav class="header__navigation">
-			<HeaderLink href="/" class="header__link">Home</HeaderLink>
-			<HeaderLink href="/blog" class="header__link">Blog</HeaderLink>
-			<HeaderLink href="/about" class="header__link">About</HeaderLink>
-		</nav>
-		<Settings client:load className="header__settings" />
+		<a href="/" class="header__logo--horizontal"
+			><div class="header__logo" set:html={horizontalLogo} /></a
+		>
+		<a href="/" class="header__logo--small"
+			><div class="header__logo" set:html={headLogo} /></a
+		>
+		<div class="header__toolbar">
+			<nav class="header__navigation">
+				<HeaderLink href="/blog" class="header__link">Blog</HeaderLink>
+				<HeaderLink href="/about" class="header__link">About</HeaderLink
+				>
+			</nav>
+			<Settings client:load className="header__settings" />
+		</div>
 	</div>
 </header>
 <style>
 	.header {
 		margin: 0;
-		padding: 0;
+		padding: var(--cl-m-gap) 0;
 		background: var(--cl-base-background-color);
 		box-shadow: var(--cl-box-shadow);
 	}
@@ -37,13 +49,17 @@ const logoSvg = rawLogoSvg.replaceAll(
 		max-width: 1200px;
 		margin: 0 auto;
 	}
-	.header__navigation {
+	.header__toolbar {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
+		justify-content: flex-end;
+		gap: var(--cl-xl-gap);
+	}
+	.header__navigation {
+		display: none;
 	}
 	.header__link {
-		padding: 1em 0.5em;
+		padding: var(--cl-l-gap) var(--cl-m-gap);
 		color: var(--cl-base-font-color);
 		text-decoration: none;
 	}
@@ -63,8 +79,15 @@ const logoSvg = rawLogoSvg.replaceAll(
 		flex-shrink: 0;
 		color: var(--cl-base-font-color);
 	}
-	.header__logo :global(svg) {
+	.header__logo--small :global(svg) {
 		display: block;
+		width: 52px;
+		height: 52px;
+	}
+	.header__logo--horizontal {
+		display: none;
+	}
+	.header__logo :global(svg) {
 		width: 48px;
 		height: 48px;
 	}
@@ -74,15 +97,34 @@ const logoSvg = rawLogoSvg.replaceAll(
 		align-items: center;
 	}
 	@media (min-width: 640px) {
+		.header__logo--small {
+			display: none;
+		}
+		.header__logo--horizontal {
+			display: block;
+		}
 		.header__logo :global(svg) {
-			width: 56px;
-			height: 56px;
+			width: 130px;
+			height: 58px;
+		}
+		.header__navigation {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
 		}
 	}
 	@media (min-width: 1024px) {
+		.header {
+			padding: 0;
+		}
+
 		.header__logo :global(svg) {
-			width: 64px;
-			height: 64px;
+			width: 192px;
+			height: 70px;
+		}
+
+		.header__link {
+			padding: var(--cl-xl-gap) var(--cl-l-gap);
 		}
 	}
 </style>
