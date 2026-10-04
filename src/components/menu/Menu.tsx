@@ -1,9 +1,8 @@
-import { ThemeSwitcher } from "@components";
 import { Button, ButtonView, Dialog, IconName } from "chop-logic-components";
 import { useState } from "react";
-import "./Settings.styles.css";
+import { MenuContent } from "./MenuContent";
 
-const Settings = ({ className }: { className?: string }) => {
+const Menu = ({ className }: { className?: string }) => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const handleOpen = () => {
@@ -18,23 +17,21 @@ const Settings = ({ className }: { className?: string }) => {
 		<>
 			<Button
 				className={className}
-				icon={IconName.Settings}
-				label="Toggle color theme"
+				icon={IconName.Menu}
+				label="Open menu"
 				onClick={handleOpen}
 				view={ButtonView.Icon}
 			/>
 			<Dialog
 				isOpened={isOpen}
 				onClose={handleClose}
-				icon={IconName.Settings}
-				title="Settings"
+				title="Menu"
+				className="menu__dialog"
 			>
-				<div className="settings__content">
-					<ThemeSwitcher className="settings__item" />
-				</div>
+				<MenuContent />
 			</Dialog>
 		</>
 	);
 };
 
-export default Settings;
+export default Menu;

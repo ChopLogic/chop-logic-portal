@@ -1,7 +1,7 @@
 ---
 import rawHeadLogoSVG from "@assets/Chop-Logic-Logo-Head.svg?raw";
 import rawHorizontalLogoSVG from "@assets/Chop-Logic-Logo-Horizontal.svg?raw";
-import { Settings } from "@components";
+import { Menu } from "@components";
 import HeaderLink from "./HeaderLink.astro";
 
 // Each <path> ships with its own hardcoded fill;
@@ -30,7 +30,7 @@ const horizontalLogo = rawHorizontalLogoSVG.replaceAll(
 				<HeaderLink href="/about" class="header__link">About</HeaderLink
 				>
 			</nav>
-			<Settings client:load className="header__settings" />
+			<Menu client:load className="header__menu" />
 		</div>
 	</div>
 </header>
@@ -91,7 +91,7 @@ const horizontalLogo = rawHorizontalLogoSVG.replaceAll(
 		width: 48px;
 		height: 48px;
 	}
-	:global(.header__settings) {
+	:global(.header__menu) {
 		padding: 0;
 		display: flex;
 		align-items: center;
