@@ -26,6 +26,12 @@ const menuItems: MenuItem[] = [
 		icon: IconName.Info,
 		link: "/about",
 	},
+	{
+		label: "Privacy Policy",
+		id: "privacy-policy-page",
+		icon: IconName.Briefcase,
+		link: "/privacy-policy",
+	},
 ];
 
 export const MenuContent = () => {

@@ -2,7 +2,7 @@ import { Button, ButtonView, Dialog, IconName } from "chop-logic-components";
 import { useState } from "react";
 import { MenuContent } from "./MenuContent";
 
-const Menu = ({ className }: { className?: string }) => {
+const Menu = () => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const handleOpen = () => {
@@ -16,7 +16,7 @@ const Menu = ({ className }: { className?: string }) => {
 	return (
 		<>
 			<Button
-				className={className}
+				className="menu__button"
 				icon={IconName.Menu}
 				label="Open menu"
 				onClick={handleOpen}

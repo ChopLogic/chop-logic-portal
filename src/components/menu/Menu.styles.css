@@ -20,3 +20,13 @@
 	width: 100%;
 	justify-content: space-between;
 }
+
+.menu__button {
+	padding: 0;
+	display: flex;
+	align-items: center;
+}
+
+.menu__button .cl-icon_medium {
+	font-size: var(--cl-typography-h5-desktop);
+}

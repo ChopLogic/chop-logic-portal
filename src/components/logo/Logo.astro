@@ -1,0 +1,61 @@
+---
+import rawHeadLogoSVG from "@assets/Chop-Logic-Logo-Head.svg?raw";
+import rawHorizontalLogoSVG from "@assets/Chop-Logic-Logo-Horizontal.svg?raw";
+
+// Each <path> ships with its own hardcoded fill;
+// swap them for currentColor so the logo can be recolored per theme.
+const headLogo = rawHeadLogoSVG.replaceAll(
+	/fill="#[0-9a-fA-F]{3,6}"/g,
+	'fill="currentColor"',
+);
+const horizontalLogo = rawHorizontalLogoSVG.replaceAll(
+	/fill="#[0-9a-fA-F]{3,6}"/g,
+	'fill="currentColor"',
+);
+---
+
+<a href="/" class="logo--horizontal"
+	><div class="logo" set:html={horizontalLogo} /></a
+>
+<a href="/" class="logo--small"
+	><div class="logo" set:html={headLogo} /></a
+>
+
+<style>
+	.logo {
+		display: flex;
+		align-items: center;
+		flex-shrink: 0;
+		color: var(--cl-base-font-color);
+	}
+	.logo--small :global(svg) {
+		display: block;
+		width: 52px;
+		height: 52px;
+	}
+	.logo--horizontal {
+		display: none;
+	}
+	.logo :global(svg) {
+		width: 48px;
+		height: 48px;
+	}
+	@media (min-width: 640px) {
+		.logo--small {
+			display: none;
+		}
+		.logo--horizontal {
+			display: block;
+		}
+		.logo :global(svg) {
+			width: 130px;
+			height: 58px;
+		}
+	}
+	@media (min-width: 1024px) {
+		.logo :global(svg) {
+			width: 192px;
+			height: 70px;
+		}
+	}
+</style>

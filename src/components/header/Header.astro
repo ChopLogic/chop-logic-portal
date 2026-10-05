@@ -1,36 +1,19 @@
 ---
-import rawHeadLogoSVG from "@assets/Chop-Logic-Logo-Head.svg?raw";
-import rawHorizontalLogoSVG from "@assets/Chop-Logic-Logo-Horizontal.svg?raw";
 import { Menu } from "@components";
+import Logo from "../logo/Logo.astro";
 import HeaderLink from "./HeaderLink.astro";
-
-// Each <path> ships with its own hardcoded fill;
-// swap them for currentColor so the logo can be recolored per theme.
-const headLogo = rawHeadLogoSVG.replaceAll(
-	/fill="#[0-9a-fA-F]{3,6}"/g,
-	'fill="currentColor"',
-);
-const horizontalLogo = rawHorizontalLogoSVG.replaceAll(
-	/fill="#[0-9a-fA-F]{3,6}"/g,
-	'fill="currentColor"',
-);
 ---
 
 <header class="header">
 	<div class="header__container">
-		<a href="/" class="header__logo--horizontal"
-			><div class="header__logo" set:html={horizontalLogo} /></a
-		>
-		<a href="/" class="header__logo--small"
-			><div class="header__logo" set:html={headLogo} /></a
-		>
+		<Logo />
 		<div class="header__toolbar">
 			<nav class="header__navigation">
 				<HeaderLink href="/blog" class="header__link">Blog</HeaderLink>
 				<HeaderLink href="/about" class="header__link">About</HeaderLink
 				>
 			</nav>
-			<Menu client:load className="header__menu" />
+			<Menu client:load />
 		</div>
 	</div>
 </header>
@@ -73,40 +56,7 @@ const horizontalLogo = rawHorizontalLogoSVG.replaceAll(
 		cursor: default;
 		color: var(--cl-accent-a0);
 	}
-	.header__logo {
-		display: flex;
-		align-items: center;
-		flex-shrink: 0;
-		color: var(--cl-base-font-color);
-	}
-	.header__logo--small :global(svg) {
-		display: block;
-		width: 52px;
-		height: 52px;
-	}
-	.header__logo--horizontal {
-		display: none;
-	}
-	.header__logo :global(svg) {
-		width: 48px;
-		height: 48px;
-	}
-	:global(.header__menu) {
-		padding: 0;
-		display: flex;
-		align-items: center;
-	}
 	@media (min-width: 640px) {
-		.header__logo--small {
-			display: none;
-		}
-		.header__logo--horizontal {
-			display: block;
-		}
-		.header__logo :global(svg) {
-			width: 130px;
-			height: 58px;
-		}
 		.header__navigation {
 			display: flex;
 			align-items: center;
@@ -116,11 +66,6 @@ const horizontalLogo = rawHorizontalLogoSVG.replaceAll(
 	@media (min-width: 1024px) {
 		.header {
 			padding: 0;
-		}
-
-		.header__logo :global(svg) {
-			width: 192px;
-			height: 70px;
 		}
 
 		.header__link {
