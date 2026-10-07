@@ -1,31 +1,48 @@
 ---
+import { Menu } from "@components";
+import Logo from "../logo/Logo.astro";
 import HeaderLink from "./HeaderLink.astro";
 ---
 
 <header class="header">
-	<nav class="header__navigation">
-		<HeaderLink href="/" class="header__link">Home</HeaderLink>
-		<HeaderLink href="/blog" class="header__link">Blog</HeaderLink>
-		<HeaderLink href="/about" class="header__link">About</HeaderLink>
-	</nav>
+	<div class="header__container">
+		<Logo />
+		<div class="header__toolbar">
+			<nav class="header__navigation">
+				<HeaderLink href="/blog" class="header__link">Blog</HeaderLink>
+				<HeaderLink href="/about" class="header__link">About</HeaderLink
+				>
+			</nav>
+			<Menu client:load />
+		</div>
+	</div>
 </header>
 <style>
 	.header {
 		margin: 0;
-		padding: 0;
+		padding: var(--cl-m-gap) 0;
 		background: var(--cl-base-background-color);
 		box-shadow: var(--cl-box-shadow);
-		display: flex;
-		align-items: center;
-		justify-content: center;
 	}
-	.header__navigation {
+	.header__container {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		padding: 0 var(--cl-xl-gap);
+		max-width: 1200px;
+		margin: 0 auto;
+	}
+	.header__toolbar {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		gap: var(--cl-xl-gap);
+	}
+	.header__navigation {
+		display: none;
 	}
 	.header__link {
-		padding: 1em 0.5em;
+		padding: var(--cl-l-gap) var(--cl-m-gap);
 		color: var(--cl-base-font-color);
 		text-decoration: none;
 	}
@@ -38,5 +55,21 @@ import HeaderLink from "./HeaderLink.astro";
 		text-shadow: none;
 		cursor: default;
 		color: var(--cl-accent-a0);
+	}
+	@media (min-width: 640px) {
+		.header__navigation {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+	}
+	@media (min-width: 1024px) {
+		.header {
+			padding: 0;
+		}
+
+		.header__link {
+			padding: var(--cl-xl-gap) var(--cl-l-gap);
+		}
 	}
 </style>

@@ -1,5 +1,5 @@
 import { loadRenderers } from "astro:container";
-import { getContainerRenderer as reactContainerRenderer } from "@astrojs/react";
+import { getContainerRenderer as reactContainerRenderer } from "@astrojs/react/container-renderer";
 import {
 	type DynamicZoneComponent,
 	DynamicZoneComponentType,
