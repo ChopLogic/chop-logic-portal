@@ -1,9 +1,9 @@
 .menu__content {
 	padding: var(--cl-l-gap) 0;
-	height: 100%;
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
+	gap: var(--cl-xl-gap);
 }
 
 .menu__links a {
@@ -18,7 +18,12 @@
 
 .menu__item {
 	width: 100%;
-	justify-content: space-between;
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.menu__item .cl-switch__track {
+	margin-left: auto;
 }
 
 .menu__button {

@@ -2,6 +2,7 @@ import { THEME_STORAGE_KEY } from "@constants";
 import {
 	CL_DARK_THEME_CLASS,
 	CL_LIGHT_THEME_CLASS,
+	IconName,
 	Switch,
 } from "chop-logic-components";
 import { useState } from "react";
@@ -31,6 +32,7 @@ const ThemeSwitcher = ({ className }: { className?: string }) => {
 			onChange={toggleTheme}
 			label="Dark Theme"
 			name="theme-switcher"
+			icon={isDark ? IconName.Moon : IconName.Sun}
 		/>
 	);
 };

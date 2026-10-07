@@ -27,6 +27,7 @@ const Menu = () => {
 				onClose={handleClose}
 				title="Menu"
 				className="menu__dialog"
+				bodyClassName="menu__content"
 			>
 				<MenuContent />
 			</Dialog>
