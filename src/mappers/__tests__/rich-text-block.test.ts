@@ -464,6 +464,43 @@ describe("mapRichTextBlock", () => {
 
 			expect(result).toEqual([]);
 		});
+
+		it("rejects a heading whose children fail to parse", () => {
+			// Valid level + array children, but a child is not a valid text node,
+			// so parseArrayItems returns null and the heading is dropped.
+			const raw = [
+				{
+					type: "heading",
+					level: 2,
+					children: [{ type: "text" }],
+				},
+			];
+			const result = mapRichTextBlock(raw);
+
+			expect(result).toEqual([]);
+		});
+
+		it("rejects a list whose children array is missing", () => {
+			const raw = [{ type: "list", format: "unordered" }];
+			const result = mapRichTextBlock(raw);
+
+			expect(result).toEqual([]);
+		});
+
+		it("rejects a list whose child items fail to parse", () => {
+			// Valid format + array children, but the child is neither a valid
+			// list-item nor a valid nested list, so the whole list is dropped.
+			const raw = [
+				{
+					type: "list",
+					format: "ordered",
+					children: [{ type: "not-a-list-item" }],
+				},
+			];
+			const result = mapRichTextBlock(raw);
+
+			expect(result).toEqual([]);
+		});
 	});
 
 	describe("edge cases", () => {

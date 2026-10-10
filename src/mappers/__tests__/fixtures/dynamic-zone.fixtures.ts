@@ -297,3 +297,32 @@ export function createDetectableEmbeddedVideoComponent(): Omit<
 		}),
 	};
 }
+
+export function createDetectableReferenceListComponent(): Omit<
+	MockReferenceListComponent,
+	"__typename" | "__component"
+> {
+	return {
+		id: "detectable-refs",
+		heading: "Detectable References",
+		links: [
+			createMockLinkResponse({ id: "ref-1", url: "https://ref1.com" }),
+			createMockLinkResponse({ id: "ref-2", url: "https://ref2.com" }),
+		],
+	};
+}
+
+export function createDetectableGalleryComponent(): Omit<
+	MockGalleryComponent,
+	"__typename" | "__component"
+> {
+	return {
+		id: "detectable-gallery",
+		heading: "Detectable Gallery",
+		layout: "grid",
+		items: [
+			createMockCmsImageResponse({ documentId: "gallery-a", name: "a.jpg" }),
+			createMockCmsImageResponse({ documentId: "gallery-b", name: "b.jpg" }),
+		],
+	};
+}

@@ -98,6 +98,25 @@ describe("ThemeSwitcher", () => {
 		expect(mockClassList.add).toHaveBeenCalled();
 	});
 
+	it("switches to the dark theme class when toggled from light mode", () => {
+		// Start in light mode so toggling computes nextIsDark = true and
+		// selects CL_DARK_THEME_CLASS.
+		mockClassList.contains.mockReturnValue(false);
+
+		render(<ThemeSwitcher />);
+		const switchInput = document.querySelector(".cl-switch__input");
+
+		if (switchInput) {
+			fireEvent.click(switchInput);
+		}
+
+		expect(mockClassList.add).toHaveBeenCalledWith(CL_DARK_THEME_CLASS);
+		expect(window.localStorage.setItem).toHaveBeenCalledWith(
+			expect.any(String),
+			CL_DARK_THEME_CLASS,
+		);
+	});
+
 	it("persists theme preference to localStorage when toggled", () => {
 		mockClassList.contains.mockImplementation(
 			(cls: string) => cls === CL_DARK_THEME_CLASS,

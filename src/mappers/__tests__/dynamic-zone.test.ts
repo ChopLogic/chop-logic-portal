@@ -13,7 +13,9 @@ import {
 	createCallToActionComponent,
 	createDetectableCallToActionComponent,
 	createDetectableEmbeddedVideoComponent,
+	createDetectableGalleryComponent,
 	createDetectableParagraphComponent,
+	createDetectableReferenceListComponent,
 	createEmbeddedVideoComponent,
 	createGalleryComponent,
 	createMockDynamicZoneContent,
@@ -581,6 +583,22 @@ describe("mapDynamicZoneContent", () => {
 
 			expect(result).toHaveLength(1);
 			expect(result[0]?.type).toBe(DynamicZoneComponentType.EmbeddedVideo);
+		});
+
+		it("detects ReferenceList by a links array", () => {
+			const raw = [createDetectableReferenceListComponent()];
+			const result = mapDynamicZoneContent(raw, TEST_API_URL);
+
+			expect(result).toHaveLength(1);
+			expect(result[0]?.type).toBe(DynamicZoneComponentType.ReferenceList);
+		});
+
+		it("detects Gallery by items array and heading", () => {
+			const raw = [createDetectableGalleryComponent()];
+			const result = mapDynamicZoneContent(raw, TEST_API_URL);
+
+			expect(result).toHaveLength(1);
+			expect(result[0]?.type).toBe(DynamicZoneComponentType.Gallery);
 		});
 	});
 

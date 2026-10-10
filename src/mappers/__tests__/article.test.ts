@@ -1,3 +1,4 @@
+import { DEFAULT_IMAGE } from "@constants";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { mapArticleToArticlePreview } from "../article";
 import {
@@ -318,6 +319,20 @@ describe("mapArticleToArticlePreview", () => {
 
 			// Falls through to default image when no small format
 			expect(result.image.src).toBeDefined();
+		});
+
+		it("falls back to the default image src when preview has no small format and no url", () => {
+			mockMapCmsImage.mockReturnValue({
+				documentId: "img-123",
+				url: undefined,
+				width: 1920,
+				height: 1080,
+				formats: {},
+			});
+			const entity = createMockArticleEntity();
+			const result = mapArticleToArticlePreview(entity as never, TEST_API_URL);
+
+			expect(result.image.src).toBe(DEFAULT_IMAGE.src);
 		});
 
 		it("uses alternativeText when available", () => {

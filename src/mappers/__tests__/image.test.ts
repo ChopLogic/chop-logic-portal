@@ -224,6 +224,21 @@ describe("mapCmsImage", () => {
 
 			expect(result?.formats.small).toBeDefined();
 		});
+
+		it("skips known format names whose variant is not a record", () => {
+			const raw = {
+				...createMockCmsImageResponse(),
+				formats: {
+					small: { url: "/small.jpg", width: 500, height: 300 },
+					// A known format name whose value cannot be mapped to a variant.
+					medium: "not-a-record",
+				},
+			};
+			const result = mapCmsImage(raw, TEST_API_URL);
+
+			expect(result?.formats.small).toBeDefined();
+			expect(result?.formats.medium).toBeUndefined();
+		});
 	});
 });
 
@@ -286,6 +301,34 @@ describe("pickOpenGraphCmsImage", () => {
 		const result = pickOpenGraphCmsImage(image, TEST_API_URL);
 
 		expect(result.src).toContain(TEST_API_URL);
+	});
+
+	it("falls back to all candidates when none meet the minimum size", () => {
+		// Every candidate (original + formats) is below OG_IMAGE_MIN_WIDTH (600),
+		// so the min-size pool is empty and the full candidate list is used.
+		const image = createCmsImage(400, 300, {
+			thumbnail: { url: "/thumb.jpg", width: 245, height: 138 },
+			small: { url: "/small.jpg", width: 500, height: 281 },
+		});
+		const result = pickOpenGraphCmsImage(image, TEST_API_URL);
+
+		expect(result.src).toBeDefined();
+		expect(result.width).toBeGreaterThan(0);
+		expect(result.height).toBeGreaterThan(0);
+	});
+
+	it("breaks ties on equal score by preferring the larger pixel area", () => {
+		// Both candidates are equidistant from the ideal width (1200): the large
+		// format at 1000 and the original at 1400 each score 200 and sit below the
+		// soft-max, so the secondary sort by pixel area decides the pick.
+		const image = createCmsImage(1400, 1000, {
+			large: { url: "/large.jpg", width: 1000, height: 714 },
+		});
+		const result = pickOpenGraphCmsImage(image, TEST_API_URL);
+
+		// 1400x1000 (original) has the larger area, so it wins the tie-break.
+		expect(result.src).toContain("original.jpg");
+		expect(result.width).toBe(1400);
 	});
 });
 
