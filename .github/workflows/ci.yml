@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality-checks:
+    name: Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint (Biome)
+        run: npm run lint
+
+      - name: Type check (TypeScript)
+        run: npm run typecheck
+
+      - name: Astro check
+        run: npm run astro:check
+
+      - name: Run tests with coverage
+        run: npm run test:coverage
+
+      # TODO: Enable build step once Strapi server is available
+      # This requires STRAPI_URL environment variable for GraphQL codegen
+      # - name: Build
+      #   run: npm run build
+      #   env:
+      #     STRAPI_URL: ${{ secrets.STRAPI_URL }}

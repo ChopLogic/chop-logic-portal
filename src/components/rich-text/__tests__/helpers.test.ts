@@ -278,4 +278,18 @@ describe("renderRichTextListHtml & renderRichTextListBodyHtml", () => {
 		expect(renderRichTextListHtml(empty)).toBe("<ul></ul>");
 		expect(renderRichTextListBodyHtml(empty)).toBe("");
 	});
+
+	it("skips children that are neither list-item nor list", () => {
+		// A child with an unexpected type should be ignored (no <li> emitted),
+		// while surrounding valid list-items still render.
+		const stray = {
+			type: RichTextContentType.Paragraph,
+		} as unknown as RichTextListItem;
+		const root = list(RichTextListFormat.Unordered, [
+			listItem([textNode("a")]),
+			stray,
+			listItem([textNode("b")]),
+		]);
+		expect(renderRichTextListBodyHtml(root)).toBe("<li>a</li><li>b</li>");
+	});
 });

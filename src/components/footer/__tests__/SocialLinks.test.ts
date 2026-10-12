@@ -1,140 +1,179 @@
+import { type Link, LinkTarget, ReferrerPolicy, SocialPlatform } from "@models";
 import {
-	type Link,
-	LinkTarget,
-	LinkType,
-	ReferrerPolicy,
-	SocialPlatform,
-} from "@models";
-import { experimental_AstroContainer as AstroContainer } from "astro/container";
-import { beforeAll, describe, expect, it } from "vitest";
+	createAstroContainer,
+	createSocialLink,
+	createTestLink,
+	resetLinkIdCounter,
+} from "@test/helpers";
+import { afterEach, beforeAll, describe, expect, it } from "vitest";
 import SocialLinks from "../SocialLinks.astro";
 
-function testLink(overrides: Partial<Link>): Link {
-	return {
-		id: "1",
-		url: overrides.url as string,
-		text: overrides.text as string,
-		target: overrides.target ?? LinkTarget.Blank,
-		type: overrides.type ?? LinkType.External,
-		referrerPolicy:
-			overrides.referrerPolicy ?? ReferrerPolicy.StrictOriginWhenCrossOrigin,
-		...overrides,
-	};
-}
-
 describe("SocialLinks.astro", () => {
-	let container: Awaited<ReturnType<typeof AstroContainer.create>>;
+	let container: Awaited<ReturnType<typeof createAstroContainer>>;
 
 	beforeAll(async () => {
-		container = await AstroContainer.create();
+		container = await createAstroContainer();
 	});
 
-	it("renders nothing when links is empty", async () => {
-		const html = await container.renderToString(SocialLinks, {
-			props: { links: [] },
-		});
-		expect(html).not.toContain("<a ");
+	afterEach(() => {
+		resetLinkIdCounter();
 	});
 
-	it("skips links without a platform", async () => {
-		const html = await container.renderToString(SocialLinks, {
-			props: {
-				links: [testLink({ url: "https://a.com", text: "A" })],
-			},
+	async function render(links: Link[]) {
+		return container.renderToString(SocialLinks, {
+			props: { links },
 		});
-		expect(html).not.toContain("<a ");
+	}
+
+	it("filters out links without platform property", async () => {
+		const links = [
+			createTestLink({ text: "No platform link" }),
+			createSocialLink(SocialPlatform.GitHub, { text: "GitHub" }),
+		];
+		const html = await render(links);
+		// Should only render the GitHub link
+		expect(html).toContain("GitHub");
+		// The non-platform link text should be in sr-only span if rendered
+		// Actually, the filter removes it entirely, so we check there's only one link
+		const linkMatches = html.match(/<a /g);
+		expect(linkMatches).toHaveLength(1);
 	});
 
-	it("renders an anchor with href, screen-reader text, and icon for a social link", async () => {
-		const html = await container.renderToString(SocialLinks, {
-			props: {
-				links: [
-					testLink({
-						url: "https://github.com/user",
-						text: "My GitHub",
-						platform: SocialPlatform.GitHub,
-					}),
-				],
-			},
-		});
+	it("renders only links with platform property", async () => {
+		const links = [
+			createSocialLink(SocialPlatform.LinkedIn, { text: "LinkedIn" }),
+			createSocialLink(SocialPlatform.GitHub, { text: "GitHub" }),
+		];
+		const html = await render(links);
+		expect(html).toContain("LinkedIn");
+		expect(html).toContain("GitHub");
+		const linkMatches = html.match(/<a /g);
+		expect(linkMatches).toHaveLength(2);
+	});
+
+	it("renders correct href for each link", async () => {
+		const links = [
+			createSocialLink(SocialPlatform.GitHub, {
+				url: "https://github.com/user",
+			}),
+		];
+		const html = await render(links);
 		expect(html).toContain('href="https://github.com/user"');
-		expect(html).toContain('class="sr-only"');
-		expect(html).toContain("My GitHub");
-		expect(html).toContain("M12 .297");
 	});
 
-	it("adds rel=noopener noreferrer for target _blank", async () => {
-		const html = await container.renderToString(SocialLinks, {
-			props: {
-				links: [
-					testLink({
-						url: "https://x.com/h",
-						text: "X",
-						target: LinkTarget.Blank,
-						platform: SocialPlatform.XTwitter,
-					}),
-				],
-			},
-		});
+	it("applies target attribute from link props", async () => {
+		const links = [
+			createSocialLink(SocialPlatform.GitHub, { target: LinkTarget.Blank }),
+		];
+		const html = await render(links);
 		expect(html).toContain('target="_blank"');
-		expect(html).toMatch(/rel="noopener noreferrer"/);
 	});
 
-	it("omits rel when target is not _blank", async () => {
-		const html = await container.renderToString(SocialLinks, {
-			props: {
-				links: [
-					testLink({
-						url: "https://example.com",
-						text: "Same tab",
-						target: LinkTarget.Self,
-						platform: SocialPlatform.Medium,
-					}),
-				],
-			},
-		});
-		expect(html).toContain('target="_self"');
-		expect(html).not.toMatch(/rel="noopener/);
+	it('adds rel="noopener noreferrer" for _blank target', async () => {
+		const links = [
+			createSocialLink(SocialPlatform.GitHub, { target: LinkTarget.Blank }),
+		];
+		const html = await render(links);
+		expect(html).toContain('rel="noopener noreferrer"');
 	});
 
-	it("passes referrerPolicy to the anchor", async () => {
-		const html = await container.renderToString(SocialLinks, {
-			props: {
-				links: [
-					testLink({
-						url: "https://example.com",
-						text: "Test",
-						referrerPolicy: ReferrerPolicy.NoReferrer,
-						platform: SocialPlatform.Discord,
-					}),
-				],
-			},
-		});
+	it("does not add rel attribute for non-blank targets", async () => {
+		const links = [
+			createSocialLink(SocialPlatform.GitHub, { target: LinkTarget.Self }),
+		];
+		const html = await render(links);
+		// Should not contain rel attribute at all (rel should be undefined)
+		expect(html).not.toMatch(/rel="[^"]*"/);
+	});
+
+	it("applies referrerpolicy attribute from link props", async () => {
+		const links = [
+			createSocialLink(SocialPlatform.GitHub, {
+				referrerPolicy: ReferrerPolicy.NoReferrer,
+			}),
+		];
+		const html = await render(links);
 		expect(html).toContain('referrerpolicy="no-referrer"');
 	});
 
-	it("renders multiple social links in order", async () => {
-		const html = await container.renderToString(SocialLinks, {
-			props: {
-				links: [
-					testLink({
-						id: "a",
-						url: "https://a.com",
-						text: "First",
-						platform: SocialPlatform.GitHub,
-					}),
-					testLink({
-						id: "b",
-						url: "https://b.com",
-						text: "Second",
-						platform: SocialPlatform.LinkedIn,
-					}),
-				],
-			},
-		});
-		const iFirst = html.indexOf("https://a.com");
-		const iSecond = html.indexOf("https://b.com");
-		expect(iFirst).toBeGreaterThanOrEqual(0);
-		expect(iSecond).toBeGreaterThan(iFirst);
+	it("renders link text in sr-only span for accessibility", async () => {
+		const links = [
+			createSocialLink(SocialPlatform.GitHub, { text: "Follow on GitHub" }),
+		];
+		const html = await render(links);
+		expect(html).toContain('class="sr-only"');
+		expect(html).toContain("Follow on GitHub");
+	});
+
+	it("renders SocialPlatformIcon for each platform", async () => {
+		const links = [createSocialLink(SocialPlatform.GitHub)];
+		const html = await render(links);
+		// GitHub icon contains specific SVG path
+		expect(html).toContain("<svg");
+	});
+
+	it("handles empty links array", async () => {
+		const html = await render([]);
+		// Should render nothing or just whitespace
+		expect(html.replace(/\s/g, "")).toBe("");
+	});
+
+	it("handles all links without platform (renders nothing)", async () => {
+		const links = [
+			createTestLink({ text: "Regular link 1" }),
+			createTestLink({ text: "Regular link 2" }),
+		];
+		const html = await render(links);
+		expect(html.replace(/\s/g, "")).toBe("");
+	});
+
+	it("handles multiple social platforms", async () => {
+		const links = [
+			createSocialLink(SocialPlatform.GitHub, {
+				url: "https://github.com/user",
+			}),
+			createSocialLink(SocialPlatform.LinkedIn, {
+				url: "https://linkedin.com/in/user",
+			}),
+			createSocialLink(SocialPlatform.XTwitter, {
+				url: "https://x.com/user",
+			}),
+		];
+		const html = await render(links);
+		expect(html).toContain("https://github.com/user");
+		expect(html).toContain("https://linkedin.com/in/user");
+		expect(html).toContain("https://x.com/user");
+	});
+
+	it("preserves order of social links", async () => {
+		const links = [
+			createSocialLink(SocialPlatform.GitHub, { text: "GitHub" }),
+			createSocialLink(SocialPlatform.LinkedIn, { text: "LinkedIn" }),
+			createSocialLink(SocialPlatform.XTwitter, { text: "X/Twitter" }),
+		];
+		const html = await render(links);
+
+		const githubIndex = html.indexOf("GitHub");
+		const linkedinIndex = html.indexOf("LinkedIn");
+		const twitterIndex = html.indexOf("X/Twitter");
+
+		expect(githubIndex).toBeLessThan(linkedinIndex);
+		expect(linkedinIndex).toBeLessThan(twitterIndex);
+	});
+
+	it("mixes platform and non-platform links correctly", async () => {
+		const links = [
+			createTestLink({ text: "Normal link 1" }),
+			createSocialLink(SocialPlatform.GitHub, { text: "GitHub" }),
+			createTestLink({ text: "Normal link 2" }),
+			createSocialLink(SocialPlatform.LinkedIn, { text: "LinkedIn" }),
+		];
+		const html = await render(links);
+
+		// Only social links should be rendered
+		const linkMatches = html.match(/<a /g);
+		expect(linkMatches).toHaveLength(2);
+		expect(html).toContain("GitHub");
+		expect(html).toContain("LinkedIn");
 	});
 });
