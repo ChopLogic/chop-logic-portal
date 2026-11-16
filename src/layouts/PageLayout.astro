@@ -36,8 +36,12 @@ const { siteTitle, footer, links, metaData, siteUrl } = Astro.props;
 			const prefersDark = window.matchMedia(
 				"(prefers-color-scheme: dark)",
 			).matches;
-			const isDark = storedTheme ? storedTheme === darkClass : prefersDark;
-			document.documentElement.classList.add(isDark ? darkClass : lightClass);
+			const isDark = storedTheme
+				? storedTheme === darkClass
+				: prefersDark;
+			document.documentElement.classList.add(
+				isDark ? darkClass : lightClass,
+			);
 		</script>
 		<MetaDataComponent
 			siteTitle={siteTitle}
@@ -55,6 +59,10 @@ const { siteTitle, footer, links, metaData, siteUrl } = Astro.props;
 	</body>
 </html>
 <style>
+	html {
+		scrollbar-gutter: stable;
+	}
+
 	body {
 		background: var(--cl-base-background-color);
 	}
