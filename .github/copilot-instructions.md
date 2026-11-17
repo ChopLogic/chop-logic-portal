@@ -10,6 +10,7 @@ into view models (`src/mappers/`, `src/models/`) and rendered by Astro component
 `src/layouts/`, `src/pages/`).
 
 Key directories:
+
 - `src/pages/` — Astro file-based routes (home, blog, about, privacy policy).
 - `src/components/` — Reusable Astro (and a few React) UI components, organized by feature/component name.
 - `src/layouts/` — Shared page layout(s).
@@ -26,22 +27,22 @@ Vitest for unit tests, GraphQL Codegen for typed API queries, Husky + lint-stage
 
 Run all commands from the repo root.
 
-| Script | Description |
-| :----- | :---------- |
-| `npm run dev` | Regenerate GraphQL types, then start the Astro dev server (`localhost:4321`). |
-| `npm run build` | Regenerate GraphQL types, then build the production site to `./dist/`. |
-| `npm run preview` | Serve the production build locally. |
-| `npm run astro` | Run the Astro CLI directly (e.g. `npm run astro -- add`). |
-| `npm run typegen` | Generate typed GraphQL query/result types via GraphQL Codegen. |
-| `npm run lint` | Run Biome lint + format check. |
-| `npm run lint:fix` | Run Biome and apply safe fixes (lint + format + organize imports). |
-| `npm run format` | Format files with Biome. |
-| `npm run typecheck` | Type-check the project with `tsc --noEmit`. |
-| `npm run astro:check` | Run Astro's checker for `.astro` files and TS diagnostics. |
-| `npm run check` | Run lint, typecheck, Astro check, and CI tests — use this before considering a change complete. |
-| `npm run test` | Run Vitest in watch mode. |
-| `npm run test:ci` | Run Vitest once, non-interactive (used in CI). |
-| `npm run test:coverage` | Run Vitest with V8 coverage report (`./coverage/`). |
+| Script                  | Description                                                                                     |
+| :---------------------- | :---------------------------------------------------------------------------------------------- |
+| `npm run dev`           | Regenerate GraphQL types, then start the Astro dev server (`localhost:4321`).                   |
+| `npm run build`         | Regenerate GraphQL types, then build the production site to `./dist/`.                          |
+| `npm run preview`       | Serve the production build locally.                                                             |
+| `npm run astro`         | Run the Astro CLI directly (e.g. `npm run astro -- add`).                                       |
+| `npm run typegen`       | Generate typed GraphQL query/result types via GraphQL Codegen.                                  |
+| `npm run lint`          | Run Biome lint + format check.                                                                  |
+| `npm run lint:fix`      | Run Biome and apply safe fixes (lint + format + organize imports).                              |
+| `npm run format`        | Format files with Biome.                                                                        |
+| `npm run typecheck`     | Type-check the project with `tsc --noEmit`.                                                     |
+| `npm run astro:check`   | Run Astro's checker for `.astro` files and TS diagnostics.                                      |
+| `npm run check`         | Run lint, typecheck, Astro check, and CI tests — use this before considering a change complete. |
+| `npm run test`          | Run Vitest in watch mode.                                                                       |
+| `npm run test:ci`       | Run Vitest once, non-interactive (used in CI).                                                  |
+| `npm run test:coverage` | Run Vitest with V8 coverage report (`./coverage/`).                                             |
 
 ## Conventions
 
